@@ -1,0 +1,26 @@
+﻿@model SneakerShop.Models.Product
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Customer</title>
+</head>
+<body>
+    <div>
+        @Model.ProductID
+        <br />
+        @Model.ProductName
+        <br />
+        @Model.ProductDescription
+        <br />
+        @Model.Price
+        <br />
+        <img src=@Model.ProductPictureURL>
+        <br />
+        @Model.ReleaseDate
+        <br />
+        @Model.Category
+        <br />
+    </div>
+</body>
+</html>
