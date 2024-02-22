@@ -6,7 +6,7 @@
     <title>Customer</title>
 </head>
 <body>
-    <div>
+ @*    <div>
         @Model.ProductID
         <br />
         @Model.ProductName
@@ -15,12 +15,33 @@
         <br />
         @Model.Price
         <br />
-        <img src=@Model.ProductPictureURL>
+        <img src=@Model.ProductPictureURL1>
         <br />
-        @Model.ReleaseDate
+        <img src=@Model.ProductPictureURL2>
+        <br />
+        <img src=@Model.ProductPictureURL3>
+        <br />
+        @Model.Qnt
         <br />
         @Model.Category
         <br />
+        @Model.Size
+        <br />
+    </div> *@
+
+    <div class="card" style="width: 18rem;">
+        <img src=@Model.ProductPictureURL1 class="card-img-top" >
+        <div class="card-body">
+            <h5 class="card-title">@Model.ProductName</h5>
+            <p class="card-text">@Model.ProductDescription</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Quantity: @Model.Qnt</li>
+                <li class="list-group-item">Price: @Model.Price </li>
+                
+            </ul>
+            <a href="#" class="btn btn-primary">BUY NOW!</a>
+        </div>
     </div>
+
 </body>
 </html>
