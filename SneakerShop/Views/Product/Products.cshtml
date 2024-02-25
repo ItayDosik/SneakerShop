@@ -19,25 +19,42 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/bootstrap.css" rel="stylesheet" />
+
+
+    <style>
+        .custom-card-img-top {
+            position: relative;
+            vertical-align: middle;
+            left: 50%;
+            transform: translate(-50%);
+            object-fit: cover;
+            width: 350px;
+            height: 200px;
+        }
+
+    </style>
 </head>
 <body>
-    <!-- Section-->
-    <section class="py-5">
+
+
+    <section class="py-2">
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-xl-3 justify-content-center">
                 @for (int i = 0; i < Model.allProducts.Count(); ++i)
                 {
                     <div class="col mb-5">
                         <div class="card h-100">
                             <!-- Product image-->
-                            <img src=@Model.allProducts[i].ProductPictureURL1 class="card-img-top" width="160" height="150" >
-                            
+                            <img src=@Model.allProducts[i].ProductPictureURL1 class="card-img-top custom-card-img-top img-fluid">
+
                             <!-- Product details-->
                             <div class="card-body">
                                 <div class="text-center">
                                     <!-- Product name-->
-                                    <h5 class="fw-bolder">@Model.allProducts[i].ProductName</h5>
-                                    <hr/>
+                                    <div class="title-container">
+                                        <h5 class="fw-bolder">@Model.allProducts[i].ProductName</h5>
+                                    </div>
+
                                     <!-- Product description-->
                                     <p class="fw-semibold">@Model.allProducts[i].ProductDescription</p>
                                     <!-- Product price-->
@@ -52,10 +69,11 @@
                     </div>
 
                 }
-            </div>
-        </div>
+                </div>
+                </div>
+        
     </section>
-  
+
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
