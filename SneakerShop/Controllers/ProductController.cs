@@ -44,18 +44,18 @@ namespace SneakerShop.Controllers
                     int ra=command.ExecuteNonQuery();
                     if (ra > 0)
                     {
+                        connection.Close();
                         return ViewProduct();
                     }
                     else
                     {
+                        connection.Close();
                         return View("Enter");
                     }
                 }
-                connection.Close();
+                //connection.Close(); unreachable, moved before the return statements 
             }
-           
 
-                //return View("Product", product);
         }
 
         public ActionResult ViewProduct()
