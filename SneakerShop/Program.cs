@@ -1,7 +1,33 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SneakerShop;
+using SneakerShop.Models;
+using SneakerShop.Models.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var connectionString = builder.Configuration.GetConnectionString("myConnect") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
+builder.Services.AddIdentity<Users, IdentityRole>(
+    option =>
+    {   //Requirments for Password 
+        option.Password.RequiredUniqueChars = 0;
+        option.Password.RequireUppercase = false;
+        option.Password.RequiredLength = 6;
+        option.Password.RequireNonAlphanumeric = false;
+        option.Password.RequireLowercase = false;
+        
+        
+    }
+    ).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
 
 var app = builder.Build();
@@ -19,6 +45,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
