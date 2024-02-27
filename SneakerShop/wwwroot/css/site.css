@@ -18,5 +18,40 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: 'Poppins', sans-serif;
 }
+
+.card .img-fit {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.card{
+    height: 100%;
+}
+
+.card-body{
+    display:flex;
+    height:100%;
+    flex-direction:column;
+}
+
+.card-title {
+    height: 2.4em; /* Height for two lines */
+    line-height: 1.2em; /* Line height for each line */
+    overflow: hidden; /* Hides overflow */
+    text-overflow: ellipsis; /* Displays ellipsis (...) for overflow */
+    margin-bottom: 8px; /* Remove default margin to avoid extra spacing */
+}
+
+.card-text{
+    flex-grow: 1;
+}
+
+@media (max-width: 767.98px){
+    .card .img-fit{
+        aspect-ratio: 1.45 / 1;
+    }
+}
+

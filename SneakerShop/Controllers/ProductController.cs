@@ -45,7 +45,7 @@ namespace SneakerShop.Controllers
                     if (ra > 0)
                     {
                         connection.Close();
-                        return ViewProduct();
+                        return ViewAllProducts();
                     }
                     else
                     {
@@ -53,7 +53,7 @@ namespace SneakerShop.Controllers
                         return View("Enter");
                     }
                 }
-                //connection.Close(); unreachable, moved before the return statements 
+                
             }
 
         }
@@ -66,7 +66,7 @@ namespace SneakerShop.Controllers
             {
                 connection.Open();
 
-                string sqlQuery = "SELECT * FROM product WHERE ProductID = '1'";
+                string sqlQuery = "SELECT * FROM product WHERE ProductID = '2'";
                 using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                 {
                     SqlDataReader reader = command.ExecuteReader();
@@ -91,6 +91,43 @@ namespace SneakerShop.Controllers
             }
 
             return View("Product",product);
+        }
+
+        public ActionResult ViewAllProducts()
+        {
+            Products productList = new Products();
+            string connectionString = _configuration.GetConnectionString("myConnect");
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string sqlQuery = "SELECT * FROM product";
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Product tempProducts = new Product();
+                        tempProducts.ProductID = reader.GetString(0);
+                        tempProducts.ProductName = reader.GetString(1);
+                        tempProducts.ProductDescription = reader.GetString(2);
+                        tempProducts.Price = reader.GetString(3);
+                        tempProducts.ProductPictureURL1 = reader.GetString(4);
+                        tempProducts.ProductPictureURL2 = reader.GetString(5);
+                        tempProducts.ProductPictureURL3 = reader.GetString(6);
+                        tempProducts.Qnt = reader.GetInt32(7);
+                        tempProducts.Category = reader.GetString(8);
+                        tempProducts.Size = reader.GetString(9);
+                        productList.allProducts.Add(tempProducts);
+                    }
+
+                    reader.Close();
+                }
+                connection.Close();
+            }
+
+            return View("Products", productList);
         }
 
     }

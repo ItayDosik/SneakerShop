@@ -6,7 +6,9 @@
     <title>@ViewData["Title"] - SneakerShop</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SneakerShop.styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/SneakerShop.styles.css" asp-append-version="true" />
+	<link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+
 </head>
 <body>
     <header>
@@ -31,11 +33,12 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+
 
     <footer class="border-top footer text-muted">
         <div class="container">
