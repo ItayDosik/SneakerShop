@@ -10,9 +10,11 @@ namespace SneakerShop.ViewModels
         [Required]
         public string? UserName { get; set; }
         [Required]
-        public string? Phone { get; set; }
+        [RegularExpression("^0(?:[234689]|5[0-689]|7[246789])(?![01])(\\d{7})$", ErrorMessage = "Invalid Phone number.")]
+        public string? PhoneNumber { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string? Email { get; set; }
         [Required]
         

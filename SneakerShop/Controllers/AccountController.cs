@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using SneakerShop.Models;
 using SneakerShop.ViewModels;
+using System.Net.NetworkInformation;
 using System.Threading;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace SneakerShop.Controllers
 {
@@ -28,7 +31,7 @@ namespace SneakerShop.Controllers
                 var result = await signInManager.PasswordSignInAsync(model.UserName!,model.Password!,model.RememberMe,false); //the ! is for not-null check
                 if(result.Succeeded)
                 {
-                    return RedirectToAction("Index","Home");// for testing only
+                    return RedirectToAction("Index","Home");
                 }
                 ModelState.AddModelError("", "Invalid Login attempt");
                 return View(model);
@@ -46,22 +49,21 @@ namespace SneakerShop.Controllers
         {
             if(ModelState.IsValid)
             {
-                Users user = new() { //create user object
+                Users user = new() { 
                     Name = model.Name,
                     UserName = model.UserName,
                     Address = model.Address,
-                    Phone = model.Phone,
-                    Password = model.Password,
-                    Email = model.Email,
-                    CartID = "test1",//need to generate some how uniqe keys  
-                    Role = "User",
+                    PhoneNumber = model.PhoneNumber,
+                    Email = model.Email
+                    
                 };
                 var result = await userManager.CreateAsync(user, model.Password!);
 
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
+                    await userManager.AddToRoleAsync(user, "Member");
                     await signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index","Home");// for testing only
+                    return RedirectToAction("Index","Home");
                 }
                
                 foreach (var error in result.Errors)
@@ -77,6 +79,32 @@ namespace SneakerShop.Controllers
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+
+
+
+
+
+           
+                
+
+                
+
+               
+                    
+
+                    
+
+                
+
+            
+
         }
     }
+
+
+
 }
+
+
+
+

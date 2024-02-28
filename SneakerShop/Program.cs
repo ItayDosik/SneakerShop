@@ -15,7 +15,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
 builder.Services.AddIdentity<Users, IdentityRole>(
     option =>
     {   //Requirments for Password 
@@ -24,10 +23,10 @@ builder.Services.AddIdentity<Users, IdentityRole>(
         option.Password.RequiredLength = 6;
         option.Password.RequireNonAlphanumeric = false;
         option.Password.RequireLowercase = false;
-        
-        
+             
     }
-    ).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+    ).AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
 
 var app = builder.Build();
@@ -53,5 +52,41 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+using (var scope = app.Services.CreateScope()) 
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roles = new[] { "Admin", "Member" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role)) {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+}
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Users>>();
+
+    string email = "admin@adiv.com";
+    string password = "123123";
+    
+    if (await userManager.FindByEmailAsync(email) == null) 
+    {
+        var user = new Users();
+
+        user.UserName = "admin";
+        user.Email = email;
+        await userManager.CreateAsync(user, password);
+
+        await userManager.AddToRoleAsync(user, "Admin");
+
+    }
+   
+}
+
 
 app.Run();
