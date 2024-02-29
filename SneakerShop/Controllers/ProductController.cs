@@ -33,7 +33,7 @@ namespace SneakerShop.Controllers
         {
             _db.Products.Add(product);
             _db.SaveChanges();
-            return View("ViewAllProducts");
+            return RedirectToAction("ViewAllProducts");
 
         }
 
@@ -56,7 +56,7 @@ namespace SneakerShop.Controllers
             product.Category = _product.Category;
             product.Size = _product.Size;
             _db.SaveChanges();
-            return ViewAllProducts();
+            return RedirectToAction("ViewAllProducts");
         }
 
         public ActionResult ViewAllProducts()
