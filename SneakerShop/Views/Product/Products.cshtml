@@ -1,9 +1,6 @@
 ﻿@model List<SneakerShop.Models.Product>
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<Users> signInManager;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,8 +30,21 @@
                                 <p class="card-text">
                                     @Model[i].ProductDescription
                                 </p>
-                                <div class="text-end">
+                                <div class="row">
+
+                                <div class="col text-end">
                                     <a href="#" class="btn btn-outline-primary">Buy Now</a>
+                                </div>
+                                @if (signInManager.IsSignedIn(User))
+                                {
+                                    @if (@User.IsInRole("Admin"))
+                                    {
+                                        <div class="col text-end">
+                                            <a href="@Url.Action("Edit","Product", new {@id = @Model[i].ProductId})" class="btn btn-outline-primary">Edit</a>
+                                        </div>
+                                    }
+                                }
+
                                 </div>
                             </div>
                         </div>
