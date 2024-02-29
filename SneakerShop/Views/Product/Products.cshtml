@@ -1,9 +1,6 @@
-﻿@model SneakerShop.Models.Products
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<SneakerShop.Models.Product>
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<Users> signInManager;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,18 +20,31 @@
 <body>
     <div class="container">
         <div class="row g-3">   
-                @for(int i = 0; i < Model.allProducts.Count(); i++)
+                @for(int i = 0; i < Model.Count(); i++)
                 {
                     <div class="col-md-4 col-12">
                         <div class="card">
-                            <img src=@Model.allProducts[i].ProductPictureURL1 class="card-img-top img-fit" />
+                            <img src=@Model[i].ProductPictureURL1 class="card-img-top img-fit" />
                             <div class="card-body">
-                                <h5 class="card-title">@Model.allProducts[i].ProductName</h5>
+                                <h5 class="card-title">@Model[i].ProductName</h5>
                                 <p class="card-text">
-                                    @Model.allProducts[i].ProductDescription
+                                    @Model[i].ProductDescription
                                 </p>
-                                <div class="text-end">
+                                <div class="row">
+
+                                <div class="col text-end">
                                     <a href="#" class="btn btn-outline-primary">Buy Now</a>
+                                </div>
+                                @if (signInManager.IsSignedIn(User))
+                                {
+                                    @if (@User.IsInRole("Admin"))
+                                    {
+                                        <div class="col text-end">
+                                            <a href="@Url.Action("Edit","Product", new {@id = @Model[i].ProductId})" class="btn btn-outline-primary">Edit</a>
+                                        </div>
+                                    }
+                                }
+
                                 </div>
                             </div>
                         </div>

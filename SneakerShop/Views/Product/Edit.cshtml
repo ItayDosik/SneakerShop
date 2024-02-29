@@ -1,0 +1,49 @@
+﻿@model SneakerShop.Models.Product
+
+
+<div class="container">
+    <div class="card">
+        <p>
+            <h1>Edit</h1>
+        </p>
+
+        <form action="Save" method="post">
+            <br />
+            @Html.HiddenFor(Model=>Model.ProductId)
+            Product Name:
+            <br />
+            <input name="ProductName" type="text" value="@Model.ProductName" />
+            <br />
+            Product Description:
+            <br />
+            <input name="ProductDescription" type="text" value="@Model.ProductDescription" />
+            <br />
+            Price:
+            <br />
+            <input name="Price" type="text" value="@Model.Price" />
+            <br />
+            Product Picture URL:
+            <br />
+            <input name="ProductPictureURL1" type="text" value="@Model.ProductPictureURL1" />
+            <br />
+            <input name="ProductPictureURL2" type="text" value="@Model.ProductPictureURL2" />
+            <br />
+            <input name="ProductPictureURL3" type="text" value="@Model.ProductPictureURL3" />
+            <br />
+            Quantity:
+            <br />
+            <input name="Qnt" type="text" value="@Model.Qnt"  />
+            <br />
+            Category:
+            <br />
+            <input name="Category" type="text" value="@Model.Category" />
+            <br />
+            Size:
+            <br />
+            <input name="Size" type="text" value="@Model.Category" />
+            <br />
+            <input type="submit" value="Save Changes" />
+        </form>
+    </div>
+
+</div>

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SneakerShop.Models
+namespace SneakerShop.Data
 {
     public class Product
     {
@@ -15,6 +15,5 @@ namespace SneakerShop.Models
         public int Qnt { get; set; }
         public string Category { get; set; }
         public string Size { get; set; }
-
     }
 }

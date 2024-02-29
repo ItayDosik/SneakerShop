@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SneakerShop.Models;
+using SneakerShop.Models.Data;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -8,128 +9,64 @@ namespace SneakerShop.Controllers
 {
     public class ProductController : Controller
     {
-        private IConfiguration _configuration;
-       public ProductController(IConfiguration configuration)
+        private readonly AppDbContext _db;
+
+       public ProductController(AppDbContext db)
         {
-            _configuration = configuration;
+            _db = db;
         }
 
-        public ActionResult Enter()
+        public ActionResult Index()
+        {
+            List<Product> ProductList = new List<Product>();
+            _db.Products.ToList();
+            return View();
+        }
+
+        public ActionResult NewProduct()
         {
             return View();
         }
 
+
         public ActionResult AddProduct(Product product)
         {
-            string connectionString = _configuration.GetConnectionString("myConnect");
-            using (SqlConnection connection=new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string sqlQuery = "INSERT INTO PRODUCT VALUES(@ProductID,@ProductName,@ProductDescription,@Price,@ProductPictureURL1,@ProductPictureURL2,@ProductPictureURL3,@Qnt,@Category,@Size)";
-                using (SqlCommand command=new SqlCommand(sqlQuery, connection))
-                {
-                    command.Parameters.AddWithValue("@ProductID", product.ProductID);
-                    command.Parameters.AddWithValue("@ProductName", product.ProductName);
-                    command.Parameters.AddWithValue("@ProductDescription", product.ProductDescription);
-                    command.Parameters.AddWithValue("@Price", product.Price);
-                    command.Parameters.AddWithValue("@ProductPictureURL1", product.ProductPictureURL1);
-                    command.Parameters.AddWithValue("@ProductPictureURL2", product.ProductPictureURL2);
-                    command.Parameters.AddWithValue("@ProductPictureURL3", product.ProductPictureURL3);
-                    command.Parameters.AddWithValue("@Qnt", product.Qnt);
-                    command.Parameters.AddWithValue("@Category", product.Category);
-                    command.Parameters.AddWithValue("@Size", product.Size);
-
-
-                    int ra=command.ExecuteNonQuery();
-                    if (ra > 0)
-                    {
-                        connection.Close();
-                        return ViewAllProducts();
-                    }
-                    else
-                    {
-                        connection.Close();
-                        return View("Enter");
-                    }
-                }
-                
-            }
+            _db.Products.Add(product);
+            _db.SaveChanges();
+            return View("ViewAllProducts");
 
         }
 
-        public ActionResult ViewProduct()
+        public ActionResult Edit(int id) 
         {
-            Product product=new Product();
-            string connectionString = _configuration.GetConnectionString("myConnect");
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
+            Product product = _db.Products.Find(id);
+            return View(product);
+        }
 
-                string sqlQuery = "SELECT * FROM product WHERE ProductID = '2'";
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        product.ProductID=reader.GetString(0);
-                        product.ProductName=reader.GetString(1);
-                        product.ProductDescription=reader.GetString(2);
-                        product.Price=reader.GetString(3);
-                        product.ProductPictureURL1=reader.GetString(4);
-                        product.ProductPictureURL2=reader.GetString(5);
-                        product.ProductPictureURL3=reader.GetString(6);
-                        product.Qnt=reader.GetInt32(7);
-                        product.Category=reader.GetString(8);
-                        product.Size=reader.GetString(9);
-                    }
-                    
-                    reader.Close();
-                }
-                connection.Close();
-            }
-
-            return View("Product",product);
+        [HttpPost]
+        public ActionResult Edit(Product _product)
+        {
+            Product product = _db.Products.Find(_product.ProductId);
+            product.ProductName = _product.ProductName;
+            product.ProductDescription = _product.ProductDescription;
+            product.Price = _product.Price;
+            product.ProductPictureURL1 = _product.ProductPictureURL1;
+            product.ProductPictureURL2 = _product.ProductPictureURL2;
+            product.ProductPictureURL3 = _product.ProductPictureURL3;
+            product.Category = _product.Category;
+            product.Size = _product.Size;
+            _db.SaveChanges();
+            return ViewAllProducts();
         }
 
         public ActionResult ViewAllProducts()
         {
-            Products productList = new Products();
-            string connectionString = _configuration.GetConnectionString("myConnect");
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string sqlQuery = "SELECT * FROM product";
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
-                {
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        Product tempProducts = new Product();
-                        tempProducts.ProductID = reader.GetString(0);
-                        tempProducts.ProductName = reader.GetString(1);
-                        tempProducts.ProductDescription = reader.GetString(2);
-                        tempProducts.Price = reader.GetString(3);
-                        tempProducts.ProductPictureURL1 = reader.GetString(4);
-                        tempProducts.ProductPictureURL2 = reader.GetString(5);
-                        tempProducts.ProductPictureURL3 = reader.GetString(6);
-                        tempProducts.Qnt = reader.GetInt32(7);
-                        tempProducts.Category = reader.GetString(8);
-                        tempProducts.Size = reader.GetString(9);
-                        productList.allProducts.Add(tempProducts);
-                    }
-
-                    reader.Close();
-                }
-                connection.Close();
-            }
-
+            List<Product> productList = _db.Products.ToList();
             return View("Products", productList);
+
         }
 
+       
     }
 
 
