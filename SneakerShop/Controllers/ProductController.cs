@@ -44,7 +44,7 @@ namespace SneakerShop.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Product _product)
+        public ActionResult Save(Product _product)
         {
             Product product = _db.Products.Find(_product.ProductId);
             product.ProductName = _product.ProductName;
