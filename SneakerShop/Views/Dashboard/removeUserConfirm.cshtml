@@ -1,0 +1,48 @@
+﻿﻿@using Microsoft.AspNetCore.Identity;
+@model SneakerShop.Models.Users
+
+@{
+    ViewData["Title"] = "Removed User";
+}
+<style>
+    .btn-container {
+        width:15rem; 
+        margin-left:auto; 
+        margin-right:auto;
+    }
+    .mybtn{ 
+    }
+</style>
+
+<!DOCTYPE html>
+<html>
+<head>    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                User Details
+            </div>
+            <form asp-action="removeUserConfirm" asp-route-id="@Model.Id" method="post"> 
+                <div class="card-body">
+                    <h5 class="card-title">Username: @Model.UserName</h5>
+                    <p class="card-text">Name: @Model.Name</p>
+                    <p class="card-text">id: @Model.Id</p>
+                    <p class="card-text">Email: @Model.Email</p>
+                    <p class="card-text">Address: @Model.Address</p>
+                    <p class="card-text">Phone Number: @Model.PhoneNumber</p>
+                </div>
+                <div class="btn-container">
+                    <button onclick="return(confirm('Are you sure? Youre about to remove this user'))" type="submit" class="mybtn btn btn-danger btn-block mb-4">Remove User</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</body>
+</html>
+
+
+

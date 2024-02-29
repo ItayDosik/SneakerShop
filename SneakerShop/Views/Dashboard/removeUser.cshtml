@@ -1,0 +1,111 @@
+﻿@model SneakerShop.ViewModels.RemoveUserVM;
+
+
+@{
+    ViewData["Title"] = "Remove User";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete User</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style>
+    .container{ 
+        width: 35%;
+        
+    }
+
+    .searchBtn {
+        width: 50%; 
+        margin-left:auto; 
+        margin-right:auto;
+        background-color:lightblue;
+    }
+    .mybtn{
+        width: 25%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: lightblue;
+    }
+    .card-header{ 
+        background-color:lightblue
+    }
+</style>
+
+
+<body> 
+
+
+        <div class="container">
+            <h2>Search User</h2>
+            <form action="removeUser" method="post"> 
+                <div class="form-group">
+                    <label for="method">Search By:</label>
+                    <select class="form-control" id="method" name="method">
+                        <option value="username">Username</option>
+                        <option value="email">Email</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="identifier">Enter Username or Email:</label>
+                    <input required type="text" class="form-control" id="identifier" name="identifier" placeholder="Enter Username or Email">
+                </div>
+                    <button type="submit" class="searchBtn btn btn-block mb-4">Search User</button>
+            </form>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        </div>
+
+        @if (Model != null && Model.users.Count() > 1)
+        {
+            <div class="container">
+            @foreach (var user in Model.users)
+            {
+                if(user.UserName == "admin")
+                {
+                    continue;
+                }
+                <div class="card mb-3" style="margin-top: 0.1rem;">
+                    <div class="card-header">
+                        User Id: @user.Id
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Username: @user.UserName</h5>
+                        <p class="card-text">Email: @user.Email</p>
+                    </div>
+                    <div class="card-footer">
+                        <form asp-action="findUserById" asp-route-id="@user.Id" method="get">
+                            <button type="submit" class="btn mybtn">Show</button>
+                        </form>
+                    </div>
+                </div>
+                <br/>   
+                <br/>   
+            }
+            </div>
+        }
+        else
+        {
+            <div class="card">
+                <div class="card-header">
+                    No Users Added Yet
+                    
+                </div>
+            </div>
+        }
+    </body>
+</html>

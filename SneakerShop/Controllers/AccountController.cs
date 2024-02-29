@@ -49,6 +49,7 @@ namespace SneakerShop.Controllers
         {
             if(ModelState.IsValid)
             {
+
                 Users user = new() { 
                     Name = model.Name,
                     UserName = model.UserName,
@@ -57,6 +58,14 @@ namespace SneakerShop.Controllers
                     Email = model.Email
                     
                 };
+
+                var existingEmail = await userManager.FindByEmailAsync(model.Email!);
+                if (existingEmail != null)
+                {
+                    ModelState.AddModelError("", "Email address is already in use.");
+                    return View(model);
+                }
+
                 var result = await userManager.CreateAsync(user, model.Password!);
 
                 if (result.Succeeded)
@@ -78,31 +87,13 @@ namespace SneakerShop.Controllers
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-
-
-
-
-
-           
-                
-
-                
-
-               
-                    
-
-                    
-
-                
-
-            
+            return RedirectToAction("Index", "Home");           
 
         }
     }
 
 
-
+    
 }
 
 
