@@ -44,7 +44,7 @@ namespace SneakerShop.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(Product _product)
+        public ActionResult Edit(Product _product)
         {
             Product product = _db.Products.Find(_product.ProductId);
             product.ProductName = _product.ProductName;
@@ -56,7 +56,7 @@ namespace SneakerShop.Controllers
             product.Category = _product.Category;
             product.Size = _product.Size;
             _db.SaveChanges();
-            return View("ViewAllProducts");
+            return ViewAllProducts();
         }
 
         public ActionResult ViewAllProducts()
@@ -66,7 +66,7 @@ namespace SneakerShop.Controllers
 
         }
 
-
+       
     }
 
 

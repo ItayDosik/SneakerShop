@@ -9,41 +9,38 @@
 
         <form action="Save" method="post">
             <br />
-            Product ID:
-            <br />
-            <input name="ProductId" type="text" value=@Model.ProductId  />
-            <br />
+            @Html.HiddenFor(Model=>Model.ProductId)
             Product Name:
             <br />
-            <input name="ProductName" type="text" value=@Model.ProductName />
+            <input name="ProductName" type="text" value="@Model.ProductName" />
             <br />
             Product Description:
             <br />
-            <input name="ProductDescription" type="text" value=@Model.ProductDescription />
+            <input name="ProductDescription" type="text" value="@Model.ProductDescription" />
             <br />
             Price:
             <br />
-            <input name="Price" type="text" value=@Model.Price />
+            <input name="Price" type="text" value="@Model.Price" />
             <br />
             Product Picture URL:
             <br />
-            <input name="ProductPictureURL1" type="text" value=@Model.ProductPictureURL1 />
+            <input name="ProductPictureURL1" type="text" value="@Model.ProductPictureURL1" />
             <br />
-            <input name="ProductPictureURL2" type="text" value=@Model.ProductPictureURL2 />
+            <input name="ProductPictureURL2" type="text" value="@Model.ProductPictureURL2" />
             <br />
-            <input name="ProductPictureURL3" type="text" value=@Model.ProductPictureURL3 />
+            <input name="ProductPictureURL3" type="text" value="@Model.ProductPictureURL3" />
             <br />
             Quantity:
             <br />
-            <input name="Qnt" type="text" value=@Model.Qnt  />
+            <input name="Qnt" type="text" value="@Model.Qnt"  />
             <br />
             Category:
             <br />
-            <input name="Category" type="text" value=@Model.Category />
+            <input name="Category" type="text" value="@Model.Category" />
             <br />
             Size:
             <br />
-            <input name="Size" type="text" value=@Model.Size />
+            <input name="Size" type="text" value="@Model.Category" />
             <br />
             <input type="submit" value="Save Changes" />
         </form>
