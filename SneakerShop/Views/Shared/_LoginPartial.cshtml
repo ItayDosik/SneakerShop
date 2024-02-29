@@ -5,7 +5,7 @@
     @if (signInManager.IsSignedIn(User))
     {
 
-        <li class="nav-link text-dark">Hello, @User.Identity.Name @User.IsInRole("Member")</li>
+        <li class="nav-link text-dark">Hello, @User.Identity.Name </li>
         <a class="dropdown-item" asp-action="Logout" asp-controller="Account">
             Logout
         </a>

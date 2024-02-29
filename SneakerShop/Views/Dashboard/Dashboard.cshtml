@@ -1,1 +1,49 @@
-﻿<h1>dashboard</h1>
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+} 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="addProduct">Add Product</a>
+            </div>
+            <div class="col-md-3 ">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="removeProduct">Remove Product</a>
+            </div>
+            <div class="col-md-3">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="editProduct">Edit Product</a>
+            </div>
+            <div class="col-md-3">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="manageSupply">Manage Supply</a>
+            </div>
+            <div class="col-md-3">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="findProduct">Find Product</a>
+            </div>
+            <div class="col-md-3">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="removeUser">Remove User</a>
+            </div>
+            <div class="col-md-3">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="addUser">Add User</a>
+            </div>
+            <div class="col-md-3">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="editUser">Edit User</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
