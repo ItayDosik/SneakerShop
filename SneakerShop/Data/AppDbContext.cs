@@ -9,4 +9,6 @@ public class AppDbContext:IdentityDbContext<Users>
     {
 
     }
+
+    public DbSet<Product> Products { get; set; }
 }
