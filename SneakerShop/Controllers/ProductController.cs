@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
 using System.Data;
@@ -16,6 +17,13 @@ namespace SneakerShop.Controllers
             _db = db;
         }
 
+
+        public ActionResult ViewAllProducts()
+        {
+            List<Product> productList = _db.Products.ToList();
+            return View("Products", productList);
+
+        }
         public ActionResult Index()
         {
             List<Product> ProductList = new List<Product>();
@@ -59,14 +67,32 @@ namespace SneakerShop.Controllers
             return RedirectToAction("ViewAllProducts");
         }
 
-        public ActionResult ViewAllProducts()
+
+        public ActionResult Delete(int id)
         {
-            List<Product> productList = _db.Products.ToList();
-            return View("Products", productList);
+            _db.Products.Remove(_db.Products.Find(id));
+            
+            _db.SaveChanges();
+
+            if (_db.Products.Find(id)!=null)
+            {
+                TempData["ErrorMessage"] = "Product cannot be found.";
+                return RedirectToAction("ViewAllProducts");
+            }
+
+            if (_db.Products.Find(id) == null)
+            {
+                TempData["SuccessMessage"] = "Product removed successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Something went wrong, try again later.";
+            }
+            return RedirectToAction("ViewAllProducts");
 
         }
 
-       
+
     }
 
 
