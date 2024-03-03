@@ -30,6 +30,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        
                         <li class="nav-item">
                             @if (signInManager.IsSignedIn(User))
                             {
@@ -41,16 +42,6 @@
                                 } 
                             }
                         </li>
-
-                        <li class="nav-item">
-                            <form asp-controller="Product" asp-action="Search" method="get">
-                                <input type="text" name="search" placeholder="Search products...">
-                                <button type="submit">Search</button>
-                            </form>
-
-                        </li>
-
-                        
                     </ul>
                     <partial name="_LoginPartial"/>
                 </div>

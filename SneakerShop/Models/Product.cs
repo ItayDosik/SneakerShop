@@ -6,34 +6,24 @@ namespace SneakerShop.Models
     {
         [Key]
         public int ProductId { get; set; }
-
-        [Required(ErrorMessage = "Product Name is required")]
+        [Required]
         public string ProductName { get; set; }
-
-        [Required(ErrorMessage = "Product Description is required")]
+        [Required]
         public string ProductDescription { get; set; }
-
-        [Required(ErrorMessage = "Price is required")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
+        [Required]
+        [Range(0, 9999999999999999.99)]
         public decimal Price { get; set; }
-
-        [Url(ErrorMessage = "Invalid URL format.")]
+        [Required]
         public string ProductPictureURL1 { get; set; }
-
-        [Url(ErrorMessage = "Invalid URL format.")]
+        [Required]
         public string ProductPictureURL2 { get; set; }
-
-        [Url(ErrorMessage = "Invalid URL format.")]
+        [Required]
         public string ProductPictureURL3 { get; set; }
-
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
+        [Required]
         public int Qnt { get; set; }
-
-        [Required(ErrorMessage = "Category is required")]
+        [Required]
         public string Category { get; set; }
-
-        [Required(ErrorMessage = "Size is required")]
-
+        [Required]
         public string Size { get; set; }
 
     }
