@@ -37,11 +37,22 @@ namespace SneakerShop.Controllers
         }
 
 
+        [HttpPost]
         public ActionResult AddProduct(Product product)
         {
-            _db.Products.Add(product);
-            _db.SaveChanges();
-            return RedirectToAction("ViewAllProducts");
+            if (ModelState.IsValid)
+            {
+                _db.Products.Add(product);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Product: " + product.ProductName + " added successfully.";
+                return RedirectToAction("ViewAllProducts");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Product cannot be added, check again for the values you entered.";
+                return RedirectToAction("ViewAllProducts");
+            }
+           
 
         }
 
@@ -54,41 +65,82 @@ namespace SneakerShop.Controllers
         [HttpPost]
         public ActionResult Edit(Product _product)
         {
-            Product product = _db.Products.Find(_product.ProductId);
-            product.ProductName = _product.ProductName;
-            product.ProductDescription = _product.ProductDescription;
-            product.Price = _product.Price;
-            product.ProductPictureURL1 = _product.ProductPictureURL1;
-            product.ProductPictureURL2 = _product.ProductPictureURL2;
-            product.ProductPictureURL3 = _product.ProductPictureURL3;
-            product.Category = _product.Category;
-            product.Size = _product.Size;
-            _db.SaveChanges();
-            return RedirectToAction("ViewAllProducts");
+            try
+            {
+                Product product = _db.Products.Find(_product.ProductId);
+
+                if (ModelState.IsValid && product != null)
+                {
+                    product.ProductName = _product.ProductName;
+                    product.ProductDescription = _product.ProductDescription;
+                    product.Price = _product.Price;
+                    product.ProductPictureURL1 = _product.ProductPictureURL1;
+                    product.ProductPictureURL2 = _product.ProductPictureURL2;
+                    product.ProductPictureURL3 = _product.ProductPictureURL3;
+                    product.Category = _product.Category;
+                    product.Size = _product.Size;
+                    _db.SaveChanges();
+                    TempData["SuccessMessage"] = "Product: " + product.ProductName + " saved successfully.";
+                    return RedirectToAction("ViewAllProducts");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Product cannot be edited, check again for the values you entered.";
+                    return RedirectToAction("ViewAllProducts");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred while saving the product.";
+                return RedirectToAction("ViewAllProducts");
+            }
+
+            //product.ProductName = _product.ProductName;
+            //product.ProductDescription = _product.ProductDescription;
+            //product.Price = _product.Price;
+            //product.ProductPictureURL1 = _product.ProductPictureURL1;
+            //product.ProductPictureURL2 = _product.ProductPictureURL2;
+            //product.ProductPictureURL3 = _product.ProductPictureURL3;
+            //product.Category = _product.Category;
+            //product.Size = _product.Size;
+            //_db.SaveChanges();
+            //return RedirectToAction("ViewAllProducts");
         }
 
 
         public ActionResult Delete(int id)
         {
-            _db.Products.Remove(_db.Products.Find(id));
-            
-            _db.SaveChanges();
 
-            if (_db.Products.Find(id)!=null)
+            try
             {
-                TempData["ErrorMessage"] = "Product cannot be found.";
-                return RedirectToAction("ViewAllProducts");
+                Product product = _db.Products.Find(id);
+
+                if (product != null)
+                {
+                    _db.Products.Remove(product);
+                    _db.SaveChanges();
+
+                    if (_db.Products.Find(id) == null)
+                    {
+                        TempData["SuccessMessage"] = "Product removed successfully.";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Product removal failed.";
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Product cannot be found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred: " + ex.Message;
             }
 
-            if (_db.Products.Find(id) == null)
-            {
-                TempData["SuccessMessage"] = "Product removed successfully.";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Something went wrong, try again later.";
-            }
             return RedirectToAction("ViewAllProducts");
+
 
         }
 
