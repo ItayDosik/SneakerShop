@@ -34,9 +34,11 @@
                                 @if (@User.IsInRole("Admin"))
                                 {
                                 <div class="card-img-overlay">
-                                    <div class="btn-group">
+                                    <div class="btn-group" style="z-index: 1;">
                                         <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <span style="font-size: 20px; color: #dbe1e8;">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </span>
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a href="@Url.Action("Edit","Product", new {@id = @Model[i].ProductId})" class="dropdown-item">Edit</a></li>
@@ -54,8 +56,8 @@
                                 @Model[i].ProductDescription
                             </p>
                             <div class="row">
-                                <div class="col text-end">
-                                    <a href="#" class="btn btn-outline-primary">Buy Now</a>
+                                <div class="col text-end style=" style="position: relative; z-index: 2;">
+                                    <button href="#" class="btn btn-outline-primary" type="button">Buy Now</button>
                                 </div>
                             </div>
                         </div>
