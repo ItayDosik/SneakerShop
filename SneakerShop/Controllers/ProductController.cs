@@ -148,7 +148,11 @@ namespace SneakerShop.Controllers
         public ActionResult Search(string search)
         {
             List<Product> results = _db.Products.Where(p => p.ProductName.Contains(search) || p.ProductDescription.Contains(search)).ToList();
-           
+            if (results.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No sneakers found";
+            }
+
             return View("Products", results);
 
         }
