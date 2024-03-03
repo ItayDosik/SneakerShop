@@ -41,6 +41,8 @@ namespace SneakerShop.Controllers
         public ActionResult NewProduct()
         {
             return View();
+
+
         }
 
         [Authorize(Roles = "Admin")]
