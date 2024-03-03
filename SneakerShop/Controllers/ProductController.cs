@@ -149,17 +149,8 @@ namespace SneakerShop.Controllers
         {
             List<Product> results = _db.Products.Where(p => p.ProductName.Contains(search) || p.ProductDescription.Contains(search)).ToList();
            
-            return View("SearchItems", results);
+            return View("Products", results);
 
-        }
-
-
-
-
-        public ActionResult SearchItems(List<Product> productList)
-        {
-            
-            return View(productList);
         }
 
     }
