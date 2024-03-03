@@ -33,6 +33,7 @@ namespace SneakerShop.Models
         public string Category { get; set; }
 
         [Required(ErrorMessage = "Size is required")]
+
         public string Size { get; set; }
 
     }

@@ -35,7 +35,7 @@
                             {
                                 @if (@User.IsInRole("Admin"))
                                 {
-                                    <a class="nav-link text-dark" asp-action="Dashboard" asp-controller="Dashboard">
+                                    <a class="nav-link text-dark" asp-action="Index" asp-controller="Dashboard">
                                     Dashboard
                                     </a> 
                                 } 
@@ -70,8 +70,9 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

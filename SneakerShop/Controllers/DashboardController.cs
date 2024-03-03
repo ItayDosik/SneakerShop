@@ -20,7 +20,7 @@ namespace SneakerShop.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        public IActionResult Dashboard()
+        public IActionResult Index()
         {
             return View("dashboard");
         }
