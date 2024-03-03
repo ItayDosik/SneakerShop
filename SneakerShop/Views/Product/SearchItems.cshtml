@@ -1,4 +1,5 @@
-﻿@model List<SneakerShop.Models.Product>
+﻿
+@model List<Product>
 ﻿@using Microsoft.AspNetCore.Identity;
 @inject SignInManager<Users> signInManager;
 
@@ -35,39 +36,39 @@
                     </div>
                 }
             </div>
-            @for (int i = 0; i < Model.Count(); i++)
+            @foreach (Product P in Model)
             {
                 <div class="col-md-4 col-12">
                     <div class="card">
-                        <img src=@Model[i].ProductPictureURL1 class="card-img-top img-fit" />
-                         @if (signInManager.IsSignedIn(User))
-                            {
-                                @if (@User.IsInRole("Admin"))
-                                {
-                                <div class="card-img-overlay">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="@Url.Action("Edit","Product", new {@id = @Model[i].ProductId})" class="dropdown-item">Edit</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="#" onclick="return confirmDelete('@Url.Action("Delete", "Product", new { @id = @Model[i].ProductId })')">Remove Sneaker</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                }
-                            }
+                        <img src=@P.ProductPictureURL1 class="card-img-top img-fit" />
                         <div class="card-body">
-                            <h5 class="card-title">@Model[i].ProductName</h5>
+                            <h5 class="card-title">@P.ProductName</h5>
                             <p class="card-text">
-                                @Model[i].ProductDescription
+                                @P.ProductDescription
                             </p>
                             <div class="row">
+
                                 <div class="col text-end">
                                     <a href="#" class="btn btn-outline-primary">Buy Now</a>
                                 </div>
+                                @if (signInManager.IsSignedIn(User))
+                                {
+                                    @if (@User.IsInRole("Admin"))
+                                    {
+                                        <div class="col text-end">
+                                            <a href="@Url.Action("Edit","Product", new {@id = @P.ProductId})" class="btn btn-outline-primary">Edit</a>
+                                        </div>
+                                        <div class="col text-end">
+                                            @*<a href="@Url.Action("Delete","Product", new {@id = @Model[i].ProductId})" class="btn btn-outline-primary">Delete Product</a>*@
+                                            <a href="#" onclick="return confirmDelete('@Url.Action("Delete", "Product", new { @id = @P.ProductId })')" class="btn btn-outline-primary">Delete Product</a>
+
+                                        </div>
+
+
+
+                                    }
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -84,18 +85,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/bootstrap.js"></script>
-
-    <script>
-        function confirmDelete(url) {
+    <script>function confirmDelete(url) {
             if (confirm("Are you sure you want to delete this product?")) {
                 window.location.href = url;
                 return true;
             } else {
                 return false;
             }
-        }
-    </script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
+        }</script>
 </body>
 
