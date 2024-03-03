@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
 using System.Data;
 using System.Data.SqlClient;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace SneakerShop.Controllers
@@ -22,8 +24,9 @@ namespace SneakerShop.Controllers
         {
             List<Product> productList = _db.Products.ToList();
             return View("Products", productList);
-
         }
+
+   
         public ActionResult Index()
         {
             List<Product> ProductList = new List<Product>();
@@ -144,6 +147,23 @@ namespace SneakerShop.Controllers
 
         }
 
+
+        public ActionResult Search(string search)
+        {
+            List<Product> results = _db.Products.Where(p => p.ProductName.Contains(search) || p.ProductDescription.Contains(search)).ToList();
+           
+            return View("SearchItems", results);
+
+        }
+
+
+
+
+        public ActionResult SearchItems(List<Product> productList)
+        {
+            
+            return View(productList);
+        }
 
     }
 
