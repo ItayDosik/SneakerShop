@@ -2,10 +2,7 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<Users> signInManager;
 
-@if (signInManager.IsSignedIn(User))
-{
-    @if (@User.IsInRole("Admin"))
-    {
+
         <div class="container">
             <div class="card">
                 <p>
@@ -90,18 +87,6 @@
             </div>
 
         </div>
-
-
-    }
-}
-
-
-else
-{
-    <div>
-        Log in as admin to see this page.
-    </div>
-}
 
 
 

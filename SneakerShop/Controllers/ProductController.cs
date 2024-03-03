@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SneakerShop.Models;
@@ -34,12 +35,15 @@ namespace SneakerShop.Controllers
             return View();
         }
 
+
+
+        [Authorize(Roles = "Admin")]
         public ActionResult NewProduct()
         {
             return View();
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddProduct(Product product)
         {
@@ -59,12 +63,14 @@ namespace SneakerShop.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id) 
         {
             Product product = _db.Products.Find(id);
             return View(product);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult Edit(Product _product)
         {
@@ -97,20 +103,9 @@ namespace SneakerShop.Controllers
                 TempData["ErrorMessage"] = "An error occurred while saving the product.";
                 return RedirectToAction("ViewAllProducts");
             }
-
-            //product.ProductName = _product.ProductName;
-            //product.ProductDescription = _product.ProductDescription;
-            //product.Price = _product.Price;
-            //product.ProductPictureURL1 = _product.ProductPictureURL1;
-            //product.ProductPictureURL2 = _product.ProductPictureURL2;
-            //product.ProductPictureURL3 = _product.ProductPictureURL3;
-            //product.Category = _product.Category;
-            //product.Size = _product.Size;
-            //_db.SaveChanges();
-            //return RedirectToAction("ViewAllProducts");
         }
 
-
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
 
