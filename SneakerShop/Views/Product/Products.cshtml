@@ -22,9 +22,30 @@
         <div class="row g-3">   
                 @for(int i = 0; i < Model.Count(); i++)
                 {
+
                     <div class="col-md-4 col-12">
                         <div class="card">
                             <img src=@Model[i].ProductPictureURL1 class="card-img-top img-fit" />
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                @if (@User.IsInRole("Admin"))
+                                {
+                                <div class="card-img-overlay">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="@Url.Action("Edit","Product", new {@id = @Model[i].ProductId})" class="dropdown-item">Edit</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#">Remove Sneaker</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                }
+                            }
+                            
                             <div class="card-body">
                                 <h5 class="card-title">@Model[i].ProductName</h5>
                                 <p class="card-text">
@@ -35,15 +56,6 @@
                                 <div class="col text-end">
                                     <a href="#" class="btn btn-outline-primary">Buy Now</a>
                                 </div>
-                                @if (signInManager.IsSignedIn(User))
-                                {
-                                    @if (@User.IsInRole("Admin"))
-                                    {
-                                        <div class="col text-end">
-                                            <a href="@Url.Action("Edit","Product", new {@id = @Model[i].ProductId})" class="btn btn-outline-primary">Edit</a>
-                                        </div>
-                                    }
-                                }
 
                                 </div>
                             </div>
@@ -59,4 +71,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/bootstrap.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
