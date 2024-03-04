@@ -54,7 +54,7 @@ namespace SneakerShop.Controllers
 
 
 
-        public async Task<IActionResult> removeUser()
+        public async Task<IActionResult> userManagement()
         {
 
             var currentUser = await userManager.GetUserAsync(User);
@@ -65,12 +65,12 @@ namespace SneakerShop.Controllers
             }
             var allUsersExceptCurrent = userManager.Users.Where(u => u.Id != currentUser.Id).ToList();
 
-            return View(new RemoveUserVM { users = allUsersExceptCurrent });
+            return View("userManagement", new RemoveUserVM { users = allUsersExceptCurrent });
 
         }
 
     [HttpPost]
-        public async Task<IActionResult> removeUser(RemoveUserVM model)
+        public async Task<IActionResult> userManagement(RemoveUserVM model)
         {
             var method = model.method; 
             var identifier = model.identifier;
@@ -103,7 +103,7 @@ namespace SneakerShop.Controllers
             if (user == null) 
             {
                 TempData["ErrorMessage"] = "User cannot be found.";
-                return RedirectToAction("removeUser");
+                return RedirectToAction("userManagement");
             }
             var result = await userManager.DeleteAsync(user);
 
@@ -115,7 +115,7 @@ namespace SneakerShop.Controllers
             {
                 TempData["ErrorMessage"] = "Something went wrong, try again later.";
             }
-                return RedirectToAction("removeUser"); 
+                return RedirectToAction("userManagement"); 
         }
 
         // helper function for passing user object to removeUserConfirm
@@ -125,7 +125,7 @@ namespace SneakerShop.Controllers
             if (user == null)
             {
                 ModelState.AddModelError("", "User cannot be found");
-                return View("removeUser");
+                return View("userManagement");
             }
             return RedirectToAction("removeUserConfirm",user);
         }
@@ -177,7 +177,7 @@ namespace SneakerShop.Controllers
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User {editUser.editUserName} cannot be found"; 
-                return View("removeUser");
+                return View("userManagement");
             }
 
             // check if the new email is already in use
@@ -220,7 +220,7 @@ namespace SneakerShop.Controllers
             if (result.Succeeded)
             {
                 TempData["SuccessMessage"] = "User has been updated successfully!";
-                return RedirectToAction("removeUser");
+                return RedirectToAction("userManagement");
             }
             else
             {
