@@ -4,11 +4,17 @@
 <ul class="navbar-nav">
     @if (signInManager.IsSignedIn(User))
     {
-
+        <div class="container" style="white-space: nowrap;">
         <li class="nav-link text-dark">Hello, @User.Identity.Name </li>
-        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">
-            Logout
+
+        </div>
+
+        <a class="nav-link text-dark" asp-action="Logout" asp-controller="Account">
+                Logout
+
         </a>
+
+        
     }
     else
     {
@@ -19,6 +25,8 @@
             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login </a>
         </li>
     }
-</ul> 
+</ul>
+
+
 
 

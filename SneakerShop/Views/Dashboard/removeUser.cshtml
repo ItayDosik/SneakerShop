@@ -5,19 +5,8 @@
     ViewData["Title"] = "Remove User";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete User</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+
 <style>
-    .container{ 
-        width: 35%;
-        
-    }
 
     .searchBtn {
         width: 50%; 
@@ -40,7 +29,7 @@
 <body> 
 
 
-        <div class="container">
+        <div class="container w-25">
             <h2>Search User</h2>
             <form action="removeUser" method="post"> 
                 <div class="form-group">
@@ -72,7 +61,7 @@
 
         @if (Model != null && Model.users.Count() > 1)
         {
-            <div class="container">
+            <div class="container w-25">
             @foreach (var user in Model.users)
             {
                 if(user.UserName == "admin")
