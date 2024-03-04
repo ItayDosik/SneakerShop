@@ -91,7 +91,7 @@ namespace SneakerShop.Controllers
                     product.Category = _product.Category;
                     product.Size = _product.Size;
                     _db.SaveChanges();
-                    TempData["SuccessMessage"] = "Product: " + product.ProductName + " saved successfully.";
+                    TempData["SuccessMessage"] = "Product successfully saved";
                     return RedirectToAction("ViewAllProducts");
                 }
                 else

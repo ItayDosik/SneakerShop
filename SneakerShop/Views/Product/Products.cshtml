@@ -19,9 +19,17 @@
             <div>
                 @if (TempData["ErrorMessage"] != null)
                 {
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show w-50 mx-auto" role="alert">
                         <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         @TempData["ErrorMessage"]
+                    </div>
+                }
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show w-50 mx-auto" role="alert">
+                        <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        @TempData["SuccessMessage"]
                     </div>
                 }
 
@@ -36,7 +44,7 @@
                                 @if (@User.IsInRole("Admin"))
                                 {
                                 <div class="card-img-overlay">
-                                    <div class="btn-group" style="z-index: 1;">
+                                    <div style="z-index: 1;">
                                         <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span style="font-size: 20px; color: #dbe1e8;">
                                                 <i class="fa-solid fa-pen-to-square"></i>
@@ -75,13 +83,6 @@
                                 </div>
                             </form>
                             
-                            
-
-@*                             <div class="row">
-                                <div class="col text-end style=" style="position: relative; z-index: 2;">
-                                    <button href="#" class="btn btn-outline-primary" type="button">Buy Now</button>
-                                </div>
-                            </div> *@
                         </div>
                     </div>
                 </div>
