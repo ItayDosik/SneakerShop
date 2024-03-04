@@ -2,7 +2,7 @@
 
 
 @{
-    ViewData["Title"] = "Remove User";
+    ViewData["Title"] = "User Management";
 }
 
 
@@ -31,19 +31,18 @@
 
         <div class="container w-25">
             <h2>Search User</h2>
-            <form action="removeUser" method="post"> 
+            <form action="userManagement" method="post">
                 <div class="form-group">
                     <label for="method">Search By:</label>
-                    <select class="form-control" id="method" name="method">
+                    <select class="form-control" id="method" name="method" onchange="changePlaceholder()">
                         <option value="username">Username</option>
                         <option value="email">Email</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="identifier">Enter Username or Email:</label>
-                    <input required type="text" class="form-control" id="identifier" name="identifier" placeholder="Enter Username or Email">
+                    <input required type="text" class="form-control" id="identifier" name="identifier" placeholder="Enter Username">
                 </div>
-                    <button type="submit" class="searchBtn btn btn-block mb-4">Search User</button>
+                <button type="submit" class="searchBtn btn btn-block mb-4">Search User</button>
             </form>
         @if (TempData["ErrorMessage"] != null)
         {
@@ -59,7 +58,7 @@
         }
         </div>
 
-        @if (Model != null && Model.users.Count() > 1)
+        @if (Model != null && Model.users.Count() > 0)
         {
             <div class="container w-25">
             @foreach (var user in Model.users)
@@ -98,3 +97,11 @@
         }
     </body>
 </html>
+
+<script>
+    function changePlaceholder() {
+        var method = document.getElementById("method").value;
+        var placeholder = (method === 'username') ? 'Enter Username' : 'Enter Email';
+        document.getElementById("identifier").setAttribute('placeholder', placeholder);
+    }
+</script>
