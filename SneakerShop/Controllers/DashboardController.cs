@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShop.Models;
 using SneakerShop.ViewModels;
-
+using Microsoft.AspNetCore.Identity;
+using System.Text.RegularExpressions;
 namespace SneakerShop.Controllers
 {
     public class DashboardController : Controller
@@ -29,7 +30,7 @@ namespace SneakerShop.Controllers
         {
             return View();
         }
-        //
+       
         public IActionResult removeProduct()
         {
 
@@ -53,13 +54,19 @@ namespace SneakerShop.Controllers
 
 
 
-        public IActionResult removeUser()
+        public async Task<IActionResult> removeUser()
         {
-            var RemoveUserViewModel = new RemoveUserVM { 
-            
-                users = userManager.Users.ToList()
-            };
-            return View(RemoveUserViewModel);
+
+            var currentUser = await userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login", "Account"); 
+            }
+            var allUsersExceptCurrent = userManager.Users.Where(u => u.Id != currentUser.Id).ToList();
+
+            return View(new RemoveUserVM { users = allUsersExceptCurrent });
+
         }
 
     [HttpPost]
@@ -127,9 +134,100 @@ namespace SneakerShop.Controllers
         {
             return View();
         }
-        public IActionResult editUser()
+
+
+
+
+
+
+
+        
+        public async Task<IActionResult> EditUser(string UserId)
         {
-            return View();
+
+            Users user = await userManager.FindByIdAsync(UserId);
+
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {UserId} cannot be found";
+                return View("NotFound");
+            }
+
+            var userRoles = await userManager.GetRolesAsync(user); //users with no roles or more than 1 role change to Member as default 
+            if(userRoles.Count() == 0 || userRoles.Count() > 1 ){
+                userRoles = ["Member"];
+            }
+
+            var model = new EditUserVM
+            {
+                editUserName = user.UserName,
+                editName = user.Name,
+                editEmail = user.Email,
+                editPhoneNumber = user.PhoneNumber,
+                editRole = userRoles[0], // assuming that each user has one Role
+                id = UserId
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> saveUserEdit(EditUserVM editUser)
+        {
+            var user = await userManager.FindByIdAsync(editUser.id!); 
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User {editUser.editUserName} cannot be found"; 
+                return View("removeUser");
+            }
+
+            // check if the new email is already in use
+            var existingUserByEmail = await userManager.FindByEmailAsync(editUser.editEmail!);
+            if (existingUserByEmail != null && existingUserByEmail.Id != user.Id)
+            {
+                ModelState.AddModelError("editEmail", "Email is already in use.");
+                return View("editUser", editUser);
+            }
+
+            // check if the new username is already in use
+            var existingUserByName = await userManager.FindByNameAsync(editUser.editUserName!);
+            if (existingUserByName != null && existingUserByName.Id != user.Id)
+            {
+                ModelState.AddModelError("editUserName", "Username is already in use.");
+                return View("editUser", editUser);
+            }
+
+            // validate phone number using regular expression
+            if (!Regex.IsMatch(editUser.editPhoneNumber!, @"^0(5[0-9])\d{7}$"))
+            {
+                ModelState.AddModelError("editPhoneNumber", "Invalid phone number.");
+                return View("editUser", editUser);
+            }
+
+
+            user.Email = editUser.editEmail;
+            user.UserName = editUser.editUserName;
+            user.Name = editUser.editName;
+            user.PhoneNumber = editUser.editPhoneNumber;
+            
+
+            // remove old roles and add new role
+            var roles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, roles);
+            await userManager.AddToRoleAsync(user, editUser.editRole!);
+
+
+            var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "User has been updated successfully!";
+                return RedirectToAction("removeUser");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Something went wrong. Please try again later.";
+            }
+
+            return View(user);
         }
 
     }

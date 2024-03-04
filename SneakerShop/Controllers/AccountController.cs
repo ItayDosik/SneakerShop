@@ -55,8 +55,8 @@ namespace SneakerShop.Controllers
                     UserName = model.UserName,
                     Address = model.Address,
                     PhoneNumber = model.PhoneNumber,
-                    Email = model.Email
-                    
+                    Email = model.Email,
+                    Role = "Member"
                 };
 
                 var existingEmail = await userManager.FindByEmailAsync(model.Email!);
@@ -65,6 +65,7 @@ namespace SneakerShop.Controllers
                     ModelState.AddModelError("", "Email address is already in use.");
                     return View(model);
                 }
+
 
                 var result = await userManager.CreateAsync(user, model.Password!);
 
