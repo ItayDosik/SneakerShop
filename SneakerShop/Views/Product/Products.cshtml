@@ -57,11 +57,31 @@
                             <p class="card-text">
                                 @Model[i].ProductDescription
                             </p>
-                            <div class="row">
+
+                            <p class="fw-semibold text-secondary">$@Model[i].Price</p>
+
+                            <form>
+                                <div class="input-group mb-1 w-75 ms-5 d-flex">
+                                    <select class ="form-select" name="p" title="Department List">
+                                        <option selected>Select Size</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                    </select>
+                                    <button href="#" class="btn btn-outline-primary" type="button">Buy Now</button>
+                                </div>
+                            </form>
+                            
+                            
+
+@*                             <div class="row">
                                 <div class="col text-end style=" style="position: relative; z-index: 2;">
                                     <button href="#" class="btn btn-outline-primary" type="button">Buy Now</button>
                                 </div>
-                            </div>
+                            </div> *@
                         </div>
                     </div>
                 </div>
