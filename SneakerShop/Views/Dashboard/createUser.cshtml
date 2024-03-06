@@ -1,7 +1,7 @@
 ﻿@model SneakerShop.ViewModels.RegisterVM
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Create User";
 }
 
 <section class="">
@@ -9,23 +9,11 @@
     <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
         <div class="container">
             <div class="row gx-lg-5 align-items-center">
-                <div class="col-lg-6 mb-5 mb-lg-0">
-                    <h1 class="my-5 display-3 fw-bold ls-tight">
-                        The best offer <br />
-                        <span class="text-primary">for your business</span>
-                    </h1>
-                    <p style="color: hsl(217, 10%, 50.8%)">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Eveniet, itaque accusantium odio, soluta, corrupti aliquam
-                        quibusdam tempora at cupiditate quis eum maiores libero
-                        veritatis? Dicta facilis sint aliquid ipsum atque?
-                    </p>
-                </div>
-
+                <h1>Create User:</h1>
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="card">
                         <div class="card-body py-5 px-md-5">
-                            <form action="Register" method="post">
+                            <form action="createUser" method="post">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-outline mb-4">
                                     <input type="text" name="UserName" class="form-control" />
@@ -71,12 +59,36 @@
                                     <span asp-validation-for="Address" class="text-danger"></span>
                                 </div>
 
-                                <input type="submit" value="Register" class="btn btn-primary btn-block mb-4"/>
-                                                            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Role</label>
+                                    <div class="col-sm-10">
+                                        <div class="btn-group" role="group" aria-label="Role">
+                                            <button type="button" class="btn btn-secondary" onclick="selectRole('Admin')" id="adminBtn">Admin</button>
+                                            <button type="button" class="btn btn-secondary" onclick="selectRole('Member')" id="memberBtn">Member</button>
+                                            <input type="hidden" id="Role" name="Role" value="@(Model?.Role ?? "Member")">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="submit" value="Create" class="btn btn-primary btn-block mb-4" />
+
                             </form>
                         </div>
                     </div>
                 </div>
+                @if (TempData["SuccessMessageCreate"] != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @TempData["SuccessMessageCreate"]
+                    </div>
+                }
+                @if (TempData["ErrorMessageCreate"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @TempData["ErrorMessageCreate"]
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -90,3 +102,8 @@
 
     }
 }
+<script>
+    function selectRole(role) {
+        document.getElementById("Role").value = role;
+    }
+</script>

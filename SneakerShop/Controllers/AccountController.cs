@@ -45,11 +45,10 @@ namespace SneakerShop.Controllers
         }
 
         [HttpPost]
-            public async Task<IActionResult> Register(RegisterVM model)
+        public async Task<IActionResult> Register(RegisterVM model)
         {
             if(ModelState.IsValid)
             {
-
                 Users user = new() { 
                     Name = model.Name,
                     UserName = model.UserName,
@@ -91,6 +90,8 @@ namespace SneakerShop.Controllers
             return RedirectToAction("Index", "Home");           
 
         }
+
+       
     }
 
 
