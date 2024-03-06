@@ -29,6 +29,7 @@
         width: auto; /* Adjust this value to your preference */
         max-width: 150px; /* Adjust this value to your preference */
     }
+
 </style>
 
 
@@ -100,13 +101,22 @@
                             <td>@product.Qnt</td> 
                             <td>@product.Category</td>
                             <td>
-                                <form asp-action="Edit" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="get">  <!--add action here maybe to rewrite the edit function because it redirect to other view-->
-                                    <button type="submit" class="btn btn-info">Edit</button>
-                                </form>
+                                <div class="row col-sm-8">
+                                    <form asp-action="Edit" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="get" class="col">
+                                        <!--add action here maybe to rewrite the edit function because it redirect to other view-->
+                                        <button type="submit" class="btn">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </form>
 
-                                <form asp-action="" asp-controller="" asp-route-id="@product.ProductId" method="post">  <!--add action here maybe to rewrite the edit function because it redirect to other view--> 
-                                    <button type="submit" onclick="return alert("Are You Sure?")" class="btn btn-danger">Remove</button>
-                                </form>
+                                    <form asp-action="" asp-controller="" asp-route-id="@product.ProductId" method="post" class="col">
+                                        <!--add action here maybe to rewrite the edit function because it redirect to other view-->
+                                        <button type="submit" onclick="return alert(" Are You Sure?")" class="btn btn-danger">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
 
                             </td>
                         </tr>
