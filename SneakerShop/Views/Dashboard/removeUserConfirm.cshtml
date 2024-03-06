@@ -18,12 +18,12 @@
 
 
 <body>
-    <div class="container mt-5">
-        <div class="card">
+    <div class="container">
+        <div class="card w-50 mx-auto mt-5">
             <div class="card-header">
                 User Details
             </div>
-            <form asp-action="removeUserConfirm" asp-route-id="@Model.Id" method="post"> 
+            <form asp-action="removeUserConfirm" asp-route-id="@Model.Id" method="post">
                 <div class="card-body">
                     <h5 class="card-title">Username: @Model.UserName</h5>
                     <p class="card-text">Name: @Model.Name</p>
@@ -33,8 +33,8 @@
                     <p class="card-text">Phone Number: @Model.PhoneNumber</p>
                 </div>
                 <div class="btn-container">
-                    <a class="mybtn btn btn-block mb-4" asp-action="EditUser" asp-controller="Dashboard" asp-route-UserId="@Model.Id" style="background-color:lightblue">Edit</a>
-                    <button onclick="return(confirm('Are you sure? Youre about to remove this user'))" type="submit" class="mybtn btn btn-danger btn-block mb-4">Remove User</button>
+                    <a class="btn btn-secondary  mb-4" asp-action="EditUser" asp-controller="Dashboard" asp-route-UserId="@Model.Id">Edit</a>
+                    <button onclick="return(confirm('Are you sure? Youre about to remove this user'))" type="submit" class="btn btn-danger btn-block mb-4">Remove User</button>
                 </div>
             </form>
 
