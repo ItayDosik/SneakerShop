@@ -4,61 +4,69 @@
     ViewBag.Title = "Edit User";
 }
 
+<div class="container d-flex justify-content-center align-items-center">
 
-<div class="container">
-    <h1>Edit User</h1>
-
-    <form asp-action="saveUserEdit" method="post" class="mt-3">
-        <input type="hidden" asp-for="id" />
-
-        <div class="form-group row">
-            <label asp-for="editUserName" class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-10">
-                <input required asp-for="editUserName" class="form-control">
-                <span asp-validation-for="editUserName" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label asp-for="editName" class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-10">
-                <input required asp-for="editName" class="form-control">
-            </div>
+    <div class="card col-sm-5 align-content-center d-flex">
+        <div class="card-header">
+            Edit User: @Model.id
         </div>
 
-        <div class="form-group row">
-            <label asp-for="editEmail" class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-10">
-                <input required asp-for="editEmail" class="form-control">
-                <span asp-validation-for="editEmail" class="text-danger"></span>
-            </div>
-        </div>
+        <div class="card-body">
+            <form asp-action="saveUserEdit" method="post" class="mt-3">
+                <input type="hidden" asp-for="id" />
 
-        <div class="form-group row">
-            <label asp-for="editPhoneNumber" class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-10">
-                <input required asp-for="editPhoneNumber" class="form-control">
-                <span asp-validation-for="editPhoneNumber" class="text-danger"></span>
-            </div>
-        </div>
-        <br /><br />
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Role</label>
-            <div class="col-sm-10">
-                <div class="btn-group" role="group" aria-label="Role">
-                    <button type="button" class="btn btn-secondary" onclick="selectRole('Admin')" id="adminBtn">Admin</button>
-                    <button type="button" class="btn btn-secondary" onclick="selectRole('Member')" id="memberBtn">Member</button>
-                    <input type="hidden" id="editRole" name="editRole" value="@Model.editRole"> 
+                <div class="form-group row mb-2">
+                    <label asp-for="editUserName" class="col-form-label col-4"></label>
+                    <div class="col col-sm-8">
+                        <input required asp-for="editUserName" class="form-control">
+                        <span asp-validation-for="editUserName" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
-        </div>
+                <div class="form-group row mb-2">
+                    <label asp-for="editName" class="col-form-label col-4"></label>
+                    <div class="col col-sm-8">
+                        <input required asp-for="editName" class="form-control">
+                    </div>
+                </div>
 
-        <div class="form-group row">
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <a asp-action="userManagement" class="btn btn-primary">Cancel</a>
-            </div>
+                <div class="form-group row mb-2">
+                    <label asp-for="editEmail" class="col-form-label col-4"></label>
+                    <div class="col col-sm-8">
+                        <input required asp-for="editEmail" class="form-control">
+                        <span asp-validation-for="editEmail" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-2">
+                    <label asp-for="editPhoneNumber" class="col-form-label col-4"></label>
+                    <div class="col col-sm-8">
+                        <input required asp-for="editPhoneNumber" class="form-control">
+                        <span asp-validation-for="editPhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-2">
+                    <label class="ccol-form-label col-4">Role</label>
+                    <div class="col col-sm-8">
+                        <div class="btn-group" role="group" aria-label="Role">
+                            <button type="button" class="btn btn-outline-secondary" onclick="selectRole('Admin')" id="adminBtn">Admin</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="selectRole('Member')" id="memberBtn">Member</button>
+
+                        </div>
+                        <input type="hidden" id="editRole" name="editRole" value="@Model.editRole">
+                    </div>
+                </div>
+
+
+                <div class="btn-container mt-5">
+                    <button type="submit" class="btn btn-secondary">Update</button>
+                    <a asp-action="userManagement" class="btn btn-danger">Cancel</a>
+                </div>
+
+            </form>
         </div>
-    </form>
+    </div>
+</div>
 
         <script>
             window.onload = function () {

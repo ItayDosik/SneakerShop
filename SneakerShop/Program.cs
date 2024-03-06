@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SneakerShop;
+using SneakerShop.Data;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
 
@@ -65,6 +66,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+AppDbInitializer.Seed(app);
 
 using (var scope = app.Services.CreateScope())
 {
