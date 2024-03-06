@@ -66,6 +66,7 @@ namespace SneakerShop.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public ActionResult Edit(int id) 
         {
             Product product = _db.Products.Find(id);
@@ -105,6 +106,7 @@ namespace SneakerShop.Controllers
                 TempData["ErrorMessage"] = "An error occurred while saving the product.";
                 return RedirectToAction("ViewAllProducts");
             }
+
         }
 
         [Authorize(Roles = "Admin")]

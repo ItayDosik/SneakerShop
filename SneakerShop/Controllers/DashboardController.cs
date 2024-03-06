@@ -5,16 +5,23 @@ using SneakerShop.Models;
 using SneakerShop.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
+using SneakerShop.Models.Data;
+using SneakerShop.Controllers;
+using SneakerShop.Migrations;
 namespace SneakerShop.Controllers
 {
     public class DashboardController : Controller
     {
         private readonly SignInManager<Users> signInManager;
         private readonly UserManager<Users> userManager;
-        public DashboardController(SignInManager<Users> signInManager, UserManager<Users> userManager)
+        private readonly ProductController productController;
+        private readonly AppDbContext _db;
+        public DashboardController(SignInManager<Users> signInManager, UserManager<Users> userManager, AppDbContext db)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            _db = db;
+            productController = new ProductController(db);
         }
 
 
@@ -30,25 +37,91 @@ namespace SneakerShop.Controllers
         {
             return View();
         }
-       
-        public IActionResult removeProduct()
-        {
 
 
-            return View();
-        }
-        public IActionResult editProduct()
+
+        [HttpPost]
+        public IActionResult removeProduct(int productId)
         {
-            return View();
+            try
+            {
+                Product product = _db.Products.Find(productId);
+
+                if (product != null)
+                {
+                    _db.Products.Remove(product);
+                    _db.SaveChanges();
+
+                    if (_db.Products.Find(productId) == null)
+                    {
+                        TempData["SuccessMessage"] = "Product removed successfully.";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Product removal failed.";
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Product cannot be found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred: " + ex.Message;
+            }
+
+            return RedirectToAction("productManagement", "Dashboard");
         }
+
+
+
+        public IActionResult editProduct(int productId)
+        {
+            var x = productController.Edit(productId);
+            return View("Product", x);
+        }
+
+
         public IActionResult manageSupply()
         {
             return View();
         }
-        public IActionResult findProduct()
+
+
+
+        public IActionResult productManagement()
         {
-            return View();
+            List<Product> results = _db.Products.ToList();
+            return View("productManagement", new productManagement { products = results });
         }
+
+        [HttpPost]
+        public IActionResult productManagement(string keyWord)
+        {
+            List<Product> results = _db.Products.Where(p => p.ProductName.Contains(keyWord) || p.ProductDescription.Contains(keyWord)).ToList(); 
+            return View("productManagement", new productManagement { products = results});
+        }
+
+
+
+
+        public IActionResult Edit()
+        {
+            return View("Error");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
