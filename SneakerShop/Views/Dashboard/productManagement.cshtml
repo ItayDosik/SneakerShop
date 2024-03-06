@@ -100,7 +100,7 @@
                             <td>@product.Qnt</td> 
                             <td>@product.Category</td>
                             <td>
-                                <form asp-action="editProduct" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="get">  <!--add action here maybe to rewrite the edit function because it redirect to other view-->
+                                <form asp-action="Edit" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="get">  <!--add action here maybe to rewrite the edit function because it redirect to other view-->
                                     <button type="submit" class="btn btn-info">Edit</button>
                                 </form>
 

@@ -66,7 +66,6 @@ namespace SneakerShop.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet]
         public ActionResult Edit(int id) 
         {
             Product product = _db.Products.Find(id);
