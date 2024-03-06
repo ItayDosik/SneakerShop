@@ -14,11 +14,13 @@ namespace SneakerShop.Controllers
     {
         private readonly SignInManager<Users> signInManager;
         private readonly UserManager<Users> userManager;
+        private readonly ProductController productController;
         private readonly AppDbContext _db;
         public DashboardController(SignInManager<Users> signInManager, UserManager<Users> userManager, AppDbContext db)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            productController = new ProductController(db);
             _db = db;
 
         }
@@ -80,8 +82,7 @@ namespace SneakerShop.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            Product product = _db.Products.Find(id);
-            return View(product);
+            return productController.Edit(id);
         }
 
         [Authorize(Roles = "Admin")]
@@ -90,27 +91,8 @@ namespace SneakerShop.Controllers
         {
             try
             {
-                Product product = _db.Products.Find(_product.ProductId);
-
-                if (ModelState.IsValid && product != null)
-                {
-                    product.ProductName = _product.ProductName;
-                    product.ProductDescription = _product.ProductDescription;
-                    product.Price = _product.Price;
-                    product.ProductPictureURL1 = _product.ProductPictureURL1;
-                    product.ProductPictureURL2 = _product.ProductPictureURL2;
-                    product.ProductPictureURL3 = _product.ProductPictureURL3;
-                    product.Category = _product.Category;
-                    product.Size = _product.Size;
-                    _db.SaveChanges();
-                    TempData["SuccessMessage"] = "Product successfully saved";
-                    return RedirectToAction("productManagement");
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Product cannot be edited, check again for the values you entered.";
-                    return RedirectToAction("productManagement");
-                }
+                productController.Edit(_product);
+                TempData["SuccessMessage"] = "Product successfully saved";
             }
             catch (Exception ex)
             {
@@ -118,6 +100,8 @@ namespace SneakerShop.Controllers
                 return RedirectToAction("productManagement");
             }
 
+
+            return RedirectToAction("productManagement");
         }
 
 
