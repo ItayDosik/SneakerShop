@@ -39,11 +39,18 @@
                         <option value="email">Email</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
                     <input required type="text" class="form-control" id="identifier" name="identifier" placeholder="Enter Username">
                 </div>
+                <br/>
                 <button type="submit" class="searchBtn btn btn-block mb-4">Search User</button>
             </form>
+                    <div>
+            <a class ="mybtn btn btn-block mb-4" asp-action="CreateUser" asp-controller="Dashboard" style="background-color:lightblue">
+                Create User <i class="fa-solid fa-user-plus"></i>
+            </a>
+                    </div>
         @if (TempData["ErrorMessage"] != null)
         {
             <div class="alert alert-danger" role="alert">
@@ -60,30 +67,36 @@
 
         @if (Model != null && Model.users.Count() > 0)
         {
-            <div class="container w-25">
-            @foreach (var user in Model.users)
-            {
-                if(user.UserName == "admin")
-                {
-                    continue;
-                }
-                <div class="card mb-3" style="margin-top: 0.1rem;">
-                    <div class="card-header">
-                        User Id: @user.Id
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Username: @user.UserName</h5>
-                        <p class="card-text">Email: @user.Email</p>
-                    </div>
-                    <div class="card-footer">
-                        <form asp-action="findUserById" asp-route-id="@user.Id" method="get">
-                            <button type="submit" class="btn mybtn">Show</button>
-                        </form>
-                    </div>
-                </div>
-                <br/>   
-                <br/>   
-            }
+            <div class="container">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>User Id</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.users)
+                        {
+                            if (user.UserName == "admin")
+                            {
+                                continue;
+                            }
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    <form asp-action="findUserById" asp-route-id="@user.Id" method="get">
+                                        <button type="submit" class="btn btn-info">Show</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         }
         else
@@ -91,10 +104,10 @@
             <div class="card">
                 <div class="card-header">
                     No Users Added Yet
-                    
                 </div>
             </div>
         }
+
     </body>
 </html>
 

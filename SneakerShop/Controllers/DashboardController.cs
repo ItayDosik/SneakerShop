@@ -230,5 +230,57 @@ namespace SneakerShop.Controllers
             return View(user);
         }
 
+
+        public IActionResult createUser()
+        {
+            return View("createUser");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> createUser(RegisterVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                Users user = new()
+                {
+                    Name = model.Name,
+                    UserName = model.UserName,
+                    Address = model.Address,
+                    PhoneNumber = model.PhoneNumber,
+                    Email = model.Email,
+                    Role = model.Role
+                };
+
+                var existingEmail = await userManager.FindByEmailAsync(model.Email!);
+                if (existingEmail != null)
+                {
+                    ModelState.AddModelError("", "Email address is already in use.");
+                    return View(model);
+                }
+
+
+                var result = await userManager.CreateAsync(user, model.Password!);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, model.Role!);
+                    TempData["SuccessMessageCreate"] = "User Created!";
+                    return RedirectToAction("createUser", "Dashboard");
+                }
+                else
+                {
+                    TempData["ErrorMessageCreate"] = "User Not Created, Something Went Wrong!";
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+            }
+            return View(model);
+        }
+
     }
 }
