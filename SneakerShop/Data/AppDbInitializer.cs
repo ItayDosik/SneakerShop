@@ -71,6 +71,8 @@ namespace SneakerShop.Data
                     });
                     context.SaveChanges();
                 }
+
+
             }
         }
     }
