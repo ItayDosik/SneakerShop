@@ -1,0 +1,144 @@
+﻿@model SneakerShop.ViewModels.productManagement;
+
+
+@{
+    ViewData["Title"] = "Product Management";
+}
+
+
+<style>
+
+    .searchBtn {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: lightblue;
+    }
+
+    .mybtn {
+        width: 25%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: lightblue;
+    }
+
+    .card-header {
+    }
+
+    .custom-select {
+        width: auto; /* Adjust this value to your preference */
+        max-width: 150px; /* Adjust this value to your preference */
+    }
+
+</style>
+
+
+<body>
+    <div class="container">
+        <div class="col-sm-5 mx-auto mb-5">
+
+            <form action="productManagement" method="post"> 
+                <h1>Find Product:</h1>
+                <div class="form-group">
+                    <input required type="text" class="form-control" id="keyWord" name="keyWord" placeholder="Enter Product Name Or Desciption">
+                </div>
+                <br />
+                <button type="submit" class="searchBtn btn btn-block mb-4">Search Product</button>
+
+            <div>
+                    <a class="mybtn btn btn-block mb-4" asp-action="NewProduct" asp-controller="Dashboard" style="background-color:lightblue">
+                    Add New Product <i class="fa-solid fa-user-plus"></i>
+                </a>
+            </div>
+            </form>
+
+        </div>
+    </div>
+
+
+
+    <div class="container w-25">
+
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                @TempData["SuccessMessage"]
+            </div>
+        }
+    </div>
+
+    
+
+    @if (Model != null && Model.products.Count() > 0)
+    {
+
+        <div class="container">
+            <a class="btn btn-block mb-4" asp-action="backwardToProductManagement" asp-controller="Dashboard" style="background-color:lightblue">
+                <i class="fa-solid fa-table"></i> Show All
+            </a>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Product id</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Qun</th> 
+                        <th>Category</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.products)
+                    {
+                        <tr>
+                            <td>@product.ProductId</td>
+                            <td>@product.ProductName</td>
+                            <td>@product.Price</td>
+                            <td>@product.Qnt</td> 
+                            <td>@product.Category</td>
+                            <td>
+                                <div class="row col-sm-8">
+                                    <form asp-action="Edit" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="get" class="col">
+                                        <button type="submit" class="btn">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                    </form>
+
+                                    <form asp-action="removeProduct" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="post" class="col">
+                                        <button type="submit" onclick="return confirm('Are You Sure?')" class="btn btn-danger">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="card w-25 mx-auto">
+            <div class="card-header">
+                No Products To Show.
+            </div>
+        </div>
+    }
+
+</body>
+
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>

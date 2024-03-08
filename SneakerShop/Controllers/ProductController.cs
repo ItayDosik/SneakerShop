@@ -42,7 +42,6 @@ namespace SneakerShop.Controllers
         {
             return View();
 
-
         }
 
         [Authorize(Roles = "Admin")]
@@ -91,7 +90,10 @@ namespace SneakerShop.Controllers
                     product.Category = _product.Category;
                     product.Size = _product.Size;
                     _db.SaveChanges();
-                    TempData["SuccessMessage"] = "Product successfully saved";
+                    if (TempData != null)
+                    {
+                        TempData["SuccessMessage"] = "Product successfully saved";
+                    }
                     return RedirectToAction("ViewAllProducts");
                 }
                 else
@@ -105,6 +107,7 @@ namespace SneakerShop.Controllers
                 TempData["ErrorMessage"] = "An error occurred while saving the product.";
                 return RedirectToAction("ViewAllProducts");
             }
+
         }
 
         [Authorize(Roles = "Admin")]

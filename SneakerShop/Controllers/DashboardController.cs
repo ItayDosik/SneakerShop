@@ -5,20 +5,25 @@ using SneakerShop.Models;
 using SneakerShop.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
+using SneakerShop.Models.Data;
+using SneakerShop.Controllers;
+using SneakerShop.Migrations;
 namespace SneakerShop.Controllers
 {
     public class DashboardController : Controller
     {
         private readonly SignInManager<Users> signInManager;
         private readonly UserManager<Users> userManager;
-        public DashboardController(SignInManager<Users> signInManager, UserManager<Users> userManager)
+        private readonly ProductController productController;
+        private readonly AppDbContext _db;
+        public DashboardController(SignInManager<Users> signInManager, UserManager<Users> userManager, AppDbContext db)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            productController = new ProductController(db);
+            _db = db;
+
         }
-
-
-
 
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
@@ -26,29 +31,144 @@ namespace SneakerShop.Controllers
             return View("dashboard");
         }
 
-        public IActionResult addProduct()
+        [Authorize(Roles = "Admin")]
+        public IActionResult NewProduct()
         {
-            return View();
+            return View("NewProduct");
         }
-       
-        public IActionResult removeProduct()
-        {
 
 
-            return View();
-        }
-        public IActionResult editProduct()
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AddProduct(Product product)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                _db.Products.Add(product);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Product: " + product.ProductName + " added successfully.";
+                return RedirectToAction("productManagement");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Product cannot be added, check again for the values you entered.";
+                return RedirectToAction("productManagement");
+            }
+        }
+
+
+
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult removeProduct(int id) 
+        {
+            try
+            {
+                Product product = _db.Products.Find(id);
+
+                if (product != null)
+                {
+                    _db.Products.Remove(product);
+                    _db.SaveChanges();
+
+                    if (_db.Products.Find(id) == null)
+                    {
+                        TempData["SuccessMessage"] = "Product removed successfully.";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Product removal failed.";
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Product cannot be found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred: " + ex.Message;
+            }
+
+            return RedirectToAction("productManagement", "Dashboard");
+
+        }
+
+
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            return productController.Edit(id);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult Edit(Product _product) 
+        {
+            try
+            {
+                productController.Edit(_product);
+                TempData["SuccessMessage"] = "Product successfully saved";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred while saving the product.";
+                return RedirectToAction("productManagement");
+            }
+
+
+            return RedirectToAction("productManagement");
+        }
+
+        public IActionResult backwardToProductManagement()
+        {
+            List<Product> results = _db.Products.ToList();
+            return View("productManagement", new productManagement { products = results });
         }
         public IActionResult manageSupply()
         {
             return View();
         }
-        public IActionResult findProduct()
+
+
+
+        public IActionResult productManagement()
         {
-            return View();
+            List<Product> results = _db.Products.ToList();
+            return View("productManagement", new productManagement { products = results });
         }
+
+        [HttpPost]
+        public IActionResult productManagement(string keyWord)
+        {
+            List<Product> results = _db.Products.Where(p => p.ProductName.Contains(keyWord) || p.ProductDescription.Contains(keyWord)).ToList(); 
+            return View("productManagement", new productManagement { products = results});
+        }
+
+
+
+
+        public IActionResult Edit()
+        {
+            return View("Error");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
