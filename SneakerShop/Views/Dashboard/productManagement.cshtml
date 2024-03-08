@@ -40,13 +40,13 @@
             <form action="productManagement" method="post"> 
                 <h1>Find Product:</h1>
                 <div class="form-group">
-                    <input required type="text" class="form-control" id="keyWord" name="keyWord" placeholder="Enter Username">
+                    <input required type="text" class="form-control" id="keyWord" name="keyWord" placeholder="Enter Product Name Or Desciption">
                 </div>
                 <br />
                 <button type="submit" class="searchBtn btn btn-block mb-4">Search Product</button>
 
             <div>
-                <a class="mybtn btn btn-block mb-4" asp-action="" asp-controller="Dashboard" style="background-color:lightblue"> <!--enter new action for Add New Product-->
+                    <a class="mybtn btn btn-block mb-4" asp-action="NewProduct" asp-controller="Dashboard" style="background-color:lightblue">
                     Add New Product <i class="fa-solid fa-user-plus"></i>
                 </a>
             </div>
@@ -76,10 +76,15 @@
         }
     </div>
 
+    
+
     @if (Model != null && Model.products.Count() > 0)
     {
 
         <div class="container">
+            <a class="btn btn-block mb-4" asp-action="backwardToProductManagement" asp-controller="Dashboard" style="background-color:lightblue">
+                <i class="fa-solid fa-table"></i> Show All
+            </a>
             <table class="table">
                 <thead class="thead-light">
                     <tr>
@@ -103,15 +108,13 @@
                             <td>
                                 <div class="row col-sm-8">
                                     <form asp-action="Edit" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="get" class="col">
-                                        <!--add action here maybe to rewrite the edit function because it redirect to other view-->
                                         <button type="submit" class="btn">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
                                     </form>
 
-                                    <form asp-action="" asp-controller="" asp-route-id="@product.ProductId" method="post" class="col">
-                                        <!--add action here maybe to rewrite the edit function because it redirect to other view-->
-                                        <button type="submit" onclick="return alert(" Are You Sure?")" class="btn btn-danger">
+                                    <form asp-action="removeProduct" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="post" class="col">
+                                        <button type="submit" onclick="return confirm('Are You Sure?')" class="btn btn-danger">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
                                     </form>

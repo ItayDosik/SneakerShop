@@ -25,35 +25,55 @@ namespace SneakerShop.Controllers
 
         }
 
-
-
-
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View("dashboard");
         }
 
-        public IActionResult addProduct()
+        [Authorize(Roles = "Admin")]
+        public IActionResult NewProduct()
         {
-            return View();
+            return View("NewProduct");
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult AddProduct(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Products.Add(product);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Product: " + product.ProductName + " added successfully.";
+                return RedirectToAction("productManagement");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Product cannot be added, check again for the values you entered.";
+                return RedirectToAction("productManagement");
+            }
         }
 
 
 
+
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult removeProduct(int productId)
+        public IActionResult removeProduct(int id) 
         {
             try
             {
-                Product product = _db.Products.Find(productId);
+                Product product = _db.Products.Find(id);
 
                 if (product != null)
                 {
                     _db.Products.Remove(product);
                     _db.SaveChanges();
 
-                    if (_db.Products.Find(productId) == null)
+                    if (_db.Products.Find(id) == null)
                     {
                         TempData["SuccessMessage"] = "Product removed successfully.";
                     }
@@ -73,6 +93,7 @@ namespace SneakerShop.Controllers
             }
 
             return RedirectToAction("productManagement", "Dashboard");
+
         }
 
 
@@ -87,7 +108,7 @@ namespace SneakerShop.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult Edit(Product _product)
+        public ActionResult Edit(Product _product) 
         {
             try
             {
@@ -104,7 +125,11 @@ namespace SneakerShop.Controllers
             return RedirectToAction("productManagement");
         }
 
-
+        public IActionResult backwardToProductManagement()
+        {
+            List<Product> results = _db.Products.ToList();
+            return View("productManagement", new productManagement { products = results });
+        }
         public IActionResult manageSupply()
         {
             return View();
