@@ -1,0 +1,129 @@
+﻿@model SneakerShop.ViewModels.productManagement;
+
+
+@{
+    ViewData["Title"] = "Manage Supply";
+}
+
+
+<style>
+
+    .searchBtn {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: lightblue;
+    }
+
+    .mybtn {
+        width: 25%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: lightblue;
+    }
+
+    .card-header {
+    }
+
+    .custom-select {
+        width: auto; 
+        max-width: 150px; 
+    }
+
+</style>
+
+
+<body>
+
+    <div class="container w-25">
+
+        <h1>Manage Supply</h1>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                @TempData["SuccessMessage"]
+            </div>
+        }
+    </div>
+
+
+
+    @if (Model != null && Model.products.Count() > 0)
+    {
+        <form id="updateQuantityForm" action="updateProductQuantities" method="post">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Product Id</th>
+                        <th>Product Name</th>
+                        <th>Quantity in Store</th>
+                        <th>Price</th>
+                        <th>Order</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.products)
+                    {
+                        <tr>
+                            <td>@product.ProductId</td>
+                            <td>@product.ProductName</td>
+                            <td>@product.Qnt</td>
+                            <td>@product.Price</td>
+                            <td>
+                                <input type="number" class="quantity-input" name="products[@product.ProductId]" value="0" min="0" max="100" />
+                            </td>
+                        </tr>
+                        <input type="hidden" name="productId_@product.ProductId" value="@product.ProductId" class="product-id-input" />
+                        <input type="hidden" name="quantity_@product.ProductId" value="@product.Qnt" class="quantity-hidden-input" />
+                    }
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Submit Order</button>
+        </form>
+    }
+    else
+    {
+        <div class="card w-25 mx-auto">
+            <div class="card-header">
+                No Products To Display.
+            </div>
+        </div>
+    }
+
+
+</body>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        const productIdInputs = document.querySelectorAll('.product-id-input');
+
+        // Update hidden inputs with current quantity values when form is submitted
+        document.getElementById('updateQuantityForm').addEventListener('submit', function (event) {
+            for (let i = 0; i < quantityInputs.length; i++) {
+                const productId = productIdInputs[i].value;
+                const quantity = quantityInputs[i].value;
+
+                // Update the corresponding hidden input value
+                const hiddenInput = document.querySelector(`input[name="products[${productId}].Qnt"]`);
+                hiddenInput.value = quantity;
+            }
+        });
+    });
+</script>
+
+
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
