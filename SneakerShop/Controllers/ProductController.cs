@@ -87,6 +87,7 @@ namespace SneakerShop.Controllers
                     product.ProductPictureURL1 = _product.ProductPictureURL1;
                     product.ProductPictureURL2 = _product.ProductPictureURL2;
                     product.ProductPictureURL3 = _product.ProductPictureURL3;
+                    product.Qnt = _product.Qnt;
                     product.Category = _product.Category;
                     product.Size = _product.Size;
                     _db.SaveChanges();

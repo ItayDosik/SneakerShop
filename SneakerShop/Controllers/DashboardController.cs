@@ -6,8 +6,10 @@ using SneakerShop.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
 using SneakerShop.Models.Data;
+using System.Collections.Generic;
 using SneakerShop.Controllers;
 using SneakerShop.Migrations;
+using Microsoft.EntityFrameworkCore;
 namespace SneakerShop.Controllers
 {
     public class DashboardController : Controller
@@ -24,6 +26,65 @@ namespace SneakerShop.Controllers
             _db = db;
 
         }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult manageSupply()
+        {
+            List<Product> results = _db.Products.ToList();
+            return View("manageSupply", new productManagement { products = results });
+        }
+
+        [HttpPost]
+        public IActionResult UpdateQuantities(Dictionary<int, int> products)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var productId in products.Keys)
+                {
+                    var dbProduct = _db.Products.Find(productId);
+                    if (dbProduct != null)
+                    {
+                        
+                        dbProduct.Qnt += products[productId];
+                    }
+                }
+
+                _db.SaveChanges();
+
+                TempData["SuccessMessage"] = "Quantities updated successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Invalid data submitted.";
+            }
+
+            return RedirectToAction("ManageSupply");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
@@ -55,10 +116,6 @@ namespace SneakerShop.Controllers
                 return RedirectToAction("productManagement");
             }
         }
-
-
-
-
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
@@ -97,8 +154,6 @@ namespace SneakerShop.Controllers
         }
 
 
-
-
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult Edit(int id)
@@ -130,12 +185,6 @@ namespace SneakerShop.Controllers
             List<Product> results = _db.Products.ToList();
             return View("productManagement", new productManagement { products = results });
         }
-        public IActionResult manageSupply()
-        {
-            return View();
-        }
-
-
 
         public IActionResult productManagement()
         {
@@ -150,29 +199,10 @@ namespace SneakerShop.Controllers
             return View("productManagement", new productManagement { products = results});
         }
 
-
-
-
         public IActionResult Edit()
         {
             return View("Error");
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         public async Task<IActionResult> userManagement()
         {
@@ -254,13 +284,6 @@ namespace SneakerShop.Controllers
         {
             return View();
         }
-
-
-
-
-
-
-
         
         public async Task<IActionResult> EditUser(string UserId)
         {
