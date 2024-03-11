@@ -34,8 +34,9 @@ namespace SneakerShop.Controllers
             return View("manageSupply", new productManagement { products = results });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult UpdateQuantities(Dictionary<int, int> products)
+        public IActionResult updateProductQuantities(Dictionary<int, int> products)
         {
             if (ModelState.IsValid)
             {
@@ -60,31 +61,6 @@ namespace SneakerShop.Controllers
 
             return RedirectToAction("ManageSupply");
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         [Authorize(Roles = "Admin")]
         public IActionResult Index()

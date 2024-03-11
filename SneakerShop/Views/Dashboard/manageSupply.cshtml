@@ -34,33 +34,10 @@
 
 
 <body>
-@*     <div class="container">
-        <div class="col-sm-5 mx-auto mb-5">
-
-            <form action="productManagement" method="post">
-                <h1>Find Product:</h1>
-                <div class="form-group">
-                    <input required type="text" class="form-control" id="keyWord" name="keyWord" placeholder="Enter Product Name Or Desciption">
-                </div>
-                <br />
-                <button type="submit" class="searchBtn btn btn-block mb-4">Search Product</button>
-
-                <div>
-                    <a class="mybtn btn btn-block mb-4" asp-action="NewProduct" asp-controller="Dashboard" style="background-color:lightblue">
-                        Add New Product <i class="fa-solid fa-user-plus"></i>
-                    </a>
-                </div>
-            </form>
-
-        </div>
-    </div> *@
-
-
 
     <div class="container w-25">
 
         <h1>Manage Supply</h1>
-
 
         @if (TempData["ErrorMessage"] != null)
         {
@@ -82,7 +59,7 @@
 
     @if (Model != null && Model.products.Count() > 0)
     {
-        <form id="updateQuantityForm" action="UpdateQuantities" method="post">
+        <form id="updateQuantityForm" action="updateProductQuantities" method="post">
             <table class="table">
                 <thead class="thead-light">
                     <tr>
