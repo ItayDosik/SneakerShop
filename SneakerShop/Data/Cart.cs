@@ -6,7 +6,7 @@ namespace SneakerShop.Data
     public class Cart
     {
         [Key]
-        public int CartID { get; set; }
+        public int CartId { get; set; }
         List<CartItem> cartItems { get; set; }
 
 

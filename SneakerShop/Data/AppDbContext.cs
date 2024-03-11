@@ -11,4 +11,5 @@ public class AppDbContext:IdentityDbContext<Users>
     }
 
     public DbSet<Product> Products { get; set; }
+    public DbSet<Cart> Carts { get; set; }
 }
