@@ -1,5 +1,31 @@
 ﻿﻿@using Microsoft.AspNetCore.Identity;
+@using SneakerShop.Models.Data
+@using System.Security.Claims;
 @inject SignInManager<Users> signInManager;
+@inject AppDbContext db;
+
+
+@{
+    int NumOfProducts = 0;
+
+    if (signInManager.IsSignedIn(User))
+    {
+        var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        Cart userCart = (from cart in db.Carts
+                         where cart.UserId == userID
+                         select cart).FirstOrDefault();
+        List<CartItem> cartItems = (from item in db.CartItems
+                                    where item.CartId == userCart.CartId
+                                    select item).ToList();
+        if (cartItems != null)
+        {
+            NumOfProducts = cartItems.Count();
+        }
+
+    }
+
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +39,8 @@
 	<link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 
 </head>
+
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 ">
@@ -50,6 +78,15 @@
     </header>
 
     <main role="main" class="pb-3">
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Your Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+        </div>
         @RenderBody()
     </main>
 
