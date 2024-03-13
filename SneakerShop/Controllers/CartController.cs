@@ -43,6 +43,15 @@ namespace SneakerShop.Controllers
             if (userID != null)
             {
                 Cart my_cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
+                if(my_cart == null)
+                {
+                    my_cart = new Cart();
+                    my_cart.UserId = userID;
+                    my_cart.cartItems = new List<CartItem>();
+                    _db.Carts.Add(my_cart);
+                    _db.SaveChanges();
+
+                }
                 return my_cart;
             }
             else

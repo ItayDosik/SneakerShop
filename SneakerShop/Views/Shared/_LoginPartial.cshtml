@@ -27,7 +27,7 @@
 
 @{
     int NumOfProducts = 0;
-
+    List<CartItem> cartItems = null;
     if (signInManager.IsSignedIn(User))
     {
         var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -35,18 +35,21 @@
         Cart userCart = (from cart in db.Carts
                          where cart.UserId == userID
                          select cart).FirstOrDefault();
-        List<CartItem> cartItems = (from item in db.CartItems
-                                    where item.CartId == userCart.CartId
-                                    select item).ToList();
+        if (userCart != null)
+        {
+            cartItems = (from item in db.CartItems
+                         where item.CartId == userCart.CartId
+                         select item).ToList();
+        }
+
         if (cartItems != null)
         {
             NumOfProducts = cartItems.Count();
         }
-        
+
     }
 
 }
-
 <ul class="navbar-nav">
     @if (signInManager.IsSignedIn(User))
     {
