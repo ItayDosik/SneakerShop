@@ -76,10 +76,32 @@ namespace SneakerShop.Controllers
             }
         }
 
+        bool productAvailable(int productID, int quantity, Cart cart)
+        {
+            var index = IsInCart(productID, cart);
+            if (index == -1)
+            {
+                if (quantity > _db.Products.Find(productID).Qnt)
+                    return false;
+            }
+            else
+            {
+                var sumQun = cart.cartItems[index].quantity + quantity;
+                if (sumQun > _db.Products.Find(productID).Qnt)
+                    return false;
+            }
+            return true;
+        }
+
 
         public IActionResult AddToCart(int productID, int quantity)
         {
             Cart my_cart = GetCart();
+            if(!productAvailable(productID, quantity, my_cart))
+            {
+                TempData["ErrorMessage"] = "The selected quantity is not in stock.";
+                return RedirectToAction("ViewAllProducts", "Product");
+            }
             int index = IsInCart(productID, my_cart);
 
             if (index != -1)

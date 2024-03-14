@@ -36,5 +36,10 @@ namespace SneakerShop.Models
 
         public string Size { get; set; }
 
+        public Boolean IsOnSale {  get; set; }
+
+        [Range(0,100,ErrorMessage = "Invalid input, values between 0, 100")]
+        public int SalePercentage {  get; set; }
+
     }
 }

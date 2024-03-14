@@ -24,7 +24,10 @@ namespace SneakerShop.Migrations
                     ProductPictureURL3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Qnt = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsOnSale = table.Column<bool>(type: "bit", nullable: false), 
+                    SalePercentage = table.Column<int>(type: "int", nullable: true) 
+
                 },
                 constraints: table =>
                 {

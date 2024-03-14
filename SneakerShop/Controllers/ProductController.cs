@@ -90,6 +90,14 @@ namespace SneakerShop.Controllers
                     product.Qnt = _product.Qnt;
                     product.Category = _product.Category;
                     product.Size = _product.Size;
+                    product.SalePercentage = _product.SalePercentage;
+
+                    if(_product.SalePercentage > 0)
+                        product.IsOnSale = true;
+                    else
+                        product.IsOnSale = false;
+
+                    
                     _db.SaveChanges();
                     if (TempData != null)
                     {

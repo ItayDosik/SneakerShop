@@ -15,9 +15,14 @@
 		<th>Total Amount</th>
 		<th>Remove</th>
 	</tr>
-	
+
 	@foreach (var item in @Model.cartItems)
 	{
+		decimal actualPrice = item.product.Price;
+
+		if(item.product.IsOnSale)
+			actualPrice = item.product.Price * (1 - ((decimal)item.product.SalePercentage / 100));
+
 		<tr>
 			<td>
 				<img src="@item.product.ProductPictureURL1" width="100" height="auto"/>
@@ -26,13 +31,13 @@
 				@item.product.ProductName
 			</td>
 			<td>
-				@item.product.Price
+				@actualPrice
 			</td>
 			<td>
 				@item.quantity
 			</td>
 			<td>
-				@(item.quantity * item.product.Price)
+				@(item.quantity * actualPrice)
 			</td>
 			<td>
 				<a href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })" class="btn btn-danger">Remove</a>

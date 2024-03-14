@@ -9,7 +9,9 @@
        margin-top: auto;
        margin-bottom: auto;
     }
-
+    .text-sale{ 
+        color:red;
+    }
 
 </style>
 
@@ -103,8 +105,23 @@
                             <p class="card-text">
                                 @Model[i].ProductDescription
                             </p>
+                            @{
 
-                            <p class="fw-semibold text-secondary">$@Model[i].Price</p>
+                            }
+                            @if (@Model[i].IsOnSale)
+                            {
+
+                                decimal salePrice = Model[i].Price * (1 - ((decimal)Model[i].SalePercentage / 100));
+                                salePrice = Math.Round(salePrice, 2);
+
+
+                                <p class="fw-semibold text-secondary" style="text-decoration: line-through;">Regular Price: $@Model[i].Price</p>
+                                <p class="fw-semibold text-sale">Sale Price: $@salePrice</p>
+                            }
+                            else
+                            {
+                                <p class="fw-semibold text-secondary">$@Model[i].Price</p>
+                            }
 
                             <form action="@Url.Action("AddToCart", "Cart", new { productID = @Model[i].ProductId })" method="post">
                                 <div class="input-group mb-1 w-75 ms-5 d-flex" style="z-index: 2;">
