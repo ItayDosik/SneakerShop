@@ -2,31 +2,17 @@
 @using SneakerShop.Models.Data
 @using System.Security.Claims;
 @inject SignInManager<Users> signInManager;
-@inject AppDbContext db;
+@inject SneakerShop.Services.IProductService ProductService;
 
 
 @{
     int NumOfProducts = 0;
-    List<CartItem> cartItems = null;
+    List<CartItem> cartItems = new List<CartItem>();
     if (signInManager.IsSignedIn(User))
     {
         var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        Cart userCart = (from cart in db.Carts
-                         where cart.UserId == userID
-                         select cart).FirstOrDefault();
-        if (userCart != null)
-        {
-            cartItems = (from item in db.CartItems
-                         where item.CartId == userCart.CartId
-                         select item).ToList();
-        }
-
-        if (cartItems != null)
-        {
-            NumOfProducts = cartItems.Count();
-        }
-
+        cartItems = ProductService.GetCartItems(userID);
+        NumOfProducts = cartItems.Count();
     }
 
 }
@@ -88,7 +74,27 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <p>Try scrolling the rest of the page to see this option in action.</p>
+                <table class="table table-bordered table-hover">
+
+
+                    @foreach (var item in cartItems)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.product.ProductPictureURL1" width="100" height="auto" />
+                        </td>
+                        <td>
+                            @item.product.Price
+                        </td>
+                        <td>
+                            @item.quantity
+                        </td>
+                        <td>
+                            <a href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })" class="btn btn-danger">Remove</a>
+                        </td>
+                    </tr>
+                }
+                </table>
             </div>
         </div>
         @RenderBody()

@@ -5,6 +5,7 @@ using SneakerShop;
 using SneakerShop.Data;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
+using SneakerShop.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,7 @@ builder.Services.AddIdentity<Users, IdentityRole>(
     ).AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
@@ -76,6 +78,8 @@ using (var scope = app.Services.CreateScope())
 
 AppDbInitializer.Seed(app);
 
+
+
 using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Users>>();
@@ -94,7 +98,8 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(user, "Admin");
 
     }
-   
+
+
 }
 
 
