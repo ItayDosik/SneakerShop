@@ -75,24 +75,25 @@ namespace SneakerShop.Controllers
                        
             }
         }
-       
 
-        public IActionResult AddToCart(int productID)
+
+        public IActionResult AddToCart(int productID, int quantity)
         {
             Cart my_cart = GetCart();
             int index = IsInCart(productID, my_cart);
+
             if (index != -1)
             {
-                my_cart.cartItems[index].quantity++;
+                my_cart.cartItems[index].quantity += quantity;
             }
             else
             {
-                my_cart.cartItems.Add(new CartItem { product = _db.Products.Find(productID), quantity = 1, cart = my_cart });
+                my_cart.cartItems.Add(new CartItem { product = _db.Products.Find(productID), quantity = quantity, cart = my_cart });
             }
+
             _db.SaveChanges();
 
             return RedirectToAction("Index");
-
         }
 
         public ActionResult RemoveFromCart(int productID)
