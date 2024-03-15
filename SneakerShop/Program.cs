@@ -5,6 +5,7 @@ using SneakerShop;
 using SneakerShop.Data;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
+using SneakerShop.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,14 @@ var connectionString = builder.Configuration.GetConnectionString("myConnect") ??
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddDistributedMemoryCache(); // Required for session state
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(3600); // Session timeout of 1 hour
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddIdentity<Users, IdentityRole>(
     option =>
@@ -28,6 +37,7 @@ builder.Services.AddIdentity<Users, IdentityRole>(
     ).AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
@@ -44,7 +54,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthentication();
 
 app.UseAuthorization();
@@ -68,6 +78,8 @@ using (var scope = app.Services.CreateScope())
 
 AppDbInitializer.Seed(app);
 
+
+
 using (var scope = app.Services.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Users>>();
@@ -86,7 +98,8 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(user, "Admin");
 
     }
-   
+
+
 }
 
 

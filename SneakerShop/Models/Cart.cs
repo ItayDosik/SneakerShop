@@ -1,17 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SneakerShop.Models
 {
     public class Cart
     {
         [Key]
-        public string CartID { get; set; }
+        public int CartId { get; set; }
+        public List<CartItem> cartItems { get; set; }
 
-        [Key]
-        public string ProductID { get; set; }
-
-        public int Qnt { get; set; }
-       
+        [ForeignKey("UserId")]
+        public string? UserId { get; set; }
 
 
     }

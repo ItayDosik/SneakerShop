@@ -87,6 +87,7 @@ namespace SneakerShop.Controllers
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
+            HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");           
 
         }

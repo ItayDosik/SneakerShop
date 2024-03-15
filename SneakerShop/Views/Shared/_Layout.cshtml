@@ -1,5 +1,21 @@
 ﻿﻿@using Microsoft.AspNetCore.Identity;
+@using SneakerShop.Models.Data
+@using System.Security.Claims;
 @inject SignInManager<Users> signInManager;
+@inject SneakerShop.Services.IProductService ProductService;
+
+
+@{
+    int NumOfProducts = 0;
+    List<CartItem> cartItems = new List<CartItem>();
+    if (signInManager.IsSignedIn(User))
+    {
+        var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        cartItems = ProductService.GetCartItems(userID);
+        NumOfProducts = cartItems.Count();
+    }
+
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +29,8 @@
 	<link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 
 </head>
+
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 ">
@@ -50,6 +68,59 @@
     </header>
 
     <main role="main" class="pb-3">
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Your Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <table class="table table-borderless table-hover">
+
+
+                    @foreach (var item in cartItems)
+                {
+                        decimal actualPrice = item.product.Price;
+
+                        if (item.product.IsOnSale)
+                            actualPrice = item.product.Price * (1 - ((decimal)item.product.SalePercentage / 100));
+
+                    <tr>
+                        <td>
+                            <img src="@item.product.ProductPictureURL1" width="50" height="auto" />
+
+                        <td>
+                                $@actualPrice
+                        </td>
+                        <td>
+                            @item.quantity
+                        </td>
+                        <td>
+                                <a class="btn btn-secondary text-white btn-sm" href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                                <a class="btn btn-secondary text-white btn-sm" href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })">
+                                    <i class="fa-solid fa-minus"></i>
+                                </a>
+                                
+                        </td>
+                        <td>
+                                <a class="btn btn-danger text-white btn-sm" href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                        </td>
+                    </tr>
+                }
+                </table>
+                <div>
+                    <a class="btn btn-success text-white" href="@Url.Action("RemoveFromCart", "Cart")">
+                        Buy Now
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
         @RenderBody()
     </main>
 

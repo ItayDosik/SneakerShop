@@ -29,7 +29,10 @@ namespace SneakerShop.Data
                             ProductPictureURL3 = "https://i.ibb.co/tQ7wN86/bredtoe.png",
                             Qnt = 5,
                             Category = "Jordan",
-                            Size = "12"
+                            Size = "12",
+                            IsOnSale = false,
+                            SalePercentage = 0
+
                         },
                         new SneakerShop.Models.Product()
                         {
@@ -41,7 +44,9 @@ namespace SneakerShop.Data
                             ProductPictureURL3 = "https://i.ibb.co/p1kQM5H/travis.png",
                             Qnt = 5,
                             Category = "Jordan",
-                            Size = "12"
+                            Size = "12",
+                            IsOnSale = false,
+                            SalePercentage = 0
                         },
                         new SneakerShop.Models.Product()
                         {
@@ -53,7 +58,9 @@ namespace SneakerShop.Data
                             ProductPictureURL3 = "https://i.ibb.co/qrdPVTQ/yeezygrey.png",
                             Qnt = 5,
                             Category = "Yeezy",
-                            Size = "12"
+                            Size = "12",
+                            IsOnSale = false,
+                            SalePercentage = 0
                         },
                         new SneakerShop.Models.Product()
                         {
@@ -65,7 +72,9 @@ namespace SneakerShop.Data
                             ProductPictureURL3 = "https://i.ibb.co/192zM7V/SbApril.png",
                             Qnt = 5,
                             Category = "NikeSb",
-                            Size = "12"
+                            Size = "12",
+                            IsOnSale = false,
+                            SalePercentage = 0
                         }
 
                     });

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SneakerShop.Models.Data;
 
@@ -11,9 +12,11 @@ using SneakerShop.Models.Data;
 namespace SneakerShop.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240311152124_carts")]
+    partial class carts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,9 +212,6 @@ namespace SneakerShop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsOnSale")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -236,9 +236,6 @@ namespace SneakerShop.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Qnt")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SalePercentage")
                         .HasColumnType("int");
 
                     b.Property<string>("Size")
@@ -381,7 +378,7 @@ namespace SneakerShop.Migrations
             modelBuilder.Entity("SneakerShop.Models.CartItem", b =>
                 {
                     b.HasOne("SneakerShop.Models.Cart", "cart")
-                        .WithMany("cartItems")
+                        .WithMany()
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -395,11 +392,6 @@ namespace SneakerShop.Migrations
                     b.Navigation("cart");
 
                     b.Navigation("product");
-                });
-
-            modelBuilder.Entity("SneakerShop.Models.Cart", b =>
-                {
-                    b.Navigation("cartItems");
                 });
 #pragma warning restore 612, 618
         }

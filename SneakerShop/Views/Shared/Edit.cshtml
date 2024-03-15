@@ -78,6 +78,11 @@
                     <input asp-for="Size" class="form-control" type="text" value="@Model.Size" />
                     <span asp-validation-for="Size" class="text-danger"></span>
                     <br />
+                    Sale:
+                    <br />
+                        <input asp-for="SalePercentage" class="form-control" type="number" value="@Model.SalePercentage" />
+                        <span asp-validation-for="SalePercentage" class="text-danger"></span>
+                    <br />
                     <br />
 
                     <input type="submit" value="Save Changes" />

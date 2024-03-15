@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using SneakerShop.Models;
+@using Microsoft.AspNetCore.Session;
+@model SneakerShop.Models.Cart;
+
+<h2>
+	Your Cart
+</h2>
+<table class="table table-bordered table-hover">
+	<tr>
+		<th>Product Image</th>
+		<th>Product Name</th>
+		<th>Product Price</th>
+		<th>Product Quantity</th>
+		<th>Total Amount</th>
+		<th>Remove</th>
+	</tr>
+
+	@foreach (var item in @Model.cartItems)
+	{
+		decimal actualPrice = item.product.Price;
+
+		if(item.product.IsOnSale)
+			actualPrice = item.product.Price * (1 - ((decimal)item.product.SalePercentage / 100));
+
+		<tr>
+			<td>
+				<img src="@item.product.ProductPictureURL1" width="100" height="auto"/>
+			</td>
+			<td>
+				@item.product.ProductName
+			</td>
+			<td>
+				@actualPrice
+			</td>
+			<td>
+				@item.quantity
+			</td>
+			<td>
+				@(item.quantity * actualPrice)
+			</td>
+			<td>
+				<a href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })" class="btn btn-danger">Remove</a>
+			</td>
+		</tr>
+	}
+
+
+
+</table>
