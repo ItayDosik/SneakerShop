@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -154,7 +155,52 @@ namespace SneakerShop.Controllers
             List<Product> results = _db.Products.Where(p => p.ProductName.Contains(search) || p.ProductDescription.Contains(search)).ToList();
             if (results.Count == 0)
             {
+                results = _db.Products.ToList();
                 TempData["ErrorMessage"] = "No sneakers found";
+                return RedirectToAction("ViewAllProducts");
+            }
+
+            return View("Products", results);
+
+        }
+
+        public ActionResult CategoryFilter(string category)
+        {
+            List<Product> results = new List<Product>();
+            if (category.Contains("Show")){
+                results = _db.Products.ToList();
+                return RedirectToAction("ViewAllProducts");
+            }
+            else
+            {
+                results = _db.Products.Where(p => p.Category.Contains(category)).ToList();
+              
+            }
+
+            if (results.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No sneakers found";
+                return RedirectToAction("ViewAllProducts");
+            }
+            return View("Products", results);
+        }
+
+        public ActionResult SearchByPrice(string search)
+        {
+            List<Product> results = new List<Product>();
+            if (search == null)
+            {
+                results = _db.Products.ToList();
+                TempData["ErrorMessage"] = "Enter price range";
+                return RedirectToAction("ViewAllProducts");
+            }
+            results = _db.Products.Where(p => p.Price >= 1 && p.Price <= decimal.Parse(search)).ToList();
+
+            if (results.Count == 0)
+            {
+                results = _db.Products.ToList();
+                TempData["ErrorMessage"] = "No sneakers found";
+                return RedirectToAction("ViewAllProducts");
             }
 
             return View("Products", results);
@@ -162,6 +208,7 @@ namespace SneakerShop.Controllers
         }
 
     }
+
 
 
 }
