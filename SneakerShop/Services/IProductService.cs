@@ -26,6 +26,14 @@ namespace SneakerShop.Services
         public List<CartItem> GetCartItems(string userID)
         {
             Cart cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
+            if(cart == null)
+            {
+                cart = new Cart();
+                cart.UserId = userID;
+                cart.cartItems = new List<CartItem>();
+                _db.Carts.Add(cart);
+                _db.SaveChanges();
+            }
             return cart.cartItems;
         }
     }

@@ -79,13 +79,17 @@
 
                     @foreach (var item in cartItems)
                 {
+                        decimal actualPrice = item.product.Price;
+
+                        if (item.product.IsOnSale)
+                            actualPrice = item.product.Price * (1 - ((decimal)item.product.SalePercentage / 100));
 
                     <tr>
                         <td>
                             <img src="@item.product.ProductPictureURL1" width="50" height="auto" />
 
                         <td>
-                            $@item.product.Price
+                                $@actualPrice
                         </td>
                         <td>
                             @item.quantity
