@@ -74,29 +74,49 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <table class="table table-bordered table-hover">
+                <table class="table table-borderless table-hover">
 
 
                     @foreach (var item in cartItems)
                 {
+
                     <tr>
                         <td>
-                            <img src="@item.product.ProductPictureURL1" width="100" height="auto" />
-                        </td>
+                            <img src="@item.product.ProductPictureURL1" width="50" height="auto" />
+
                         <td>
-                            @item.product.Price
+                            $@item.product.Price
                         </td>
                         <td>
                             @item.quantity
                         </td>
                         <td>
-                            <a href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })" class="btn btn-danger">Remove</a>
+                                <a class="btn btn-secondary text-white btn-sm" href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                                <a class="btn btn-secondary text-white btn-sm" href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })">
+                                    <i class="fa-solid fa-minus"></i>
+                                </a>
+                                
+                        </td>
+                        <td>
+                                <a class="btn btn-danger text-white btn-sm" href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
                         </td>
                     </tr>
                 }
                 </table>
+                <div>
+                    <a class="btn btn-success text-white" href="@Url.Action("RemoveFromCart", "Cart")">
+                        Buy Now
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+                </div>
+
             </div>
         </div>
+
         @RenderBody()
     </main>
 
