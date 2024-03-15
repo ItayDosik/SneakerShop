@@ -54,6 +54,20 @@
         @*end of code*@
 
 
+        <br />
+        <br />
+        @*filtering*@
+
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="@Url.Action("Sort", "Product", new { sort = "Price Increase" })" class="btn btn-info">Price (High to low)</a>
+        <a href="@Url.Action("Sort", "Product", new { sort = "Price Decrease" })" class="btn btn-info">Price (Low to high)</a>
+        <a href="@Url.Action("Sort", "Product", new { sort = "Category" })" class="btn btn-info">Category</a>
+        <a href="@Url.Action("Sort", "Product", new { sort = "Most Popular" })" class="btn btn-info">Most Popular</a>
+        <a href="@Url.Action("Sort", "Product", new { sort = "Remove filter" })" class="btn btn-info">Remove filter</a>
+    </div>
+        @*filtering*@
+        <br />
+        <br />
 
         <div class="row g-3">
 

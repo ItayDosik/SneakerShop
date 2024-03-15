@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
 using System;
@@ -204,6 +206,46 @@ namespace SneakerShop.Controllers
             }
 
             return View("Products", results);
+
+        }
+
+        public ActionResult Sort(string sort)
+        {
+            try
+            {
+                var productsList = from s in _db.Products
+                                   select s;
+                switch (sort)
+                {
+                    case "Price Increase":
+                        productsList = productsList.OrderByDescending(s => s.Price);
+                        break;
+                    case "Price Decrease":
+                        productsList = productsList.OrderBy(s => s.Price);
+                        break;
+                    case "Category":
+                        productsList = productsList.OrderByDescending(s => s.Category);
+                        break;
+                    case "Most Popular":
+                        productsList = productsList.OrderByDescending(s => s.Category);
+                        break;
+                    case "Remove Filter":
+                        productsList = _db.Products;
+                        break;
+                    default:
+                        productsList = _db.Products;
+                        break;
+                }
+                return View("Products", productsList.ToList());
+            }
+
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred: " + ex.Message;
+            }
+
+            return RedirectToAction("ViewAllProducts");
+
 
         }
 
