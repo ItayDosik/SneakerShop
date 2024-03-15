@@ -114,8 +114,8 @@ namespace SneakerShop.Controllers
             }
 
             _db.SaveChanges();
-
-            return RedirectToAction("Index");
+            TempData["SuccessMessage"] = "Product added to cart successfully";
+            return RedirectToAction("ViewAllProducts", "Product");
         }
 
         public ActionResult RemoveFromCart(int productID)
@@ -124,7 +124,43 @@ namespace SneakerShop.Controllers
             int index = IsInCart(productID, my_cart);
             my_cart.cartItems.RemoveAt(index);
             _db.SaveChanges();
-            return RedirectToAction("Index");
+            TempData["SuccessMessage"] = "Product removed from cart successfully";
+            return RedirectToAction("ViewAllProducts", "Product");
+        }
+
+        public ActionResult RemoveOneQuantity(int productID)
+        {
+            Cart my_cart = GetCart();
+            int index = IsInCart(productID, my_cart);
+            if(my_cart.cartItems[index].quantity == 1)
+            {
+                RemoveFromCart(productID);
+            }
+            else
+            {
+                my_cart.cartItems[index].quantity--;
+                _db.SaveChanges();
+                
+            }
+            return RedirectToAction("ViewAllProducts", "Product");
+        }
+
+        public ActionResult AddOneQuantity(int productID)
+        {
+            Cart my_cart = GetCart();
+            if(productAvailable(productID,1,my_cart))
+            {
+                int index = IsInCart(productID, my_cart);
+                my_cart.cartItems[index].quantity++;
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Product removed from cart successfully";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "The selected quantity is not in stock.";
+            }
+            
+            return RedirectToAction("ViewAllProducts", "Product");
         }
 
         public int IsInCart(int ProductId, Cart my_cart)
