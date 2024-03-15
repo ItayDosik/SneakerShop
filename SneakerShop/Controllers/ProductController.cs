@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using SneakerShop.Migrations;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
 using System;
@@ -239,6 +240,9 @@ namespace SneakerShop.Controllers
                         break;
                     case "Remove Filter":
                         productsList = _db.Products;
+                        break;
+                    case "Sale":
+                        productsList = productsList.Where(product => product.IsOnSale == true);
                         break;
                     default:
                         productsList = _db.Products;
