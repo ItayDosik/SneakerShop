@@ -96,7 +96,7 @@
                             @item.quantity
                         </td>
                         <td>
-                                <a class="btn btn-secondary text-white btn-sm" href="@Url.Action("AddOneQuantity", "Cart", new { @productID = @item.ProductId })">
+                                <a class="btn btn-secondary text-white btn-sm" onclick="AddQuantity" href="@Url.Action("AddOneQuantity", "Cart", new { @productID = @item.ProductId })">
                                     <i class="fa-solid fa-plus"></i>
                                 </a>
                                 <a class="btn btn-secondary text-white btn-sm" href="@Url.Action("RemoveOneQuantity", "Cart", new { @productID = @item.ProductId })">
@@ -137,7 +137,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script>
+        function AddQuantity() { }
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
