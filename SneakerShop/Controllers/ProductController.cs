@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -162,14 +165,100 @@ namespace SneakerShop.Controllers
             List<Product> results = _db.Products.Where(p => p.ProductName.Contains(search) || p.ProductDescription.Contains(search)).ToList();
             if (results.Count == 0)
             {
+                results = _db.Products.ToList();
                 TempData["ErrorMessage"] = "No sneakers found";
+                return RedirectToAction("ViewAllProducts");
             }
 
             return View("Products", results);
 
         }
 
+        public ActionResult CategoryFilter(string category)
+        {
+            List<Product> results = new List<Product>();
+            if (category.Contains("Show")){
+                results = _db.Products.ToList();
+                return RedirectToAction("ViewAllProducts");
+            }
+            else
+            {
+                results = _db.Products.Where(p => p.Category.Contains(category)).ToList();
+              
+            }
+
+            if (results.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No sneakers found";
+                return RedirectToAction("ViewAllProducts");
+            }
+            return View("Products", results);
+        }
+
+        public ActionResult SearchByPrice(string search)
+        {
+            List<Product> results = new List<Product>();
+            if (search == null)
+            {
+                results = _db.Products.ToList();
+                TempData["ErrorMessage"] = "Enter price range";
+                return RedirectToAction("ViewAllProducts");
+            }
+            results = _db.Products.Where(p => p.Price >= 1 && p.Price <= decimal.Parse(search)).ToList();
+
+            if (results.Count == 0)
+            {
+                results = _db.Products.ToList();
+                TempData["ErrorMessage"] = "No sneakers found";
+                return RedirectToAction("ViewAllProducts");
+            }
+
+            return View("Products", results);
+
+        }
+
+        public ActionResult Sort(string sort)
+        {
+            try
+            {
+                var productsList = from s in _db.Products
+                                   select s;
+                switch (sort)
+                {
+                    case "Price Increase":
+                        productsList = productsList.OrderByDescending(s => s.Price);
+                        break;
+                    case "Price Decrease":
+                        productsList = productsList.OrderBy(s => s.Price);
+                        break;
+                    case "Category":
+                        productsList = productsList.OrderByDescending(s => s.Category);
+                        break;
+                    case "Most Popular":
+                        productsList = productsList.OrderByDescending(s => s.Category);
+                        break;
+                    case "Remove Filter":
+                        productsList = _db.Products;
+                        break;
+                    default:
+                        productsList = _db.Products;
+                        break;
+                }
+                return View("Products", productsList.ToList());
+            }
+
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred: " + ex.Message;
+            }
+
+            return RedirectToAction("ViewAllProducts");
+
+
+        }
+
     }
+
 
 
 }
