@@ -13,6 +13,11 @@
         color:red;
     }
 
+    .my-badge{ 
+        width:5rem;
+        margin-left:80%; 
+    }
+
 </style>
 
 <body>
@@ -60,6 +65,7 @@
                             @if (@User.IsInRole("Admin"))
                             {
                                 <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
+                                    <span class="badge alert-danger my-badge">On Sale!</span>
                                     <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span style="font-size: 20px; color: #dbe1e8;">
                                             <i class="fa-solid fa-pen-to-square"></i>
@@ -101,15 +107,20 @@
 
                         
                         <div class="card-body">
-                            <h5 class="card-title">@Model[i].ProductName</h5>
-                            <p class="card-text">
-                                @Model[i].ProductDescription
-                            </p>
-                            @{
-
-                            }
+                            
                             @if (@Model[i].IsOnSale)
                             {
+                                <div class=" top-0 end-0">
+                                   
+                                </div>
+                                <div class="row">
+                                    <h5 class="col card-title">@Model[i].ProductName  </h5>
+                                   
+                                </div>
+                                <p class="card-text">
+                                    @Model[i].ProductDescription
+                                </p>
+                                
 
                                 decimal salePrice = Model[i].Price * (1 - ((decimal)Model[i].SalePercentage / 100));
                                 salePrice = Math.Round(salePrice, 2);
@@ -120,6 +131,10 @@
                             }
                             else
                             {
+                                <h5 class="card-title">@Model[i].ProductName</h5>
+                                <p class="card-text">
+                                    @Model[i].ProductDescription
+                                </p>
                                 <p class="fw-semibold text-secondary">$@Model[i].Price</p>
                             }
 
@@ -149,7 +164,7 @@
 
 
 
-    <!-- Bootstrap core JS-->
+    
 
 
 
