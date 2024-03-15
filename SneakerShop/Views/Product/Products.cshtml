@@ -103,12 +103,22 @@
             {
                 <div class="col-md-4 col-12">
                     <div class="card">
+                        @if (@Model[i].IsOnSale)
+                        {
+                            <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
+                                <span class="badge alert-danger my-badge">-@Model[i].SalePercentage% OFF</span>
+                            </div>
+
+
+                            
+                        }
                         @if (signInManager.IsSignedIn(User))
                         {
                             @if (@User.IsInRole("Admin"))
                             {
                                 <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
-                                    <span class="badge alert-danger my-badge">On Sale!</span>
+
+                                    
                                     <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span style="font-size: 20px; color: #dbe1e8;">
                                             <i class="fa-solid fa-pen-to-square"></i>
