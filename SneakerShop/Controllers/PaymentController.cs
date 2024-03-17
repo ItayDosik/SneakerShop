@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
@@ -9,9 +10,11 @@ namespace SneakerShop.Controllers
     public class PaymentController : Controller
     {
         private readonly AppDbContext _db;
-        public PaymentController(AppDbContext db)
+        private readonly UserManager<Users> _userManager;
+        public PaymentController(AppDbContext db, UserManager<Users> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
         public IActionResult Index(string userID)
@@ -22,11 +25,12 @@ namespace SneakerShop.Controllers
         }
 
 
-        public IActionResult buyNowPayment(string userID, int productID)
+        public async Task<IActionResult> buyNowPayment(string userID, int productID)
         {
             Cart cart = new Cart()
             {
                 UserId = userID,
+                user = await _userManager.GetUserAsync(User),
                 cartItems = new List<CartItem>(),  
             };
             var prod = _db.Products.Find(productID);
