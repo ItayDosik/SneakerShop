@@ -18,11 +18,12 @@
         margin-left:80%; 
     }
 
+
 </style>
 
 <body>
     <!--Search Bar-->
-    <div class="container w-50">
+    <div class="container w-50 my-5">
         <form asp-controller="Product" asp-action="Search" method="get">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="search" placeholder="Search sneakers">
@@ -36,7 +37,6 @@
                     <li><hr class="dropdown-divider"></li>
                     <li><a href="@Url.Action("Sort", "Product", new { sort = "Remove filter" })" class="dropdown-item">Default</a></li>
                 </ul>
-
             </div>
         </form>
 
@@ -67,13 +67,11 @@
 
 
 
-
-
         <div class="row">
             <div class="col-sm-12 col-md-2 order-sm-1">
                 <div class="container">
 
-                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <div class="accordion mb-5" id="accordionPanelsStayOpenExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
@@ -82,8 +80,12 @@
                             </h2>
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
-                                <form asp-controller="Product" asp-action="CategoryFilter" method="get">
+
+                                <!--Categories-->
+                                <form class="mb-4" asp-controller="Product" asp-action="CategoryFilter" method="get">
+                                    <label class="form-label">Categories</label>
                                     <div class="input-group mb-3">
+                                        
                                         <select class="form-select" name="category" title="Department List">
                                             <option selected value="Show">Show All</option>
                                             <option value="Yeezy">Yeezy</option>
@@ -94,22 +96,23 @@
                                         <button class="btn btn-outline-primary" type="submit">Show</button>
                                     </div>
                                 </form>
+                                <!--EOF Categories-->
 
-                                @*code of range*@
-                                <form id="priceRangeForm" asp-controller="Product" asp-action="SearchByPrice" method="get">
+                                <!--Price Range-->
+                                <form class="mb-4" id="priceRangeForm" asp-controller="Product" asp-action="SearchByPrice" method="get">
                                     <div class="input-group mb-3">
                                         <label for="customRange3" class="form-label">Price Range</label>
                                         <input type="range" class="form-range" min="1" max="10000" step="100" id="customRange3">
                                         <div id="selectedAmount">Price range: 1$ - $ </div>
                                     </div>
                                     <input type="hidden" name="search" id="selectedAmountInput">
-                                    <button class="btn btn-primary" type="submit">Filter by price range</button>
+                                    <button class="btn btn-outline-primary" type="submit">Apply</button>
                                 </form>
-                                @*end of code*@
+                                <!--EOF Price Range-->
 
-                                <div class="btn-group">
-                                    <a href="@Url.Action("Sort", "Product", new { sort = "Sale" })" class="btn btn-info">Sale</a>
-                                </div>
+                                    <div class="btn-group">
+                                    <a href="@Url.Action("Sort", "Product", new { sort = "Sale" })" class="btn btn-outline-primary">Show Items on Sale</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -120,11 +123,11 @@
 
 
             </div>
-            <div class="col-sm-12 col-md-10 order-sm-2">
-                <div class="container row">
+            <div class="col-sm-12 col-md-9 order-sm-2">
+                <div class="row mx-3">
                     @for (int i = 0; i < Model.Count(); i++)
                     {
-                        <div class="col-md-4 col-12">
+                        <div class="col-md-4 col-12 mb-4">
                             <div class="card">
                                 @if (@Model[i].IsOnSale)
                                 {
@@ -234,15 +237,8 @@
         </div>
 
 
-               
-            </div>
-        </div>
-        <div class="row g-3">
-
-            
 
 
-        </div>
 
 
 
