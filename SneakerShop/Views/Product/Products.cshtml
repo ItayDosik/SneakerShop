@@ -81,38 +81,39 @@
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
 
-                                <!--Categories-->
-                                <form class="mb-4" asp-controller="Product" asp-action="CategoryFilter" method="get">
-                                    <label class="form-label">Categories</label>
-                                    <div class="input-group mb-3">
+                                    <!--Categories-->
+                                    <form class="mb-4" asp-controller="Product" asp-action="CategoryFilter" method="get">
+                                        <label class="form-label">Categories</label>
+                                        <div class="input-group mb-3">
                                         
-                                        <select class="form-select" name="category" title="Department List">
-                                            <option selected value="Show">Show All</option>
-                                            <option value="Yeezy">Yeezy</option>
-                                            <option value="NikeSB">NikeSB</option>
-                                            <option value="Adidas">Adidas</option>
-                                            <option value="Jordan">Jordan</option>
-                                        </select>
-                                        <button class="btn btn-outline-primary" type="submit">Show</button>
-                                    </div>
-                                </form>
-                                <!--EOF Categories-->
+                                            <select class="form-select" name="category" title="Department List">
+                                                <option selected value="Show">Show All</option>
+                                                <option value="Yeezy">Yeezy</option>
+                                                <option value="NikeSB">NikeSB</option>
+                                                <option value="Adidas">Adidas</option>
+                                                <option value="Jordan">Jordan</option>
+                                            </select>
+                                            <button class="btn btn-outline-primary" type="submit">Show</button>
+                                        </div>
+                                    </form>
+                                    <!--EOF Categories-->
 
-                                <!--Price Range-->
-                                <form class="mb-4" id="priceRangeForm" asp-controller="Product" asp-action="SearchByPrice" method="get">
-                                    <div class="input-group mb-3">
-                                        <label for="customRange3" class="form-label">Price Range</label>
-                                        <input type="range" class="form-range" min="1" max="10000" step="100" id="customRange3">
-                                        <div id="selectedAmount">Price range: 1$ - $ </div>
-                                    </div>
-                                    <input type="hidden" name="search" id="selectedAmountInput">
-                                    <button class="btn btn-outline-primary" type="submit">Apply</button>
-                                </form>
-                                <!--EOF Price Range-->
+                                    <!--Price Range-->
+                                    <form class="mb-4" id="priceRangeForm" asp-controller="Product" asp-action="SearchByPrice" method="get">
+                                        <div class="input-group mb-3">
+                                            <label for="customRange3" class="form-label">Price Range</label>
+                                            <input type="range" class="form-range" min="1" max="10000" step="100" id="customRange3">
+                                            <div id="selectedAmount">Price range: 1$ - $ </div>
+                                        </div>
+                                        <input type="hidden" name="search" id="selectedAmountInput">
+                                        <button class="btn btn-outline-primary" type="submit">Apply</button>
+                                    </form>
+                                    <!--EOF Price Range-->
 
                                     <div class="btn-group">
                                     <a href="@Url.Action("Sort", "Product", new { sort = "Sale" })" class="btn btn-outline-primary">Show Items on Sale</a>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -127,7 +128,7 @@
                 <div class="row mx-3">
                     @for (int i = 0; i < Model.Count(); i++)
                     {
-                        <div class="col-md-4 col-12 mb-4">
+                        <div class="col-md-3 col-12 mb-4">
                             <div class="card">
                                 @if (@Model[i].IsOnSale)
                                 {

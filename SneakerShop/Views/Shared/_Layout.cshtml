@@ -75,49 +75,55 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <table class="table table-borderless table-hover">
-
-
-                    @foreach (var item in cartItems)
+                @{if(cartItems.Count > 0)
                 {
-                        decimal actualPrice = item.product.Price;
+                    <table class="table table-borderless table-hover">
+                        @foreach (var item in cartItems)
+                        {
+                            decimal actualPrice = item.product.Price;
 
-                        if (item.product.IsOnSale)
-                            actualPrice = item.product.Price * (1 - ((decimal)item.product.SalePercentage / 100));
+                            if (item.product.IsOnSale)
+                                actualPrice = item.product.Price * (1 - ((decimal)item.product.SalePercentage / 100));
 
-                    <tr>
-                        <td>
-                            <img src="@item.product.ProductPictureURL1" width="50" height="auto" />
+                            <tr>
+                                <td>
+                                    <img src="@item.product.ProductPictureURL1" width="50" height="auto" />
 
-                        <td>
-                                $@actualPrice
-                        </td>
-                        <td>
-                            @item.quantity
-                        </td>
-                        <td>
-                                <a class="btn btn-secondary text-white btn-sm" onclick="AddQuantity" href="@Url.Action("AddOneQuantity", "Cart", new { @productID = @item.ProductId })">
-                                    <i class="fa-solid fa-plus"></i>
-                                </a>
-                                <a class="btn btn-secondary text-white btn-sm" href="@Url.Action("RemoveOneQuantity", "Cart", new { @productID = @item.ProductId })">
-                                    <i class="fa-solid fa-minus"></i>
-                                </a>
-                                
-                        </td>
-                        <td>
-                                <a class="btn btn-danger text-white btn-sm" href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
-                        </td>
-                    </tr>
+                                <td>
+                                    $@actualPrice
+                                </td>
+                                <td>
+                                        @item.quantity
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary text-white btn-sm" onclick="AddQuantity" href="@Url.Action("AddOneQuantity", "Cart", new { @productID = @item.ProductId })">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </a>
+                                    <a class="btn btn-secondary text-white btn-sm" href="@Url.Action("RemoveOneQuantity", "Cart", new { @productID = @item.ProductId })">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger text-white btn-sm" href="@Url.Action("RemoveFromCart", "Cart", new { @productID = @item.ProductId })">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <div>
+                        <a class="btn btn-success text-white" href="@Url.Action("RemoveFromCart", "Cart")">
+                            Buy Now
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </a>
+                        </div>
+                    }
+                else
+                {
+                    <p>Your cart is empty</p>       
                 }
-                </table>
-                <div>
-                    <a class="btn btn-success text-white" href="@Url.Action("RemoveFromCart", "Cart")">
-                        Buy Now
-                        <i class="fa-solid fa-cart-shopping"></i>
-                    </a>
-                </div>
+                }
+                
 
             </div>
         </div>
