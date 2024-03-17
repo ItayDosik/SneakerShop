@@ -95,6 +95,7 @@ namespace SneakerShop.Controllers
                     product.Category = _product.Category;
                     product.Size = _product.Size;
                     product.SalePercentage = _product.SalePercentage;
+                    product.locationInStore = _product.locationInStore;
 
                     if(_product.SalePercentage > 0)
                         product.IsOnSale = true;

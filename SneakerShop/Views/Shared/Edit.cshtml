@@ -82,7 +82,12 @@
                     <br />
                         <input asp-for="SalePercentage" class="form-control" type="number" value="@Model.SalePercentage" />
                         <span asp-validation-for="SalePercentage" class="text-danger"></span>
+                    
                     <br />
+                    Location:
+                    <br />
+                        <input asp-for="locationInStore" class="form-control" type="text" value="@Model.locationInStore" />
+                        <span asp-validation-for="locationInStore" class="text-danger"></span>
                     <br />
 
                     <input type="submit" value="Save Changes" />

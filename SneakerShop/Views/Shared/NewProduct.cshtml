@@ -75,6 +75,12 @@
                     <br />
                     <input asp-for="Size" class="form-control" />
                     <span asp-validation-for="Size" class="text-danger"></span>
+                    
+                    <br />
+                    Location:
+                    <br />
+                    <input asp-for="locationInStore" class="form-control" type="text" value="@Model.locationInStore" />
+                    <span asp-validation-for="locationInStore" class="text-danger"></span>
                     <br />
                     <br />
                     <input type="submit" value="Add Sneaker" />

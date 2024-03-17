@@ -31,7 +31,8 @@ namespace SneakerShop.Data
                             Category = "Jordan",
                             Size = "12",
                             IsOnSale = false,
-                            SalePercentage = 0
+                            SalePercentage = 0,
+                            locationInStore = "Aisle 4"
 
                         },
                         new SneakerShop.Models.Product()
@@ -46,7 +47,8 @@ namespace SneakerShop.Data
                             Category = "Jordan",
                             Size = "12",
                             IsOnSale = false,
-                            SalePercentage = 0
+                            SalePercentage = 0,
+                            locationInStore = "Aisle 2"
                         },
                         new SneakerShop.Models.Product()
                         {
@@ -60,7 +62,8 @@ namespace SneakerShop.Data
                             Category = "Yeezy",
                             Size = "12",
                             IsOnSale = false,
-                            SalePercentage = 0
+                            SalePercentage = 0,
+                            locationInStore = "Aisle 1"
                         },
                         new SneakerShop.Models.Product()
                         {
@@ -74,7 +77,8 @@ namespace SneakerShop.Data
                             Category = "NikeSb",
                             Size = "12",
                             IsOnSale = false,
-                            SalePercentage = 0
+                            SalePercentage = 0,
+                            locationInStore = "Aisle 4"
                         }
 
                     });

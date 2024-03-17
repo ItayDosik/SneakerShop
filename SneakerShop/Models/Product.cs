@@ -41,5 +41,8 @@ namespace SneakerShop.Models
         [Range(0,100,ErrorMessage = "Invalid input, values between 0, 100")]
         public int SalePercentage {  get; set; }
 
+        [Required(ErrorMessage = "Location is required")]
+        public string locationInStore { get; set; }
+
     }
 }
