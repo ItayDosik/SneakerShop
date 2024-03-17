@@ -16,7 +16,7 @@ namespace SneakerShop.Controllers
 
         public IActionResult Index(string userID)
         {
-            Cart my_cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
+            Cart my_cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
             //Cart my_cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == cartSessionID);
             return View("checkout", my_cart);
         }
@@ -38,20 +38,6 @@ namespace SneakerShop.Controllers
 
             return View("checkout", cart);
         }
-
-
-        public int Id { get; set; }
-
-        public int quantity { get; set; }
-
-        [ForeignKey("ProductId")]
-        public int ProductId { get; set; }
-        public Product product { get; set; }
-
-
-        [ForeignKey("CartId")]
-        public int CartId { get; set; }
-        public Cart cart { get; set; }
 
 
 

@@ -20,16 +20,17 @@ namespace SneakerShop.Controllers
     public class CartController : Controller
     {
         private readonly AppDbContext _db;
+        private readonly UserManager<Users> _userManager;
 
-        public CartController(AppDbContext db)
+        public CartController(AppDbContext db, UserManager<Users> userManager)
         {
             _db = db;
-          
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            Cart my_cart = GetCart();
+            Cart my_cart = await GetCart();
             if(my_cart != null)
             {
                 return View(my_cart);
@@ -37,7 +38,7 @@ namespace SneakerShop.Controllers
             return View();
         }
 
-        public Cart GetCart()
+        public async Task<Cart> GetCart()
         {
             var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userID != null)
@@ -47,6 +48,7 @@ namespace SneakerShop.Controllers
                 {
                     my_cart = new Cart();
                     my_cart.UserId = userID;
+                    my_cart.user = await _userManager.GetUserAsync(User);
                     my_cart.cartItems = new List<CartItem>();
                     _db.Carts.Add(my_cart);
                     _db.SaveChanges();
@@ -94,9 +96,9 @@ namespace SneakerShop.Controllers
         }
 
 
-        public IActionResult AddToCart(int productID, int quantity)
+        public async Task<IActionResult> AddToCart(int productID, int quantity)
         {
-            Cart my_cart = GetCart();
+            Cart my_cart = await GetCart();
             if(!productAvailable(productID, quantity, my_cart))
             {
                 TempData["ErrorMessage"] = "The selected quantity is not in stock.";
@@ -118,9 +120,9 @@ namespace SneakerShop.Controllers
             return RedirectToAction("ViewAllProducts", "Product");
         }
 
-        public ActionResult RemoveFromCart(int productID)
+        public async Task<ActionResult> RemoveFromCart(int productID)
         {
-            Cart my_cart = GetCart();
+            Cart my_cart = await GetCart();
             int index = IsInCart(productID, my_cart);
             my_cart.cartItems.RemoveAt(index);
             _db.SaveChanges();
@@ -128,9 +130,9 @@ namespace SneakerShop.Controllers
             return RedirectToAction("ViewAllProducts", "Product");
         }
 
-        public ActionResult RemoveOneQuantity(int productID)
+        public async Task<ActionResult> RemoveOneQuantity(int productID)
         {
-            Cart my_cart = GetCart();
+            Cart my_cart = await GetCart();
             int index = IsInCart(productID, my_cart);
             if(my_cart.cartItems[index].quantity == 1)
             {
@@ -145,9 +147,9 @@ namespace SneakerShop.Controllers
             return RedirectToAction("ViewAllProducts", "Product");
         }
 
-        public ActionResult AddOneQuantity(int productID)
+        public async Task<ActionResult> AddOneQuantity(int productID)
         {
-            Cart my_cart = GetCart();
+            Cart my_cart = await GetCart();
             if(productAvailable(productID,1,my_cart))
             {
                 int index = IsInCart(productID, my_cart);

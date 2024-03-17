@@ -168,7 +168,7 @@ namespace SneakerShop.Migrations
 
                     b.HasKey("CartId");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("SneakerShop.Models.CartItem", b =>
@@ -194,7 +194,7 @@ namespace SneakerShop.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("SneakerShop.Models.Payment", b =>
@@ -218,7 +218,7 @@ namespace SneakerShop.Migrations
 
                     b.HasKey("paymentId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("SneakerShop.Models.Product", b =>
@@ -275,7 +275,7 @@ namespace SneakerShop.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("SneakerShop.Models.Users", b =>

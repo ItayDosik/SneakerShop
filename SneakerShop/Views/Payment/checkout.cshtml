@@ -76,8 +76,8 @@
                     </div>
 
                     <div class="col-12">
-                        <label for="email" class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
-                        <input type="email" class="form-control" id="email" placeholder="you@example.com" value="">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="you@example.com" value="@Model.user.Email">
                         <div class="invalid-feedback">
                             Please enter a valid email address for shipping updates.
                         </div>
@@ -85,7 +85,7 @@
 
                     <div class="col-12">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
+                        <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" value="@Model.user.Address">
                         <div class="invalid-feedback">
                             Please enter your shipping address.
                         </div>
