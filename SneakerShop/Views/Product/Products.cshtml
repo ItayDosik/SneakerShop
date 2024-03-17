@@ -1,6 +1,11 @@
 ﻿@model List<SneakerShop.Models.Product>
 ﻿@using Microsoft.AspNetCore.Identity;
+@using SneakerShop.Models.Data
+@using System.Security.Claims;
 @inject SignInManager<Users> signInManager;
+
+
+
 
 <style>
     .carousel-control-prev,
@@ -190,8 +195,6 @@
 
                                     @if (@Model[i].IsOnSale)
                                     {
-                                        <div class=" top-0 end-0">
-                                        </div>
                                         <div class="row">
                                             <h5 class="col card-title">@Model[i].ProductName  </h5>
 
@@ -229,6 +232,14 @@
                                             <button class="btn btn-outline-primary" id="btn_@i" type="submit" disabled>Add to cart</button>
                                         </div>
                                     </form>
+
+                                @{
+                                    var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                                }
+                                <a style="z-index:2;" class="btn btn-success text-white" href="@Url.Action("buyNowPayment", "Payment",new {@userID = @userID, @productID = Model[i].ProductId})">
+                                    Buy Now
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </a>
 
                                 </div>
                             </div>

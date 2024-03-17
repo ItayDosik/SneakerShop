@@ -112,7 +112,10 @@
                         }
                     </table>
                     <div>
-                        <a class="btn btn-success text-white" href="@Url.Action("RemoveFromCart", "Cart")">
+                    @{
+                                var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    }
+                            <a class="btn btn-success text-white" href="@Url.Action("Index", "Payment",new {@userID = @userID})">
                             Buy Now
                             <i class="fa-solid fa-cart-shopping"></i>
                         </a>
