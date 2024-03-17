@@ -1,5 +1,7 @@
-﻿@model SneakerShop.Models.Cart;
-
+﻿@using Microsoft.AspNetCore.Identity;
+@using SneakerShop.ViewModels; 
+@model SneakerShop.ViewModels.PaymentVM;
+@inject SignInManager<Users> signInManager;
 
 <div class="container bg-body-tertiary px-5">
     <div class="py-5 text-center">
@@ -11,12 +13,15 @@
         <div class="col-md-4 order-md-2 mb-4">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-primary">Your cart</span>
-                <span class="badge bg-primary rounded-pill">@Model.cartItems.Count()</span>
+                <span class="badge bg-primary rounded-pill">@Model.cart.cartItems.Count()</span>
             </h4> 
             
             <ul class="list-group mb-3">
-                @{decimal totalPrice = 0;}
-                @foreach (var item in @Model.cartItems) {
+                @{
+                    decimal totalPrice = 0;
+                }
+                @foreach (var item in @Model.cart.cartItems)
+                {
                     <li class="list-group-item d-flex justify-content-between lh-sm">
                         <div>
                             <h6 class="my-0">@item.product.ProductName</h6>
@@ -49,13 +54,17 @@
                 </div>
             </div>
 
+        </div> 
 
-
-        </div>
-
+        
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Billing address</h4>
-            <form class="needs-validation" novalidate="">
+            <form action="@Url.Action("checkoutPur","Payment")" class="needs-validation" novalidate="" method="post">
+
+                <input type="hidden" asp-for="cartID" value="@Model.cart.CartId">
+
+
+
                 <div class="row g-3">
                     <div class="col-sm-6">
                         <label for="firstName" class="form-label">First name</label>
@@ -75,7 +84,14 @@
 
                     <div class="col-12">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="you@example.com" value="@Model.user.Email">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <input type="email" class="form-control" id="email" placeholder="you@example.com" value="@Model.cart.user.Email">
+                        }
+                        else
+                        {
+                            <input type="email" class="form-control" id="email" placeholder="you@example.com" value="">
+                        }
                         <div class="invalid-feedback">
                             Please enter a valid email address for shipping updates.
                         </div>
@@ -83,7 +99,14 @@
 
                     <div class="col-12">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" value="@Model.user.Address">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" value="@Model.cart.user.Address">
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" value="">
+                        }
                         <div class="invalid-feedback">
                             Please enter your shipping address.
                         </div>
@@ -127,7 +150,7 @@
                 <div class="row gy-3">
                     <div class="col-md-6">
                         <label for="cc-name" class="form-label">Name on card</label>
-                        <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                        <input name="creditName" type="text" class="form-control" id="cc-name" placeholder="" required="">
                         <small class="text-body-secondary">Full name as displayed on card</small>
                         <div class="invalid-feedback">
                             Name on card is required
@@ -136,7 +159,7 @@
 
                     <div class="col-md-6">
                         <label for="cc-number" class="form-label">Credit card number</label>
-                        <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                        <input name="creditNum" type="text" class="form-control" id="cc-number" placeholder="" required="">
                         <div class="invalid-feedback">
                             Credit card number is required
                         </div>
@@ -144,7 +167,7 @@
 
                     <div class="col-md-3">
                         <label for="cc-expiration" class="form-label">Expiration</label>
-                        <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                        <input name="creditExp" type="text" class="form-control" id="cc-expiration" placeholder="" required="">
                         <div class="invalid-feedback">
                             Expiration date required
                         </div>
@@ -152,7 +175,7 @@
 
                     <div class="col-md-3">
                         <label for="cc-cvv" class="form-label">CVV</label>
-                        <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                        <input name="creditCVV" type="text" class="form-control" id="cc-cvv" placeholder="" required="">
                         <div class="invalid-feedback">
                             Security code required
                         </div>
@@ -165,4 +188,4 @@
             </form>
         </div>
     </div>
-</div>
+</div> 

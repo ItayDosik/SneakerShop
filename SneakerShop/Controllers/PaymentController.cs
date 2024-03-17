@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SneakerShop.Models;
+using SneakerShop.ViewModels;
 using SneakerShop.Models.Data;
 using System.ComponentModel.DataAnnotations.Schema;
+using SneakerShop.Migrations;
 
 namespace SneakerShop.Controllers
 {
@@ -19,9 +21,22 @@ namespace SneakerShop.Controllers
 
         public IActionResult Index(string userID)
         {
-            Cart my_cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
+            
+
+
+            PaymentVM payment = new PaymentVM(); 
+            payment.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
+            foreach (var item in payment.cart.cartItems)
+            {
+                if(item.quantity > _db.Products.Find(item.ProductId).Qnt)
+                {
+                    TempData["ErrorMessage"] = item.product.ProductName + " is not available in selected quantity.";
+                    return RedirectToAction("ViewAllProducts","Product");
+                }
+            }
+
             //Cart my_cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == cartSessionID);
-            return View("checkout", my_cart);
+            return View("checkout", payment);
         }
 
 
@@ -40,7 +55,29 @@ namespace SneakerShop.Controllers
                 product = prod
             });
 
-            return View("checkout", cart);
+            _db.Carts.Add(cart);
+            _db.SaveChanges();
+            PaymentVM payment = new PaymentVM();
+            payment.cart = cart;
+
+
+            return View("checkout", payment);
+        }
+
+        public IActionResult checkoutPur(PaymentVM pay)
+        {
+
+            pay.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == pay.cartID);
+
+            foreach (var item in pay.cart.cartItems)
+            {
+                _db.Products.Find(item.ProductId).Qnt -= item.quantity;
+                _db.SaveChanges();
+            }
+
+            _db.Carts.Remove(pay.cart);
+            _db.SaveChanges();
+            return View("paymentSuccessed");
         }
 
 
