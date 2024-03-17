@@ -1,11 +1,10 @@
 ﻿@model SneakerShop.Models.Cart;
 
 
-<div class="container">
+<div class="container bg-body-tertiary px-5">
     <div class="py-5 text-center">
-        <img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-        <h2>Checkout form</h2>
-        <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+        <img class="d-block mx-auto mb-4" src="https://i.ibb.co/pWTHmVn/Untitled.png" alt="" width="72" height="auto">
+        <h2>Checkout</h2>
     </div>
 
     <div class="row g-5">
@@ -29,13 +28,8 @@
                         totalPrice = totalPrice + (@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity;
                     }
                 }
-
-
-
-
-
-                
-                <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+   
+                <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
                         <h6 class="my-0">Promo code</h6>
                         <small>EXAMPLECODE</small>
@@ -47,14 +41,16 @@
                     <strong>$@totalPrice</strong>
                 </li>
             </ul>
-            @*
-            <form class="card ">
+            
+
             <div class="input-group">
-            <input type="text" class="form-control" placeholder="Promo code">
-            <button type="submit" class="btn btn-secondary">Redeem</button>
+                <input type="text" class="form-control" placeholder="Promo code">
+                <button type="submit" class="btn btn-secondary">Redeem</button>
             </div>
-            </form> *@
+
+
         </div>
+
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Billing address</h4>
             <form class="needs-validation" novalidate="">
