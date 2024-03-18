@@ -29,8 +29,22 @@ namespace SneakerShop.Controllers
             
 
 
-            PaymentVM payment = new PaymentVM(); 
+            PaymentVM payment = new PaymentVM();
+            
+        
             payment.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
+            if(_db.Payments.FirstOrDefault(c => c.UserId == userID) != null)
+            {
+                Payment userPayment = _db.Payments.FirstOrDefault(c => c.UserId == userID);
+                byte[] cvv = Convert.FromBase64String(userPayment.creditCVV);
+                byte[] num = Convert.FromBase64String(userPayment.creditNum);
+
+                payment.creditCVV = DecryptStringFromBytes_Aes(cvv);
+                payment.creditNum = DecryptStringFromBytes_Aes(num);
+                payment.creditExp = (userPayment.creditDate.Month).ToString() + '/' + (userPayment.creditDate.Year).ToString();
+
+
+            }
             foreach (var item in payment.cart.cartItems)
             {
                 if(item.quantity > _db.Products.Find(item.ProductId).Qnt)
@@ -64,6 +78,20 @@ namespace SneakerShop.Controllers
             _db.SaveChanges();
             PaymentVM payment = new PaymentVM();
             payment.cart = cart;
+            if (_db.Payments.FirstOrDefault(c => c.UserId == userID) != null)
+            {
+               
+                Payment userPayment = _db.Payments.FirstOrDefault(c => c.UserId == userID);
+                byte[] cvv = Convert.FromBase64String(userPayment.creditCVV);
+                byte[] num = Convert.FromBase64String(userPayment.creditNum);
+                Console.WriteLine(userPayment.creditNum);
+                payment.creditCVV = DecryptStringFromBytes_Aes(cvv);
+                payment.creditNum = DecryptStringFromBytes_Aes(num);
+                payment.creditExp = (userPayment.creditDate.Month).ToString() + '/' + (userPayment.creditDate.Year).ToString();
+
+
+
+            }
 
             return View("checkout", payment);
         }
@@ -82,15 +110,18 @@ namespace SneakerShop.Controllers
                 _db.SaveChanges();
             }
 
-                _db.Payments.Add(new Payment() {
-                    paymentId = pay.paymentId,
+                if (_db.Payments.FirstOrDefault(c => c.UserId == pay.cart.UserId) == null)
+                {
+                    Payment p = new Payment() {
                     UserId = pay.cart.UserId,
-                    creditNum = EncryptStringToBytes_Aes(pay.creditNum).ToString(),
-                    creditCVV = EncryptStringToBytes_Aes(pay.creditCVV).ToString(),
+                    creditNum = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditNum)),
+                    creditCVV = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditCVV)),
                     creditDate = DateTime.Parse(pay.creditExp)
-                });
-                _db.SaveChanges();
-
+                    };
+                    _db.Payments.Add(p);
+                    _db.SaveChanges();
+                }
+             
             _db.Carts.Remove(pay.cart);
             _db.SaveChanges();
             return View("paymentSuccessed");
@@ -137,6 +168,37 @@ namespace SneakerShop.Controllers
 
             return encrypted;
         }
+
+        static string DecryptStringFromBytes_Aes(byte[] cipherText)
+        {
+
+            string plaintext = null;
+
+
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Encoding.UTF8.GetBytes("adivtomeritay123");
+                aesAlg.IV = Encoding.UTF8.GetBytes("itaytomeradiv321");
+
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            plaintext = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+            }
+
+            return plaintext;
+        }
+
+
+
 
 
 

@@ -12,8 +12,8 @@ using SneakerShop.Models.Data;
 namespace SneakerShop.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240318113048_paymentV2")]
-    partial class paymentV2
+    [Migration("20240318130858_paymentsV2")]
+    partial class paymentsV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

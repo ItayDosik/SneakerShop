@@ -153,19 +153,19 @@
 
                     <div class="col-md-6">
                         <label for="cc-number" class="form-label">Credit card number</label>
-                        <input name="creditNum" type="text" class="form-control" id="cc-number" placeholder="" required="">
+                        <input value="@Model.creditNum" name="creditNum" type="text" class="form-control" id="cc-number" placeholder="" required="">
                         <span asp-validation-for="creditNum" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-3">
                         <label for="cc-expiration" class="form-label">Expiration</label>
-                        <input name="creditExp" type="text" class="form-control" id="cc-expiration" placeholder="MM/YYYY" required="">
+                        <input value="@Model.creditExp" name="creditExp" type="text" class="form-control" id="cc-expiration" placeholder="MM/YYYY" required="">
                         <span asp-validation-for="creditExp" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-3">
                         <label for="cc-cvv" class="form-label">CVV</label>
-                        <input name="creditCVV" type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                        <input value="@Model.creditCVV" name="creditCVV" type="text" class="form-control" id="cc-cvv" placeholder="" required="">
                         <span asp-validation-for="creditCVV" class="text-danger"></span>
                     </div>
                 </div>

@@ -5,7 +5,7 @@
 namespace SneakerShop.Migrations
 {
     /// <inheritdoc />
-    public partial class paymentV2 : Migration
+    public partial class paymentsV2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

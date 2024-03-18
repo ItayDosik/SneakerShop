@@ -26,8 +26,7 @@ public class PaymentVM
     }
 
     public Cart cart { get; set; } = null;
-    [Key]
-    public int paymentId {  get; set; }
+
 
     [Required(ErrorMessage = "Credit Number is required")]
     [RegularExpression(@"^\d{16}$", ErrorMessage = "Invalid credit number.")]
