@@ -167,6 +167,10 @@ namespace SneakerShop.Controllers
 
         public int IsInCart(int ProductId, Cart my_cart)
         {
+            if(my_cart.cartItems.Count == 0)
+            {
+                return -1;
+            }
             for (int i = 0; i < my_cart.cartItems.Count; i++)
             {
                 if (my_cart.cartItems[i].product.ProductId == ProductId)

@@ -3,7 +3,7 @@
 @using System.Security.Claims;
 @inject SignInManager<Users> signInManager;
 @inject SneakerShop.Services.IProductService ProductService;
-
+@inject IHttpContextAccessor HttpContextAccessor;
 
 @{
     int NumOfProducts = 0;
@@ -13,6 +13,17 @@
         var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
         cartItems = ProductService.GetCartItems(userID);
         NumOfProducts = cartItems.Count();
+    }
+    else
+    {
+        var cartSession = HttpContextAccessor.HttpContext.Session.GetString("cart");
+        if (cartSession != null)
+        {
+            int cartSessionID = int.Parse(cartSession);
+            cartItems = ProductService.GetCartItems(cartSessionID);
+            NumOfProducts = cartItems.Count();
+        }
+
     }
 
 }

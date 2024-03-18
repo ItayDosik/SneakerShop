@@ -3,6 +3,8 @@
 @using System.Security.Claims;
 @inject SignInManager<Users> signInManager;
 @inject AppDbContext db;
+@inject IHttpContextAccessor HttpContextAccessor;
+@inject SneakerShop.Services.IProductService ProductService;
 
 <style>
     .badge {
@@ -27,50 +29,57 @@
 
 @{
     int NumOfProducts = 0;
-    List<CartItem> cartItems = null;
+    List<CartItem> cartItems = new List<CartItem>();
     if (signInManager.IsSignedIn(User))
     {
         var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        Cart userCart = (from cart in db.Carts
-                         where cart.UserId == userID
-                         select cart).FirstOrDefault();
-        if (userCart != null)
-        {
-            cartItems = (from item in db.CartItems
-                         where item.CartId == userCart.CartId
-                         select item).ToList();
-        }
-
-        if (cartItems != null)
-        {
-            NumOfProducts = cartItems.Count();
-        }
-
+        cartItems = ProductService.GetCartItems(userID);
+        NumOfProducts = cartItems.Count();
     }
+    else
+    {
+        var cartSession = HttpContextAccessor.HttpContext.Session.GetString("cart");
+        if (cartSession != null)
+        {
+            int cartSessionID = int.Parse(cartSession);
+            Cart userCart = (from cart in db.Carts
+                             where cart.CartId == cartSessionID
+                             select cart).FirstOrDefault();
+            if (userCart != null)
+            {
+                cartItems = (from item in db.CartItems
+                             where item.CartId == userCart.CartId
+                             select item).ToList();
+            }
+
+            if (cartItems != null)
+            {
+                NumOfProducts = cartItems.Count();
+            }
+
+        }
+    }
+
 
 }
 <ul class="navbar-nav">
+    <div class="container">
+        <a class="nav-link" asp-action="Index" asp-controller="Cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <span style="font-size: 20px; color: white;">
+                <i class="fa-solid fa-cart-shopping nav-link"></i>
+                <span class='badge badge-warning' id='lblCartCount'> @NumOfProducts </span>
+            </span>
+        </a>
+
+    </div>
     @if (signInManager.IsSignedIn(User))
     {
 
-        <div class="container">
-            <a class="nav-link" asp-action="Index" asp-controller="Cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                <span style="font-size: 20px; color: white;">
-                    <i class="fa-solid fa-cart-shopping nav-link"></i>
-                    <span class='badge badge-warning' id='lblCartCount'> @NumOfProducts </span>
-                </span>
-            </a>
 
-        </div>
 
         <div class="container" style="white-space: nowrap;">
             <li class="nav-link">Hello, @User.Identity.Name </li>
         </div>
-
-
-
-
 
         <a class="nav-link" asp-action="Logout" asp-controller="Account">
                 Logout
