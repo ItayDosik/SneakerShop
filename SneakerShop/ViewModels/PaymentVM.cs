@@ -40,10 +40,6 @@ public class PaymentVM
     [MyDate(ErrorMessage = "Invalid or Expiration Date passed")]
     public string creditExp { get; set; }
 
-    [Required(ErrorMessage = "Credit name is required.")]
-    [RegularExpression(@"^[a-zA-Z]+(?: [a-zA-Z]+)?$", ErrorMessage = "Invalid input for Credit Name.")]
-    public string creditName { get; set; } 
-
     public int cartID { get; set; }
 
     [Required(ErrorMessage = "First name is required.")]
@@ -67,7 +63,9 @@ public class PaymentVM
 
     [Required(ErrorMessage = "Zip code is Required.")]
     [RegularExpression(@"^\d{7}$", ErrorMessage = "Invalid zip code (7 digits nubmer).")]
-     public string zip { get; set; } 
+     public string zip { get; set; }  
+
+
 
 
 }

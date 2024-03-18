@@ -113,7 +113,6 @@
                     <div class="col-md-5">
                         <label for="country" class="form-label">Country</label>
                         <select class="form-select" id="country" required="">
-                            <option value="">Choose...</option>
                             <option>Israel</option>
                             <option>United States</option>
                             <option>Ukraine</option>
@@ -144,12 +143,6 @@
                 </div>
 
                 <div class="row gy-3">
-                    <div class="col-md-6">
-                        <label for="cc-name" class="form-label">Name on card</label>
-                        <input name="creditName" type="text" class="form-control" id="cc-name" placeholder="" required="">
-                        <small class="text-body-secondary">Full name as displayed on card</small>
-                        <span asp-validation-for="creditName" class="text-danger"></span>
-                    </div>
 
                     <div class="col-md-6">
                         <label for="cc-number" class="form-label">Credit card number</label>
@@ -177,4 +170,6 @@
             </form>
         </div>
     </div>
-</div> 
+</div>
+
+

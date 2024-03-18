@@ -43,7 +43,6 @@ namespace SneakerShop.Controllers
                 payment.creditNum = DecryptStringFromBytes_Aes(num);
                 payment.creditExp = (userPayment.creditDate.Month).ToString() + '/' + (userPayment.creditDate.Year).ToString();
 
-
             }
             foreach (var item in payment.cart.cartItems)
             {
@@ -79,17 +78,14 @@ namespace SneakerShop.Controllers
             PaymentVM payment = new PaymentVM();
             payment.cart = cart;
             if (_db.Payments.FirstOrDefault(c => c.UserId == userID) != null)
-            {
-               
+            {          
                 Payment userPayment = _db.Payments.FirstOrDefault(c => c.UserId == userID);
                 byte[] cvv = Convert.FromBase64String(userPayment.creditCVV);
                 byte[] num = Convert.FromBase64String(userPayment.creditNum);
-                Console.WriteLine(userPayment.creditNum);
+
                 payment.creditCVV = DecryptStringFromBytes_Aes(cvv);
                 payment.creditNum = DecryptStringFromBytes_Aes(num);
                 payment.creditExp = (userPayment.creditDate.Month).ToString() + '/' + (userPayment.creditDate.Year).ToString();
-
-
 
             }
 
