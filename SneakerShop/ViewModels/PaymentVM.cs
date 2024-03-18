@@ -6,45 +6,40 @@ public class PaymentVM
 {
     public class MyDateAttribute : ValidationAttribute
     {
-        public override bool IsValid(object value)// Return a boolean value: true == IsValid, false != IsValid
+        public override bool IsValid(object value)
         {
-            if (value is DateTime)
+            if (value != null)
             {
-            return (DateTime)value >= DateTime.Now; //Dates Greater than or equal to today are valid (true)
-            }
+                string dateString = value.ToString();
+                if (DateTime.TryParseExact(dateString, "MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime expDate))
+                {
+                    
+                    return expDate >= DateTime.Now.Date;
+                }
+                else
+                {     
+                    return false;
+                }
+            }  
             return false;
-
         }
     }
 
     public Cart cart { get; set; } = null;
-
-
+    [Key]
+    public int paymentId {  get; set; }
 
     [Required(ErrorMessage = "Credit Number is required")]
     [RegularExpression(@"^\d{16}$", ErrorMessage = "Invalid credit number.")]
     public string creditNum { get; set; }
 
-
     [Required(ErrorMessage = "CVV is reqiured.")]
     [RegularExpression(@"^\d{3,4}$", ErrorMessage = "CVV must contain a 3 or 4-digit number.")]
     public string creditCVV { get; set; }
 
-
-
-
-
-
     [Required(ErrorMessage="Expiration Date is required")]
     [MyDate(ErrorMessage = "Invalid or Expiration Date passed")]
-    public DateTime creditExp { get; set; }
-
-
-
-
-
-
-
+    public string creditExp { get; set; }
 
     [Required(ErrorMessage = "Credit name is required.")]
     [RegularExpression(@"^[a-zA-Z]+(?: [a-zA-Z]+)?$", ErrorMessage = "Invalid input for Credit Name.")]

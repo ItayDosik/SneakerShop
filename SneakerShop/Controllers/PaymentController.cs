@@ -6,6 +6,11 @@ using SneakerShop.ViewModels;
 using SneakerShop.Models.Data;
 using System.ComponentModel.DataAnnotations.Schema;
 using SneakerShop.Migrations;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SneakerShop.Controllers
 {
@@ -60,7 +65,6 @@ namespace SneakerShop.Controllers
             PaymentVM payment = new PaymentVM();
             payment.cart = cart;
 
-
             return View("checkout", payment);
         }
 
@@ -68,6 +72,7 @@ namespace SneakerShop.Controllers
         {
             pay.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == pay.cartID);
             ModelState.Remove("cart");
+            ModelState.Remove("paymentId");
             if (ModelState.IsValid)
             {
 
@@ -77,12 +82,60 @@ namespace SneakerShop.Controllers
                 _db.SaveChanges();
             }
 
+                _db.Payments.Add(new Payment() {
+                    paymentId = pay.paymentId,
+                    UserId = pay.cart.UserId,
+                    creditNum = EncryptStringToBytes_Aes(pay.creditNum).ToString(),
+                    creditCVV = EncryptStringToBytes_Aes(pay.creditCVV).ToString(),
+                    creditDate = DateTime.Parse(pay.creditExp)
+                });
+                _db.SaveChanges();
+
             _db.Carts.Remove(pay.cart);
             _db.SaveChanges();
             return View("paymentSuccessed");
-
             }
             return View("checkout", pay);
+        }
+
+
+
+
+
+
+
+        static byte[] EncryptStringToBytes_Aes(string plainText)
+        {
+            byte[] Key = Encoding.UTF8.GetBytes("adivtomeritay123"); 
+            byte[] IV = Encoding.UTF8.GetBytes("itaytomeradiv321"); 
+            byte[] encrypted;
+
+            // Create an Aes object
+            // with the specified key and IV.
+            using (Aes aesAlg = Aes.Create())
+            {
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create an encryptor to perform the stream transform.
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for encryption.
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            //Write all data to the stream.
+                            swEncrypt.Write(plainText);
+                        }
+                        encrypted = msEncrypt.ToArray();
+                    }
+                }
+            }
+
+            return encrypted;
         }
 
 

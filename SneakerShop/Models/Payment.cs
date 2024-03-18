@@ -6,8 +6,8 @@ namespace SneakerShop.Models
     public class Payment
     {
         [Key]
-        [Required]
-        public string paymentId { get; set; }
+
+        public int paymentId { get; set; }
 
         [ForeignKey("UserId")]
         public string? UserId {  get; set; }
