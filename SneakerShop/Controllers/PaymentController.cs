@@ -129,12 +129,31 @@ namespace SneakerShop.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult DiscountCoupon(string promoCode)
+        {
+            Dictionary<string, double> codes = new Dictionary<string, double>();
+            codes.Add("CODE1", 0.1); // 10% discount
+            codes.Add("CODE2", 0.15); // 15% discount
+            codes.Add("CODE3", 0.2); // 20% discount
+
+            double discount = 0; // Default discount
+            if(promoCode != null)
+            {
+                if (codes.ContainsKey(promoCode))
+                {
+                    discount = codes[promoCode];
+                }
+            }
+
+            return Json(new { discount = discount });
+        }
+    
 
 
 
 
-
-        static byte[] EncryptStringToBytes_Aes(string plainText)
+    static byte[] EncryptStringToBytes_Aes(string plainText)
         {
             byte[] Key = Encoding.UTF8.GetBytes("adivtomeritay123"); 
             byte[] IV = Encoding.UTF8.GetBytes("itaytomeradiv321"); 
