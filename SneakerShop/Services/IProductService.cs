@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SneakerShop.Controllers;
 using SneakerShop.Models;
 using SneakerShop.Models.Data;
@@ -17,10 +18,10 @@ namespace SneakerShop.Services
     {
         private readonly AppDbContext _db;
         private readonly CartController CartController;
-        public ProductService(AppDbContext db)
+        public ProductService(AppDbContext db, UserManager<Users> userManager)
         {
             _db = db;
-            CartController = new CartController(db);
+            CartController = new CartController(db, userManager);
         }
 
         public List<CartItem> GetCartItems(string userID)

@@ -11,6 +11,7 @@ namespace SneakerShop.Models
 
         [ForeignKey("UserId")]
         public string? UserId { get; set; }
+        public Users? user { get; set; }
 
 
     }

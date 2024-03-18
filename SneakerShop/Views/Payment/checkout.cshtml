@@ -1,0 +1,175 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using SneakerShop.ViewModels; 
+@model SneakerShop.ViewModels.PaymentVM;
+@inject SignInManager<Users> signInManager;
+
+<div class="container bg-body-tertiary px-5">
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://i.ibb.co/pWTHmVn/Untitled.png" alt="" width="72" height="auto">
+        <h2>Checkout</h2>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-primary">Your cart</span>
+                <span class="badge bg-primary rounded-pill">@Model.cart.cartItems.Count()</span>
+            </h4> 
+            
+            <ul class="list-group mb-3">
+                @{
+                    decimal totalPrice = 0;
+                }
+                @foreach (var item in @Model.cart.cartItems)
+                {
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">@item.product.ProductName</h6>
+                            <small class="text-body-secondary">Quantity: @item.quantity</small>
+                        </div>
+                        <span class="text-body-secondary">$@((@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity)</span>
+                    </li>
+                    {
+                        totalPrice = totalPrice + (@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity;
+                    }
+                }
+   
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <div class="text-success">
+                        <h6 class="my-0">Promo code</h6>
+                        <small>EXAMPLECODE</small>
+                    </div>
+                    <span class="text-success">−$5</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Total (USD)</span>
+                    <strong>$@totalPrice</strong>
+                </li>
+            </ul>
+            
+            <div class="card p-2" style="height: 56px">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Promo code">
+                    <button type="submit" class="btn btn-secondary">Redeem</button>
+                </div>
+            </div>
+
+        </div> 
+
+        
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Billing address</h4>
+            <form action="@Url.Action("checkoutPur","Payment")" class="needs-validation" novalidate="" method="post">
+
+                <input type="hidden" asp-for="cartID" value="@Model.cart.CartId">
+             
+
+
+                <div class="row g-3">
+
+
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">First name</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required=""
+                               name="firstName">
+                        <span asp-validation-for="firstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="LastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="LastName" placeholder="" value="" required=""
+                               name="LastName">
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label for="email" class="form-label">Email</label>
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com" value="@Model.cart.user.Email">
+                        }
+                        else
+                        {
+                            <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com" value="">
+                        }
+                        <span asp-validation-for="email" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-12">
+                        <label for="address" class="form-label">Address</label>
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St" required="" value="@Model.cart.user.Address">
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St" required="" value="">
+                        }
+                        <span asp-validation-for="address" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="country" class="form-label">Country</label>
+                        <select class="form-select" id="country" required="">
+                            <option>Israel</option>
+                            <option>United States</option>
+                            <option>Ukraine</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="zip" class="form-label">Zip</label>
+                        <input type="text" name="zip" class="form-control" id="zip" placeholder="" required="">
+                        <span asp-validation-for="zip" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <h4 class="mb-3">Payment</h4>
+
+                <div class="my-3">
+                    <div class="form-check">
+                        <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
+                        <label class="form-check-label" for="credit">Credit card</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required="">
+                        <label class="form-check-label" for="paypal">PayPal</label>
+                    </div>
+                </div>
+
+                <div class="row gy-3">
+
+                    <div class="col-md-6">
+                        <label for="cc-number" class="form-label">Credit card number</label>
+                        <input value="@Model.creditNum" name="creditNum" type="text" class="form-control" id="cc-number" placeholder="" required="">
+                        <span asp-validation-for="creditNum" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="cc-expiration" class="form-label">Expiration</label>
+                        <input value="@Model.creditExp" name="creditExp" type="text" class="form-control" id="cc-expiration" placeholder="MM/YYYY" required="">
+                        <span asp-validation-for="creditExp" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="cc-cvv" class="form-label">CVV</label>
+                        <input value="@Model.creditCVV" name="creditCVV" type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                        <span asp-validation-for="creditCVV" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <hr class="my-4">
+
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
