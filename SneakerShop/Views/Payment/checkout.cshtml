@@ -27,32 +27,36 @@
                             <h6 class="my-0">@item.product.ProductName</h6>
                             <small class="text-body-secondary">Quantity: @item.quantity</small>
                         </div>
-                        <span class="text-body-secondary">$@((@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity)</span>
+                        <span class="text-body-secondary">$@string.Format("{0:0.00}", (@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity)</span>
+
                     </li>
                     {
-                        totalPrice = totalPrice + (@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity;
+                        totalPrice = Math.Round((totalPrice + (@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity),2);
                     }
                 }
-   
-                <li class="list-group-item d-flex justify-content-between bg-light">
-                    <div class="text-success">
-                        <h6 class="my-0">Promo code</h6>
-                        <small>EXAMPLECODE</small>
+
+                <li class="list-group-item d-flex justify-content-between lh-sm" id="promoListItem" style="display: none;">
+                    <div class="text-body-secondary text-success">
+                        <h6 class="my-0"></h6>
+                        <small id="promoCodeText"></small>
                     </div>
-                    <span class="text-success">−$5</span>
+                    <span class="text-body-secondary text-success" id="promoDiscount" style="display: none;"></span>
                 </li>
-                <li class="list-group-item d-flex justify-content-between">
+
+                <li  class="list-group-item d-flex justify-content-between">
                     <span>Total (USD)</span>
-                    <strong>$@totalPrice</strong>
+                    <strong id="finalPrice">$@totalPrice</strong>
                 </li>
             </ul>
-            
+
+
             <div class="card p-2" style="height: 56px">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Promo code">
-                    <button type="submit" class="btn btn-secondary">Redeem</button>
+                    <input type="text" class="form-control" id="promoInput" placeholder="Promo code">
+                    <button type="button" id="redeemButton" class="btn btn-secondary">Redeem</button>
                 </div>
             </div>
+                
 
         </div> 
 
@@ -146,7 +150,7 @@
 
                     <div class="col-md-6">
                         <label for="cc-number" class="form-label">Credit card number</label>
-                        <input value="@Model.creditNum" name="creditNum" type="text" class="form-control" id="cc-number" placeholder="" required="">
+                        <input value="@Model.creditNum" name="creditNum" type="text" class="form-control" id="cc-number" placeholder="XXXX-XXXX-XXXX-XXXX" required="">
                         <span asp-validation-for="creditNum" class="text-danger"></span>
                     </div>
 
@@ -158,7 +162,7 @@
 
                     <div class="col-md-3">
                         <label for="cc-cvv" class="form-label">CVV</label>
-                        <input value="@Model.creditCVV" name="creditCVV" type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                        <input value="@Model.creditCVV" name="creditCVV" type="text" class="form-control" id="cc-cvv" placeholder="XXX" required="">
                         <span asp-validation-for="creditCVV" class="text-danger"></span>
                     </div>
                 </div>
@@ -173,3 +177,55 @@
 </div>
 
 
+<script>
+    function promoCode() {
+        var promoInput = document.getElementById("promoInput").value;
+     
+        // AJAX request to fetch the discount coupon
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/Payment/discountCoupon?promoCode=" + encodeURIComponent(promoInput), true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var discount = response.discount;
+                    var discountedPrice = '@totalPrice' * discount;
+                    document.getElementById("finalPrice").innerText = "$" + ('@totalPrice' - discountedPrice).toFixed(2);
+
+                    if (discount > 0) {
+                        var promoDiscount = document.getElementById("promoDiscount");
+                        var promoListItem = document.getElementById("promoListItem");
+                        var promoCodeText = document.getElementById("promoCodeText");
+                        promoListItem.style.display = "block";
+                        promoCodeText.innerText = "Coupon: " + promoInput;
+                        promoDiscount.style.display = "inline";
+                        promoDiscount.innerText = "%" + (discount * 100);
+                    } else {
+                        var promoDiscount = document.getElementById("promoDiscount");
+                        var promoListItem = document.getElementById("promoListItem");
+                        var promoCodeText = document.getElementById("promoCodeText");
+                        promoListItem.style.display = "none";
+                        promoDiscount.style.display = "none";
+                        promoDiscount.innerText = "";
+                        promoCodeText.innerText = "";
+                    }
+                } else {
+                    console.error("Error: " + xhr.status);
+                }
+            }
+        };
+        xhr.send();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var redeemButton = document.getElementById("redeemButton");
+        if (redeemButton) {
+            redeemButton.addEventListener("click", function (event) {
+                event.preventDefault(); // prevent default form submission
+                promoCode(); 
+            });
+        } else {
+            console.error("Button with id 'redeemButton' not found.");
+        }
+    });
+</script>

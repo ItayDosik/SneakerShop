@@ -43,12 +43,12 @@ public class PaymentVM
     public int cartID { get; set; }
 
     [Required(ErrorMessage = "First name is required.")]
-    [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "First name can only contain letters and numbers.")]
+    [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "First name can only contain letters.")]
     [StringLength(50, MinimumLength = 2, ErrorMessage = "First name must be between 2 and 50 characters.")]
     public string firstName {get; set; }
 
     [Required(ErrorMessage = "Last name is required.")]
-    [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "Last name can only contain letters and numbers.")]
+    [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Last name can only contain letters.")]
     [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be between 2 and 50 characters.")]
     public string LastName { get; set; }
 
@@ -66,6 +66,6 @@ public class PaymentVM
      public string zip { get; set; }  
 
 
-
+    public string? promoCode {  get; set; }
 
 }
