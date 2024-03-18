@@ -122,128 +122,145 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-                    
+                    </div>               
                 </div>
-
-
             </div>
+
+            <!--Product Card-->
             <div class="col-sm-12 col-md-9 order-sm-2">
                 <div class="row mx-3">
                     @for (int i = 0; i < Model.Count(); i++)
                     {
                         <div class="col-md-4 col-12 mb-4">
-                            <div class="card">
-                                @if (@Model[i].IsOnSale)
-                                {
-                                    <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
-                                        <span class="badge alert-danger my-badge">-@Model[i].SalePercentage% OFF</span>
-                                    </div>
-
-
-
-                                }
-                                @if (signInManager.IsSignedIn(User))
-                                {
-                                    @if (@User.IsInRole("Admin"))
-                                    {
-                                        <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
-
-
-                                            <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <span style="font-size: 20px; color: #dbe1e8;">
-                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                </span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="@Url.Action("Edit","Product", new {@id = @Model[i].ProductId})" class="dropdown-item">Edit</a></li>
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" href="#" onclick="return confirmDelete('@Url.Action("Delete", "Product", new { @id = @Model[i].ProductId })')">Remove Sneaker</a></li>
-                                            </ul>
-                                        </div>
-
-                                    }
-                                }
-
-                                <div id="myCarousel_@i" class="carousel slide mb-6" data-bs-interval="false">
-                                    <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <img class="w-100" src=@Model[i].ProductPictureURL1 alt="image">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img class="w-100" src=@Model[i].ProductPictureURL2 alt="image">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img class="w-100" src=@Model[i].ProductPictureURL3 alt="image">
-                                        </div>
-                                    </div>
-                                    <div class="carousel-control-container">
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel_@i" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel_@i" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button>
-                                    </div>
+                        <div class="card">
+                            @if (@Model[i].IsOnSale)
+                            {
+                                <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
+                                    <span class="badge alert-danger my-badge">-@Model[i].SalePercentage% OFF</span>
                                 </div>
 
 
-                                <div class="card-body">
 
-                                    @if (@Model[i].IsOnSale)
-                                    {
-                                        <div class="row">
-                                            <h5 class="col card-title">@Model[i].ProductName  </h5>
-
-                                        </div>
-                                        <p class="card-text">
-                                            @Model[i].ProductDescription
-                                        </p>
+                            }
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                @if (@User.IsInRole("Admin"))
+                                {
+                                    <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
 
 
-                                        decimal salePrice = Model[i].Price * (1 - ((decimal)Model[i].SalePercentage / 100));
-                                        salePrice = Math.Round(salePrice, 2);
+                                        <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span style="font-size: 20px; color: #dbe1e8;">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="@Url.Action("Edit","Product", new {@id = @Model[i].ProductId})" class="dropdown-item">Edit</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#" onclick="return confirmDelete('@Url.Action("Delete", "Product", new { @id = @Model[i].ProductId })')">Remove Sneaker</a></li>
+                                        </ul>
+                                    </div>
 
-                                        <p class="fw-semibold text-secondary" style="text-decoration: line-through;">Regular Price: $@Model[i].Price</p>
-                                        <p class="fw-semibold text-sale">Sale Price: $@salePrice</p>
-                                    }
-                                    else
-                                    {
-                                        <h5 class="card-title">@Model[i].ProductName</h5>
-                                        <p class="card-text">
-                                            @Model[i].ProductDescription
-                                        </p>
-                                        <p class="fw-semibold text-secondary">$@Model[i].Price</p>
-                                    }
+                                }
+                            }
+                            @if (Model[i].Qnt == 0)
+                            {
+                                <img class="w-100" src=@Model[i].ProductPictureURL1 alt="image" style="filter: grayscale(70%) brightness(100%); opacity: 0.5;">
+                            }
+                            else
+                            {
+                                <img class="w-100" src=@Model[i].ProductPictureURL1 alt="image">
+                            }
 
+
+                            <div class="card-body">
+
+                                @if (@Model[i].IsOnSale && @Model[i].Qnt != 0)
+                                {
+                                    <div class="row">
+                                        <h5 class="col card-title">@Model[i].ProductName  </h5>
+
+                                    </div>
+                                    <p class="card-text">
+                                        @Model[i].ProductDescription
+                                    </p>
+
+
+                                    decimal salePrice = Model[i].Price * (1 - ((decimal)Model[i].SalePercentage / 100));
+                                    salePrice = Math.Round(salePrice, 2);
+
+                                    <p class="fw-semibold text-secondary" style="text-decoration: line-through;">Regular Price: $@Model[i].Price</p>
+                                    <p class="fw-semibold text-sale">Sale Price: $@salePrice</p>
+                                }
+                                else if (@Model[i].Qnt == 0)
+                                {
+                                    <div class="row">
+                                        <h5 class="col card-title">@Model[i].ProductName  </h5>
+
+                                    </div>
+                                    <p class="card-text">
+                                        @Model[i].ProductDescription
+                                    </p>
+                                    <p class="fw-semibold text-secondary mx-auto">Out of Stock</p>
+                                }
+                                else
+                                {
+                                    <h5 class="card-title">@Model[i].ProductName</h5>
+                                    <p class="card-text">
+                                        @Model[i].ProductDescription
+                                    </p>
+                                    <p class="fw-semibold text-secondary">$@Model[i].Price</p>
+                                }
+
+                                @if (@Model[i].Qnt <= 2 && @Model[i].Qnt != 0)
+                                {
+                                    <p class="fw-semibold text-secondary fw-text">&#128293 Hurry up! only @Model[i].Qnt sneakers left</p>
+                                }
+
+
+                                @if (@Model[i].Qnt != 0)
+                                {
                                     <form action="@Url.Action("AddToCart", "Cart", new { productID = @Model[i].ProductId })" method="post">
-                                        <div class="input-group mb-1 w-75 ms-5 d-flex" style="z-index: 2;">
+
+                                        <div class="input-group mb-1   d-flex" style="z-index: 2;">
+                                            <span class="input-group-text">Quantity</span>
                                             <select class="form-select" name="quantity" onchange="checkOption(event)" id="selectNum_@i">
-                                                <option selected disabled>Select quantity</option>
-                                                <option value="1">1</option>
+                                                <option selected value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
                                                 <option value="5">5</option>
                                             </select>
-                                            <button class="btn btn-outline-primary" id="btn_@i" type="submit" disabled>Add to cart</button>
+                                            <button class="btn btn-outline-primary" style="z-index: 2;" id="btn_@i" type="submit">Add to cart</button>
                                         </div>
                                     </form>
 
-                                @{
-                                    var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                                }
-                                <a style="z-index:2;" class="btn btn-success text-white" href="@Url.Action("buyNowPayment", "Payment",new {@userID = @userID, @productID = Model[i].ProductId})">
-                                    Buy Now
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                </a>
+                                    <hr />
 
-                                </div>
+                                    
+                                    var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                                    
+
+                                    <a style="z-index:2;" class="btn btn-primary text-white" href="@Url.Action("buyNowPayment", "Payment",new {@userID = @userID, @productID = Model[i].ProductId})">
+                                        Buy Now
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <hr />
+                                    <a style="z-index:2;" class="btn btn-primary text-white" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        Notify me
+                                        <i class="fa-solid fa-bell"></i>
+                                    </a>
+                                }
+
+                                
+
                             </div>
                         </div>
+                    </div>
                     }
                 </div>
         </div>
@@ -251,10 +268,30 @@
 
 
 
+        <!--Notify me modal-->
 
-
-
-
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Notify me</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Enter your email and we will let you know when the sneaker is available</p>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" placeholder="name@example.com">
+                            <label for="floatingInput">Email address</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--EOF Notify me modal-->
     
 
 
@@ -267,13 +304,13 @@
                 } else {
                     return false;
                 }
-                        }
-
-        function checkOption(event) { 
-            var btnId = event.target.id[event.target.id.length - 1];
-            var addButton = document.getElementById("btn_" + btnId);
-            addButton.disabled = false;       
         }
+
+        // function checkOption(event) { 
+        //     var btnId = event.target.id[event.target.id.length - 1];
+        //     var addButton = document.getElementById("btn_" + btnId);
+        //     addButton.disabled = false;       
+        // }
 
     </script>
 
