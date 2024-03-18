@@ -33,7 +33,17 @@ namespace SneakerShop.Controllers
             
         
             payment.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
-            if(_db.Payments.FirstOrDefault(c => c.UserId == userID) != null)
+
+            foreach (var item in payment.cart.cartItems)
+            {
+                if (item.quantity > _db.Products.Find(item.ProductId).Qnt)
+                {
+                    TempData["ErrorMessage"] = item.product.ProductName + " is not available in selected quantity.";
+                    return RedirectToAction("ViewAllProducts", "Product");
+                }
+            }
+
+            if (_db.Payments.FirstOrDefault(c => c.UserId == userID) != null)
             {
                 Payment userPayment = _db.Payments.FirstOrDefault(c => c.UserId == userID);
                 byte[] cvv = Convert.FromBase64String(userPayment.creditCVV);
@@ -44,14 +54,7 @@ namespace SneakerShop.Controllers
                 payment.creditExp = (userPayment.creditDate.Month).ToString() + '/' + (userPayment.creditDate.Year).ToString();
 
             }
-            foreach (var item in payment.cart.cartItems)
-            {
-                if(item.quantity > _db.Products.Find(item.ProductId).Qnt)
-                {
-                    TempData["ErrorMessage"] = item.product.ProductName + " is not available in selected quantity.";
-                    return RedirectToAction("ViewAllProducts","Product");
-                }
-            }
+           
 
             //Cart my_cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == cartSessionID);
             return View("checkout", payment);
