@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Admin Dashboard";
 } 
-
+@model List<SneakerShop.Models.Product>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,23 +12,99 @@
     
 </head>
 <body>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Dashboard">
+                                    <i class="fa-solid fa-house"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="manageSupply" asp-controller="Dashboard">
+                                    <i class="fa-solid fa-box"></i>
+                                    Supply
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="productManagement" asp-controller="Dashboard">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Products
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="userManagement" asp-controller="Dashboard">
+                                    <i class="fa-solid fa-users"></i>
+                                    Customers
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
 
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                    <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Dashboard</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                        </div>
+                    </div>
 
-    <div class="container">
-        <div class="row">
-
-            <div class="col-md-3">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="manageSupply">Manage Supply</a>
+                    <canvas class="my-4 chartjs-render-monitor" id="myChart" width="1060" height="447" style="display: block; width: 1060px; height: 447px;"></canvas>
+        
+                </main>
             </div>
-            <div class="col-md-3">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="productManagement">Product Management</a>
-            </div>
-            <div class="col-md-3">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="userManagement">User Management</a>
-            </div>
-           
         </div>
-    </div>
+
+
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+
+
+        <!-- Graphs -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.min.js"></script>
+        <script>
+            var productsJson = @Html.Raw(Json.Serialize(Model));
+            var productNames = [];
+            var productQuantity = [];
+
+            for (var i = 0; i < productsJson.length; i++) {
+                productNames.push(productsJson[i].productName);
+                productQuantity.push(productsJson[i].qnt);
+            }
+
+        console.log(productsJson)
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+                data: {
+                labels: productNames,
+                    datasets: [{
+                        data: productQuantity,
+                        lineTension: 0,
+                        backgroundColor: '#007bff',
+                        borderColor: '#007bff',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#007bff'
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    legend: {
+                        display: false,
+                    }
+                }
+            });
+        </script>
 
 </body>
 </html>
