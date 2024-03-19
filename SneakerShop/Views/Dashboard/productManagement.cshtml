@@ -89,9 +89,17 @@
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <!--SearchBar-->
                 <div class="container">
-                    <div class="col-sm-5 mx-auto mb-5">
+                    <div class="col-sm-5 mx-auto">
 
-                        <form action="productManagement" method="post">
+                        <form asp-action="productManagement" method="post">
+                            <div class="input-group mb-3">
+                                <input required type="text" class="form-control" id="keyWord" name="keyWord" placeholder="Enter Product Name Or Desciption">
+                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                            </div>
+                        </form>
+
+
+@*                         <form action="productManagement" method="post">
                             <h1>Find Product:</h1>
                             <div class="form-group">
                                 <input required type="text" class="form-control" id="keyWord" name="keyWord" placeholder="Enter Product Name Or Desciption">
@@ -104,7 +112,7 @@
                                     Add New Product <i class="fa-solid fa-user-plus"></i>
                                 </a>
                             </div>
-                        </form>
+                        </form> *@
 
                     </div>
                 </div>
@@ -122,6 +130,9 @@
                     <div class="container">
                         <a class="btn btn-primary mb-4" asp-action="backwardToProductManagement" asp-controller="Dashboard">
                             <i class="fa-solid fa-table"></i> Show All
+                        </a>
+                        <a class="btn btn-primary ms-2 mb-4" asp-action="NewProduct" asp-controller="Dashboard">
+                            Add New Product <i class="fa-solid fa-plus"></i>
                         </a>
                         <table class="table">
                             <thead class="thead-light">
