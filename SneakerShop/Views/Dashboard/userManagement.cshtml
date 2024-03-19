@@ -32,100 +32,144 @@
 
 
 <body>
-    <div class="container">
-        <div class="col-sm-5 mx-auto mb-5">
-            <form action="userManagement" method="post">
-                <div class="input-group">
-                    <select class="form-select custom-select" id="method" name="method" onchange="changePlaceholder()">
-                        <option value="username">Username</option>
-                        <option value="email">Email</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-
-                    <input required type="text" class="form-control" id="identifier" name="identifier" placeholder="Enter Username">
-                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-                </div>
-
-                <br/>
-                <button type="submit" class="searchBtn btn btn-block mb-4">Search User</button>
-            </form>
-                    <div>
-            <a class ="mybtn btn btn-block mb-4" asp-action="CreateUser" asp-controller="Dashboard" style="background-color:lightblue">
-                Create User <i class="fa-solid fa-user-plus"></i>
-            </a>
-                    </div>
-
-        </div>      
-    </div>
-
-   
-
+    <div class="container-fluid">
         <div class="container w-25">
 
 
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                @TempData["ErrorMessage"]
-            </div>
-        }
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                @TempData["SuccessMessage"]
-            </div>
-        }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    @TempData["SuccessMessage"]
+                </div>
+            }
         </div>
 
-        @if (Model != null && Model.users.Count() > 0)
-        {
-
-            <div class="container">
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>User Id</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in Model.users)
-                        {
-                            if (user.UserName == "admin")
-                            {
-                                continue;
-                            }
-                            <tr>
-                                <td>@user.Id</td>
-                                <td>@user.UserName</td>
-                                <td>@user.Email</td>
-                                <td>
-                                    <form asp-action="findUserById" asp-route-id="@user.Id" method="get">
-                                        <button type="submit" class="btn btn-info">Show</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-            </div>
-        }
-        else
-        {
-            <div class="card w-25 mx-auto">
-                <div class="card-header">
-
-                    No Users Added Yet
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Index" asp-controller="Dashboard">
+                                <i class="fa-solid fa-house"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="manageSupply" asp-controller="Dashboard">
+                                <i class="fa-solid fa-box"></i>
+                                Supply
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="productManagement" asp-controller="Dashboard">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="userManagement" asp-controller="Dashboard">
+                                <i class="fa-solid fa-users"></i>
+                                Customers
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-        }
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Manage Customers</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="col-sm-5 mx-auto">
+                        <form action="userManagement" method="post">
+                            <div class="input-group">
+                                <select class="form-select custom-select" id="method" name="method" onchange="changePlaceholder()">
+                                    <option value="username">Username</option>
+                                    <option value="email">Email</option>
+                                </select>
+                                                            <input required type="text" class="form-control" id="identifier" name="identifier" placeholder="Enter Username">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                            </div>
+
+                        </form>
+
+
+                    </div>
+
+                    @if (Model != null && Model.users.Count() > 0)
+                    {
+
+                        <div class="">
+                            <div>
+                                <a class="btn btn-primary mb-4" asp-action="CreateUser" asp-controller="Dashboard">
+                                    Create User <i class="fa-solid fa-user-plus"></i>
+                                </a>
+                            </div>
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>User Id</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var user in Model.users)
+                                    {
+                                        if (user.UserName == "admin")
+                                        {
+                                            continue;
+                                        }
+                                        <tr>
+                                            <td>@user.Id</td>
+                                            <td>@user.UserName</td>
+                                            <td>@user.Email</td>
+                                            <td>
+                                                <form asp-action="findUserById" asp-route-id="@user.Id" method="get">
+                                                    <button type="submit" class="btn btn-info">Show</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card w-25 mx-auto">
+                            <div class="card-header">
+
+                                No Users Added Yet
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+
+
+   
+
+
 
 </body>
 
@@ -139,4 +183,3 @@
     }
 </script>
 
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
