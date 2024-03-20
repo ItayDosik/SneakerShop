@@ -108,6 +108,7 @@ namespace SneakerShop.Controllers
         public IActionResult checkoutPur(PaymentVM pay)
         {
             pay.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == pay.cartID);
+            var cartItems = pay.cart.cartItems;
             ModelState.Remove("cart");
             ModelState.Remove("paymentId");
             if (ModelState.IsValid)
@@ -136,7 +137,7 @@ namespace SneakerShop.Controllers
              
             _db.Carts.Remove(pay.cart);
             _db.SaveChanges();
-            return View("paymentSuccessed");
+            return View("paymentSuccessed", cartItems);
             }
             return View("checkout", pay);
         }
