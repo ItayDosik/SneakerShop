@@ -180,6 +180,12 @@
 <script>
     function promoCode() {
         var promoInput = document.getElementById("promoInput").value;
+
+
+        if (promoInput.toUpperCase() === "PARTY") {
+            window.location.href = "/Payment/promoCodeParty";
+            return; // Stop further execution
+        }
      
         // AJAX request to fetch the discount coupon
         var xhr = new XMLHttpRequest();

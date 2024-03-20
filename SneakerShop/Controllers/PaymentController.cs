@@ -128,10 +128,10 @@ namespace SneakerShop.Controllers
             return View("checkout", pay);
         }
 
-
         [HttpGet]
         public IActionResult DiscountCoupon(string promoCode)
         {
+
             Dictionary<string, double> codes = new Dictionary<string, double>();
             codes.Add("CODE1", 0.1); // 10% discount
             codes.Add("CODE2", 0.15); // 15% discount
@@ -147,11 +147,12 @@ namespace SneakerShop.Controllers
             }
 
             return Json(new { discount = discount });
+        } 
+
+        public IActionResult promoCodeParty()
+        {
+            return View("promoCodeParty");
         }
-    
-
-
-
 
     static byte[] EncryptStringToBytes_Aes(string plainText)
         {

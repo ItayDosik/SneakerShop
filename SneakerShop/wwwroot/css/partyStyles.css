@@ -1,0 +1,33 @@
+﻿h1 {
+    position: absolute;
+    margin-top: 30vh;
+    width: 100%;
+    text-align: center;
+    font-size: 333%;
+    font-family: sans-serif;
+    color: grey;
+    opacity: 0.5;
+}
+
+canvas {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+}
+
+
+.box {    
+  -moz-border-radius:150px;
+  -webkit-border-radius:150px;
+  background-position:0px 0px;
+  background-color:#ccc;
+  position:absolute;
+  background-repeat:no-repeat;
+  float:left;
+  height:120px;
+  margin:18px;
+  position:absolute;
+  width:120px;
+  padding:5px;
+}
