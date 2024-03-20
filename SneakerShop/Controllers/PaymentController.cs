@@ -108,37 +108,44 @@ namespace SneakerShop.Controllers
         public IActionResult checkoutPur(PaymentVM pay)
         {
             pay.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == pay.cartID);
+            if(pay.cart == null)
+            {
+                TempData["ErrorMessage"] = "Something went wrong, try again later. 🤒";
+                return RedirectToAction("ViewAllProducts", "Product");
+            }
             var cartItems = pay.cart.cartItems;
             ModelState.Remove("cart");
             ModelState.Remove("paymentId");
             if (ModelState.IsValid)
             {
 
-            foreach (var item in pay.cart.cartItems)
-            {
-                _db.Products.Find(item.ProductId).Qnt -= item.quantity;
-                _db.SaveChanges();
-            }
-                if(pay.cart.UserId != null)
+                foreach (var item in pay.cart.cartItems)
                 {
-                    if (_db.Payments.FirstOrDefault(c => c.UserId == pay.cart.UserId) == null)
-                    {
-                        Payment p = new Payment()
-                        {
-                            UserId = pay.cart.UserId,
-                            creditNum = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditNum)),
-                            creditCVV = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditCVV)),
-                            creditDate = DateTime.Parse(pay.creditExp)
-                        };
-                        _db.Payments.Add(p);
-                        _db.SaveChanges();
-                    }
+                    _db.Products.Find(item.ProductId).Qnt -= item.quantity;
+                    _db.SaveChanges();
                 }
+                    if(pay.cart.UserId != null)
+                    {
+                        if (_db.Payments.FirstOrDefault(c => c.UserId == pay.cart.UserId) == null)
+                        {
+                            Payment p = new Payment()
+                            {
+                                UserId = pay.cart.UserId,
+                                creditNum = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditNum)),
+                                creditCVV = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditCVV)),
+                                creditDate = DateTime.Parse(pay.creditExp)
+                            };
+                            _db.Payments.Add(p);
+                            _db.SaveChanges();
+                        }
+                    }
              
-            _db.Carts.Remove(pay.cart);
-            _db.SaveChanges();
-            return View("paymentSuccessed", cartItems);
+                _db.Carts.Remove(pay.cart);
+                _db.SaveChanges();
+                TempData["SuccessMessage"] = "Thank You! Enjoy 🤑" ;
+                return RedirectToAction("ViewAllProducts","Product");
             }
+
             return View("checkout", pay);
         }
 
