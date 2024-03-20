@@ -26,13 +26,24 @@ namespace SneakerShop.Controllers
 
         public IActionResult Index(string userID)
         {
-            
+
 
 
             PaymentVM payment = new PaymentVM();
             
-        
-            payment.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
+            if(userID != null)
+            {
+                payment.cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.UserId == userID);
+            }
+            else
+            {
+                var cartSession = HttpContext.Session.GetString("cart");
+                if (cartSession != null)
+                {
+                    int cartSessionID = int.Parse(cartSession);
+                    payment.cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == cartSessionID);
+                }  
+            }
 
             foreach (var item in payment.cart.cartItems)
             {
@@ -56,7 +67,6 @@ namespace SneakerShop.Controllers
             }
            
 
-            //Cart my_cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == cartSessionID);
             return View("checkout", payment);
         }
 
@@ -108,17 +118,20 @@ namespace SneakerShop.Controllers
                 _db.Products.Find(item.ProductId).Qnt -= item.quantity;
                 _db.SaveChanges();
             }
-
-                if (_db.Payments.FirstOrDefault(c => c.UserId == pay.cart.UserId) == null)
+                if(pay.cart.UserId != null)
                 {
-                    Payment p = new Payment() {
-                    UserId = pay.cart.UserId,
-                    creditNum = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditNum)),
-                    creditCVV = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditCVV)),
-                    creditDate = DateTime.Parse(pay.creditExp)
-                    };
-                    _db.Payments.Add(p);
-                    _db.SaveChanges();
+                    if (_db.Payments.FirstOrDefault(c => c.UserId == pay.cart.UserId) == null)
+                    {
+                        Payment p = new Payment()
+                        {
+                            UserId = pay.cart.UserId,
+                            creditNum = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditNum)),
+                            creditCVV = Convert.ToBase64String(EncryptStringToBytes_Aes(pay.creditCVV)),
+                            creditDate = DateTime.Parse(pay.creditExp)
+                        };
+                        _db.Payments.Add(p);
+                        _db.SaveChanges();
+                    }
                 }
              
             _db.Carts.Remove(pay.cart);

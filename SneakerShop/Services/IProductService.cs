@@ -12,6 +12,7 @@ namespace SneakerShop.Services
     public interface IProductService
     {
         List<CartItem> GetCartItems(string userID);
+        List<CartItem> GetCartItems(int cartSessionID);
     }
 
     public class ProductService : IProductService
@@ -31,6 +32,19 @@ namespace SneakerShop.Services
             {
                 cart = new Cart();
                 cart.UserId = userID;
+                cart.cartItems = new List<CartItem>();
+                _db.Carts.Add(cart);
+                _db.SaveChanges();
+            }
+            return cart.cartItems;
+        }
+
+        public List<CartItem> GetCartItems(int cartSessionID)
+        {
+            Cart cart = _db.Carts.Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == cartSessionID);
+            if (cart == null)
+            {
+                cart = new Cart();
                 cart.cartItems = new List<CartItem>();
                 _db.Carts.Add(cart);
                 _db.SaveChanges();
