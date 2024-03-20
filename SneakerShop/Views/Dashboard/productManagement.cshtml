@@ -34,29 +34,6 @@
 
 
 <body>
-    <div class="container">
-        <div class="col-sm-5 mx-auto mb-5">
-
-            <form action="productManagement" method="post"> 
-                <h1>Find Product:</h1>
-                <div class="form-group">
-                    <input required type="text" class="form-control" id="keyWord" name="keyWord" placeholder="Enter Product Name Or Desciption">
-                </div>
-                <br />
-                <button type="submit" class="searchBtn btn btn-block mb-4">Search Product</button>
-
-            <div>
-                    <a class="mybtn btn btn-block mb-4" asp-action="NewProduct" asp-controller="Dashboard" style="background-color:lightblue">
-                    Add New Product <i class="fa-solid fa-user-plus"></i>
-                </a>
-            </div>
-            </form>
-
-        </div>
-    </div>
-
-
-
     <div class="container w-25">
 
 
@@ -76,69 +53,138 @@
         }
     </div>
 
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="Index" asp-controller="Dashboard">
+                                <i class="fa-solid fa-house"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="manageSupply" asp-controller="Dashboard">
+                                <i class="fa-solid fa-box"></i>
+                                Supply
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="productManagement" asp-controller="Dashboard">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="userManagement" asp-controller="Dashboard">
+                                <i class="fa-solid fa-users"></i>
+                                Customers
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+
+                <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Manage Products</h1>
+                </div>
+                <!--SearchBar-->
+                <div class="container">
+                    <div class="col-sm-5 mx-auto">
+
+                        <form asp-action="productManagement" method="post">
+                            <div class="input-group mb-3">
+                                <input required type="text" class="form-control" id="keyWord" name="keyWord" placeholder="Enter Product Name Or Desciption">
+                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <!--EOF SearchBar-->
+                @if (Model != null && Model.products.Count() > 0)
+                {
+
+                    <div class="">
+                        <a class="btn btn-primary mb-4" asp-action="backwardToProductManagement" asp-controller="Dashboard">
+                            Show All <i class="fa-solid fa-table"></i>
+                        </a>
+                        <a class="btn btn-primary ms-2 mb-4" asp-action="NewProduct" asp-controller="Dashboard">
+                            Add New Product <i class="fa-solid fa-plus"></i>
+                        </a>
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Product id</th>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Qun</th>
+                                    <th>Location</th>
+                                    <th>Category</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in Model.products)
+                                {
+                                    <tr>
+                                        <td>@product.ProductId</td>
+                                        <td>@product.ProductName</td>
+                                        <td>@product.Price</td>
+                                        <td>@product.Qnt</td>
+                                        <td>@product.locationInStore</td>
+                                        <td>@product.Category</td>
+                                        <td>
+                                            <div class="row">
+                                                <form asp-action="Edit" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="get" class="col">
+                                                    <button type="submit" class="btn">
+                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                    </button>
+                                                </form>
+
+                                                <form asp-action="removeProduct" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="post" class="col">
+                                                    <button type="submit" onclick="return confirm('Are You Sure?')" class="btn btn-danger">
+                                                        <i class="fa-solid fa-trash-can"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="card w-25 mx-auto">
+                        <div class="card-header">
+                            No Products To Show.
+                        </div>
+                    </div>
+                }
+                
+
+            </main>
+        </div>
+    </div>
+
+
+
+
+
+
     
 
-    @if (Model != null && Model.products.Count() > 0)
-    {
-
-        <div class="container">
-            <a class="btn btn-block mb-4" asp-action="backwardToProductManagement" asp-controller="Dashboard" style="background-color:lightblue">
-                <i class="fa-solid fa-table"></i> Show All
-            </a>
-            <table class="table">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Product id</th>
-                        <th>Product Name</th>
-                        <th>Price</th>
-                        <th>Qun</th> 
-                        <th>Location</th>
-                        <th>Category</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var product in Model.products)
-                    {
-                        <tr>
-                            <td>@product.ProductId</td>
-                            <td>@product.ProductName</td>
-                            <td>@product.Price</td>
-                            <td>@product.Qnt</td>
-                            <td>@product.locationInStore</td>
-                            <td>@product.Category</td>
-                            <td>
-                                <div class="row col-sm-8">
-                                    <form asp-action="Edit" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="get" class="col">
-                                        <button type="submit" class="btn">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                    </form>
-
-                                    <form asp-action="removeProduct" asp-controller="Dashboard" asp-route-id="@product.ProductId" method="post" class="col">
-                                        <button type="submit" onclick="return confirm('Are You Sure?')" class="btn btn-danger">
-                                            <i class="fa-solid fa-trash-can"></i>
-                                        </button>
-                                    </form>
-                                </div>
-
-
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-        </div>
-    }
-    else
-    {
-        <div class="card w-25 mx-auto">
-            <div class="card-header">
-                No Products To Show.
-            </div>
-        </div>
-    }
+ 
 
 </body>
 
