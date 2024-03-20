@@ -65,7 +65,8 @@ namespace SneakerShop.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            return View("dashboard");
+            List<Product> prodList = _db.Products.ToList();
+            return View("dashboard", prodList);
         }
 
         [Authorize(Roles = "Admin")]
