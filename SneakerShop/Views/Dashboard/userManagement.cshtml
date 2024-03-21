@@ -28,6 +28,18 @@
         width: auto; /* Adjust this value to your preference */
         max-width: 150px; /* Adjust this value to your preference */
     }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+    }
+
+    .sidebar {
+        flex: 0 0 200px;
+        background-color: #f0f0f0;
+        overflow-y: auto;
+    }
 </style>
 
 
@@ -140,7 +152,7 @@
                                             <td>@user.Email</td>
                                             <td>
                                                 <form asp-action="findUserById" asp-route-id="@user.Id" method="get">
-                                                    <button type="submit" class="btn btn-info">Show</button>
+                                                    <button type="submit" class="btn btn-primary">Show</button>
                                                 </form>
                                             </td>
                                         </tr>

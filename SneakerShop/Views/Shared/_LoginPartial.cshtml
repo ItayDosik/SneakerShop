@@ -7,14 +7,6 @@
 @inject SneakerShop.Services.IProductService ProductService;
 
 <style>
-    .badge {
-        padding-left: 9px;
-        padding-right: 9px;
-        -webkit-border-radius: 9px;
-        -moz-border-radius: 9px;
-        border-radius: 9px;
-    }
-
 
     #lblCartCount {
         position: absolute;
@@ -23,7 +15,8 @@
         color: #fff;
         padding: 0 5px;
         vertical-align: top;
-        margin-left: -10px;
+        margin-left: -5px;
+        margin-top: -4px;
     }
 </style>
 
@@ -63,10 +56,10 @@
 
 }
 <ul class="navbar-nav">
-    <div class="container">
+    <div class ="navbar-collapse collapse d-sm-inline-flex justify-content-between">
         <a class="nav-link" asp-action="Index" asp-controller="Cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-            <span style="font-size: 20px; color: white;">
-                <i class="fa-solid fa-cart-shopping nav-link"></i>
+            <span class="nav-link me-2" style="font-size: 20px;">
+                <i class="fa-solid fa-cart-shopping"></i>
                 <span class='badge badge-warning' id='lblCartCount'> @NumOfProducts </span>
             </span>
         </a>
@@ -76,26 +69,29 @@
     {
 
 
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between navbar-dark">
 
-        <div class="container" style="white-space: nowrap;">
             <li class="nav-link">Hello, @User.Identity.Name </li>
+
+
+            <a class="nav-link" asp-action="Logout" asp-controller="Account">
+                    Logout
+
+            </a>
         </div>
-
-        <a class="nav-link" asp-action="Logout" asp-controller="Account">
-                Logout
-
-        </a>
-
         
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login </a>
-        </li>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login </a>
+            </li>
+        </div>
+
     }
 </ul>
 
