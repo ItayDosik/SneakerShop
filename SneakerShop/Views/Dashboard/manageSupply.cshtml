@@ -42,6 +42,14 @@
         overflow-y: auto; /* Enable scrolling if content exceeds sidebar height */
     }
 
+    .red {
+        color: red;
+    }
+
+    .yellow {
+        color: yellow;
+    }
+
 </style>
 
 
@@ -123,7 +131,9 @@
                                     <tr>
                                         <td>@product.ProductId</td>
                                         <td>@product.ProductName</td>
-                                        <td>@product.Qnt</td>
+                                    <td class="@(product.Qnt == 0 ? "text-danger fw-bold" :(product.Qnt < 5 ? "text-warning fw-bold" : "text-success fw-bold"))">
+                                        @product.Qnt
+                                    </td>
                                         <td>@product.Price</td>
                                         <td>
                                             <input type="number" class="quantity-input" name="products[@product.ProductId]" value="0" min="0" max="100" />
