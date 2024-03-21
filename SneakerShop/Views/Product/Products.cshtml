@@ -283,17 +283,27 @@
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Notify me</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <p>Enter your email and we will let you know when the sneaker is available</p>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" placeholder="name@example.com">
-                            <label for="floatingInput">Email address</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Apply</button>
-                    </div>
+
+                    <form class="needs-validation" action="@Url.Action("NotifyMe", "Product")" novalidate>
+                            <div class="modal-body">
+                                <p>Notify me when back in stock</p>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" placeholder="name@example.com" required>
+                                    <label for="floatingInput">Email address</label>
+                                    <div class="invalid-feedback">
+                                        Incorrent email address
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Apply</button>
+                            </div>
+                    </form>
+
+
                 </div>
             </div>
         </div>
@@ -320,6 +330,20 @@
 
     </script>
 
+    <script>
+            var forms = document.querySelectorAll(".needs-validation");
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener("submit", function (event) 
+            {
+                if (!form.checkValidity()) 
+                {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add("was-validated");
+            }, false);
+        });  
+    </script>
 
 
 

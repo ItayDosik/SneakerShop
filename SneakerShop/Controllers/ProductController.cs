@@ -262,6 +262,12 @@ namespace SneakerShop.Controllers
 
         }
 
+        public ActionResult NotifyMe()
+        {
+            TempData["SuccessMessage"] = "We'll notify you once the product is back in stock";
+            return RedirectToAction("ViewAllProducts");
+        }
+
     }
 
 
