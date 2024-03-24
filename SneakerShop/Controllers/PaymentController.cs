@@ -142,6 +142,7 @@ namespace SneakerShop.Controllers
              
                 _db.Carts.Remove(pay.cart);
                 _db.SaveChanges();
+                HttpContext.Session.Remove("cart");
                 TempData["SuccessMessage"] = "Thank You! Enjoy 🤑" ;
                 return RedirectToAction("ViewAllProducts","Product");
             }
