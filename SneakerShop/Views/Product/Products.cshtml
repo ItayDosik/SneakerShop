@@ -102,6 +102,23 @@
                                         </div>
                                     </form>
                                     <!--EOF Categories-->
+                                    <!--Locations-->
+                                    <form class="mb-4" asp-controller="Product" asp-action="LocationFilter" method="get">
+                                        <label class="form-label">Location in store</label>
+                                        <div class="input-group mb-3">
+
+                                            <select class="form-select" name="location" title="Department List">
+                                                <option selected value="Show All">Show All</option>
+                                                <option value="Aisle 1">Aisle 1</option>
+                                                <option value="Aisle 2">Aisle 2</option>
+                                                <option value="Aisle 3">Aisle 3</option>
+                                                <option value="Aisle 4">Aisle 4</option>
+                                            </select>
+                                            <button class="btn btn-outline-primary" type="submit">Show</button>
+                                        </div>
+                                    </form>
+                                    <!--EOF Locations-->
+
 
                                     <!--Price Range-->
                                     <form class="mb-4" id="priceRangeForm" asp-controller="Product" asp-action="SearchByPrice" method="get">

@@ -179,7 +179,7 @@ namespace SneakerShop.Controllers
         public ActionResult CategoryFilter(string category)
         {
             List<Product> results = new List<Product>();
-            if (category.Contains("Show")){
+            if (category == "Show All"){
                 results = _db.Products.ToList();
                 return RedirectToAction("ViewAllProducts");
             }
@@ -187,6 +187,28 @@ namespace SneakerShop.Controllers
             {
                 results = _db.Products.Where(p => p.Category.Contains(category)).ToList();
               
+            }
+
+            if (results.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No sneakers found";
+                return RedirectToAction("ViewAllProducts");
+            }
+            return View("Products", results);
+        }
+
+        public ActionResult LocationFilter(string location)
+        {
+            List<Product> results = new List<Product>();
+            if (location == "Show All")
+            {
+                results = _db.Products.ToList();
+                return RedirectToAction("ViewAllProducts");
+            }
+            else
+            {
+                results = _db.Products.Where(p => p.locationInStore.Contains(location)).ToList();
+
             }
 
             if (results.Count == 0)
@@ -267,6 +289,9 @@ namespace SneakerShop.Controllers
             TempData["SuccessMessage"] = "We'll notify you once the product is back in stock";
             return RedirectToAction("ViewAllProducts");
         }
+
+
+
 
     }
 
