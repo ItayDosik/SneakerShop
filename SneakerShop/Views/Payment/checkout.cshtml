@@ -1,7 +1,54 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-@using SneakerShop.ViewModels; 
+@using SneakerShop.ViewModels;
 @model SneakerShop.ViewModels.PaymentVM;
 @inject SignInManager<Users> signInManager;
+
+<!--PayPal-->
+
+        <script src="https://www.paypal.com/sdk/js?client-id=ARiPabA6mHW9gxVSegVHWInA8syt9pxowz3P2WV-V_SgTmV49coCf9ogdTg_sSaRRM1rX9qnEFpGMZgh&disable-funding=credit,card"></script>
+
+        <script>
+            paypal.Buttons({
+                style: {
+                    layout: 'vertical',
+                    color: 'silver',
+                    tagline: 'false'
+                },
+                createOrder: (data, actions) => {
+
+                    var totalPrice = parseFloat(document.getElementById("finalPrice").innerText.replace("$", ""));
+
+
+                    return fetch("@Url.Action("Order", "Payment")", {
+                        method: "post",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ totalPrice: totalPrice })
+                    }).then((response) => {
+                        if (!response.ok) {
+                            return response.json().then(error => { throw error; });
+                        }
+
+                        return response.json();
+                    }).then((order) => order.id)
+                    .catch(error => alert(error.message));
+                },
+                onApprove: (data, actions) => {
+                    return fetch(`@Url.Action("Capture")?orderId=${data.orderID}`, {
+                        method: "post",
+                    }).then((response) => {
+                        if (!response.ok) {
+                            return response.json().then(error => { throw error; });
+                        }
+
+                        window.location.href = "@Url.Action("PaymentSuccess", new { cartId = Model.cart.CartId , user = Model.cart.user})";
+                    }).catch(error => alert("Payment unsuccessful. Please try again later."));
+                }
+            }).render('#paypal-button-container');
+        </script>
+
+<!-- EOF PayPal-->
 
 <div class="container bg-body-tertiary px-5">
     <div class="py-5 text-center">
@@ -20,50 +67,6 @@
                 @{
                     decimal totalPrice = 0;
                 }
-
-                <script src="https://www.paypal.com/sdk/js?client-id=ARiPabA6mHW9gxVSegVHWInA8syt9pxowz3P2WV-V_SgTmV49coCf9ogdTg_sSaRRM1rX9qnEFpGMZgh"></script>
-
-                <script>
-                    paypal.Buttons({
-                        style: {
-                            layout: 'vertical',
-                            color: 'silver',
-                            tagline: 'false'
-                        },
-                        createOrder: (data, actions) => {
-                            // Get the total price from the view
-                            var totalPrice = parseFloat(document.getElementById("finalPrice").innerText.replace("$", ""));
-
-                            // Make the AJAX request to create the order using the Order action URL
-                            return fetch("@Url.Action("Order", "Payment")", {
-                                method: "post",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({ totalPrice: totalPrice })
-                            }).then((response) => {
-                                if (!response.ok) {
-                                    return response.json().then(error => { throw error; });
-                                }
-
-                                return response.json();
-                            }).then((order) => order.id)
-                            .catch(error => alert(error.message));
-                        },
-                        onApprove: (data, actions) => {
-                            return fetch(`@Url.Action("Capture")?orderId=${data.orderID}`, {
-                                method: "post",
-                            }).then((response) => {
-                                if (!response.ok) {
-                                    return response.json().then(error => { throw error; });
-                                }
-
-                                window.location.href = "@Url.Action("PaymentSuccess", new { cartId = Model.cart.CartId , user = Model.cart.user})";
-                            }).catch(error => alert("Payment unsuccessful. Please try again later."));
-                        }
-                    }).render('#paypal-button-container');
-                </script>
-
 
                 @foreach (var item in @Model.cart.cartItems)
                 {
@@ -216,62 +219,11 @@
                 <hr class="my-4">
 
                 <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+
+                <div class="w-100" id="paypal-button-container" style="display: none;"></div>
+
             </form>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    var paypalCheckbox = document.getElementById("paypal");
-                    var formElementsToDisable = document.querySelectorAll('.needs-validation input[type="text"], .needs-validation select, .needs-validation textarea, .needs-validation button:not(#paypal)');
-                    var paypalButtonContainer = document.getElementById("paypal-button-container");
-
-                    paypalCheckbox.addEventListener("change", function () {
-                        if (paypalCheckbox.checked) {
-                            enablePayPal();
-                            disableFormElements();
-                        } else {
-                            disablePayPal();
-                            enableFormElements();
-                        }
-                    });
-
-                    // Assuming you have a similar event listener for the credit card checkbox
-                    var creditCardCheckbox = document.getElementById("credit");
-                    creditCardCheckbox.addEventListener("change", function () {
-                        if (creditCardCheckbox.checked) {
-                            disablePayPal();
-                            enableFormElements();
-                        } else {
-                            enablePayPal();
-                            disableFormElements();
-                        }
-                    });
-
-                    function disableFormElements() {
-                        formElementsToDisable.forEach(function (element) {
-                            element.disabled = true;
-                        });
-                    }
-
-                    function enableFormElements() {
-                        formElementsToDisable.forEach(function (element) {
-                            element.disabled = false;
-                        });
-                    }
-
-                    function disablePayPal() {
-                        paypalButtonContainer.style.display = "none";
-                    }
-
-                    function enablePayPal() {
-                        paypalButtonContainer.style.display = "block";
-                    }
-                });</script>
-
-
         </div>
-    </div>
-
-    <div class="text-center">
-        <div id="paypal-button-container" style="display: none;"></div>
     </div>
 </div>
 
@@ -285,7 +237,7 @@
             window.location.href = "/Payment/promoCodeParty";
             return; // Stop further execution
         }
-     
+
         // AJAX request to fetch the discount coupon
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/Payment/discountCoupon?promoCode=" + encodeURIComponent(promoInput), true);
@@ -327,10 +279,76 @@
         if (redeemButton) {
             redeemButton.addEventListener("click", function (event) {
                 event.preventDefault(); // prevent default form submission
-                promoCode(); 
+                promoCode();
             });
         } else {
             console.error("Button with id 'redeemButton' not found.");
         }
     });
 </script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var creditRadioButton = document.getElementById("credit");
+        var paypalRadioButton = document.getElementById("paypal");
+        var form = document.querySelector("form");
+        var paypalButtonContainer = document.getElementById("paypal-button-container");
+        var checkoutButton = document.querySelector("button[type='submit']");
+
+
+        function disableFormElements() {
+            var formElements = form.querySelectorAll("input, select, textarea");
+            formElements.forEach(function (element) {
+                if (element.type !== "radio") {
+                    element.disabled = true;
+                }
+            });
+        }
+
+
+        function enableFormElements() {
+            var formElements = form.querySelectorAll("input, select, textarea");
+            formElements.forEach(function (element) {
+                element.disabled = false;
+            });
+        }
+
+
+        function showPaypalButtons() {
+            paypalButtonContainer.style.display = "block";
+            checkoutButton.style.display = "none";
+        }
+
+
+        function hidePaypalButtons() {
+            paypalButtonContainer.style.display = "none";
+            checkoutButton.style.display = "block";
+        }
+
+
+        creditRadioButton.addEventListener("change", function () {
+            if (creditRadioButton.checked) {
+                enableFormElements();
+                hidePaypalButtons();
+            }
+        });
+
+
+        paypalRadioButton.addEventListener("change", function () {
+            if (paypalRadioButton.checked) {
+                disableFormElements();
+                showPaypalButtons();
+            }
+        });
+
+
+        if (paypalRadioButton.checked) {
+            disableFormElements();
+            showPaypalButtons();
+        } else {
+            enableFormElements();
+            hidePaypalButtons();
+        }
+     });
+    </script>
