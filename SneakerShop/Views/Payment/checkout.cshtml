@@ -14,12 +14,57 @@
             <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-primary">Your cart</span>
                 <span class="badge bg-primary rounded-pill">@Model.cart.cartItems.Count()</span>
-            </h4> 
-            
+            </h4>
+
             <ul class="list-group mb-3">
                 @{
                     decimal totalPrice = 0;
                 }
+
+                <script src="https://www.paypal.com/sdk/js?client-id=ARiPabA6mHW9gxVSegVHWInA8syt9pxowz3P2WV-V_SgTmV49coCf9ogdTg_sSaRRM1rX9qnEFpGMZgh"></script>
+
+                <script>
+    paypal.Buttons({
+        style: {
+            layout: 'vertical',
+            color: 'silver',
+            tagline: 'false'
+        },
+        createOrder: (data, actions) => {
+            // Get the total price from the view
+            var totalPrice = parseFloat(document.getElementById("finalPrice").innerText.replace("$", ""));
+
+            // Make the AJAX request to create the order using the Order action URL
+            return fetch("@Url.Action("Order", "Payment")", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ totalPrice: totalPrice })
+            }).then((response) => {
+                if (!response.ok) {
+                    return response.json().then(error => { throw error; });
+                }
+
+                return response.json();
+            }).then((order) => order.id)
+            .catch(error => alert(error.message));
+        },
+        onApprove: (data, actions) => {
+            return fetch(`@Url.Action("Capture")?orderId=${data.orderID}`, {
+                method: "post",
+            }).then((response) => {
+                if (!response.ok) {
+                    return response.json().then(error => { throw error; });
+                }
+
+                window.location.href = "@Url.Action("PaymentSuccess", new { cartId = Model.cart.CartId , user = Model.cart.user})";
+            }).catch(error => alert("Payment unsuccessful. Please try again later."));
+        }
+    }).render('#paypal-button-container');
+                </script>
+
+
                 @foreach (var item in @Model.cart.cartItems)
                 {
                     <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -31,7 +76,7 @@
 
                     </li>
                     {
-                        totalPrice = Math.Round((totalPrice + (@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity),2);
+                        totalPrice = Math.Round((totalPrice + (@item.product.Price * (1 - ((decimal)@item.product.SalePercentage / 100))) * @item.quantity), 2);
                     }
                 }
 
@@ -43,7 +88,7 @@
                     <span class="text-body-secondary text-success" id="promoDiscount" style="display: none;"></span>
                 </li>
 
-                <li  class="list-group-item d-flex justify-content-between">
+                <li class="list-group-item d-flex justify-content-between">
                     <span>Total (USD)</span>
                     <strong id="finalPrice">$@totalPrice</strong>
                 </li>
@@ -56,17 +101,17 @@
                     <button type="button" id="redeemButton" class="btn btn-secondary">Redeem</button>
                 </div>
             </div>
-                
 
-        </div> 
 
-        
+        </div>
+
+
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Billing address</h4>
             <form action="@Url.Action("checkoutPur","Payment")" class="needs-validation" novalidate="" method="post">
 
                 <input type="hidden" asp-for="cartID" value="@Model.cart.CartId">
-             
+
 
 
                 <div class="row g-3">
@@ -172,7 +217,61 @@
 
                 <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
             </form>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var paypalCheckbox = document.getElementById("paypal");
+                    var formElementsToDisable = document.querySelectorAll('.needs-validation input[type="text"], .needs-validation select, .needs-validation textarea, .needs-validation button:not(#paypal)');
+                    var paypalButtonContainer = document.getElementById("paypal-button-container");
+
+                    paypalCheckbox.addEventListener("change", function () {
+                        if (paypalCheckbox.checked) {
+                            enablePayPal();
+                            disableFormElements();
+                        } else {
+                            disablePayPal();
+                            enableFormElements();
+                        }
+                    });
+
+                    // Assuming you have a similar event listener for the credit card checkbox
+                    var creditCardCheckbox = document.getElementById("credit");
+                    creditCardCheckbox.addEventListener("change", function () {
+                        if (creditCardCheckbox.checked) {
+                            disablePayPal();
+                            enableFormElements();
+                        } else {
+                            enablePayPal();
+                            disableFormElements();
+                        }
+                    });
+
+                    function disableFormElements() {
+                        formElementsToDisable.forEach(function (element) {
+                            element.disabled = true;
+                        });
+                    }
+
+                    function enableFormElements() {
+                        formElementsToDisable.forEach(function (element) {
+                            element.disabled = false;
+                        });
+                    }
+
+                    function disablePayPal() {
+                        paypalButtonContainer.style.display = "none";
+                    }
+
+                    function enablePayPal() {
+                        paypalButtonContainer.style.display = "block";
+                    }
+                });</script>
+
+
         </div>
+    </div>
+
+    <div class="text-center">
+        <div id="paypal-button-container" style="display: none;"></div>
     </div>
 </div>
 

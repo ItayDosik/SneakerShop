@@ -11,6 +11,8 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using SneakerShop.Clients;
+using Newtonsoft.Json;
 
 namespace SneakerShop.Controllers
 {
@@ -18,12 +20,80 @@ namespace SneakerShop.Controllers
     {
         private readonly AppDbContext _db;
         private readonly UserManager<Users> _userManager;
-        public PaymentController(AppDbContext db, UserManager<Users> userManager)
+        private readonly PaypalClient _paypalClient;
+        public PaymentController(AppDbContext db, UserManager<Users> userManager, PaypalClient paypalClient)
         {
             _db = db;
             _userManager = userManager;
+            _paypalClient = paypalClient;
         }
 
+
+        //paypal scope
+
+        [HttpPost]
+        public async Task<IActionResult> Order( CancellationToken cancellationToken)
+        {
+            try
+            {
+                // set the transaction price and currency
+                string requestBody = await new StreamReader(Request.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                decimal totalPrice = data.totalPrice;
+                var currency = "USD";
+
+                // "reference" is the transaction key
+                var reference = GetRandomInvoiceNumber();// "INV002";
+
+
+                var response = await _paypalClient.CreateOrder(totalPrice.ToString(), currency, reference);
+               
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                var error = new
+                {
+                    e.GetBaseException().Message
+                };
+
+                return BadRequest(error);
+            }
+        }
+        public async Task<IActionResult> Capture(string orderId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var response = await _paypalClient.CaptureOrder(orderId);
+
+                var reference = response.purchase_units[0].reference_id;
+
+                // Put your logic to save the transaction here
+                // You can use the "reference" variable as a transaction key
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                var error = new
+                {
+                    e.GetBaseException().Message
+                };
+
+                return BadRequest(error);
+            }
+        }
+        public static string GetRandomInvoiceNumber()
+        {
+            return new Random().Next(999999).ToString();
+        }
+        public IActionResult Success()
+        {
+            return View();
+        }
+
+        //eof paypal scope
         public IActionResult Index(string userID)
         {
 
@@ -175,7 +245,21 @@ namespace SneakerShop.Controllers
             return View("promoCodeParty");
         }
 
-    static byte[] EncryptStringToBytes_Aes(string plainText)
+        public IActionResult PaymentSuccess(int cartId, Users user)
+        {
+
+            Cart cart = _db.Carts.FirstOrDefault(cart => cart.CartId==cartId);
+            if (cart != null && user != null )
+            {
+                _db.Carts.Remove(cart);
+                _db.SaveChanges();
+            }
+         
+            TempData["SuccessMessage"] = "Thank You! Enjoy 🤑";
+            return RedirectToAction("ViewAllProducts", "Product");
+        }
+
+        static byte[] EncryptStringToBytes_Aes(string plainText)
         {
             byte[] Key = Encoding.UTF8.GetBytes("adivtomeritay123"); 
             byte[] IV = Encoding.UTF8.GetBytes("itaytomeradiv321"); 
