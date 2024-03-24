@@ -24,44 +24,44 @@
                 <script src="https://www.paypal.com/sdk/js?client-id=ARiPabA6mHW9gxVSegVHWInA8syt9pxowz3P2WV-V_SgTmV49coCf9ogdTg_sSaRRM1rX9qnEFpGMZgh"></script>
 
                 <script>
-    paypal.Buttons({
-        style: {
-            layout: 'vertical',
-            color: 'silver',
-            tagline: 'false'
-        },
-        createOrder: (data, actions) => {
-            // Get the total price from the view
-            var totalPrice = parseFloat(document.getElementById("finalPrice").innerText.replace("$", ""));
+                    paypal.Buttons({
+                        style: {
+                            layout: 'vertical',
+                            color: 'silver',
+                            tagline: 'false'
+                        },
+                        createOrder: (data, actions) => {
+                            // Get the total price from the view
+                            var totalPrice = parseFloat(document.getElementById("finalPrice").innerText.replace("$", ""));
 
-            // Make the AJAX request to create the order using the Order action URL
-            return fetch("@Url.Action("Order", "Payment")", {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ totalPrice: totalPrice })
-            }).then((response) => {
-                if (!response.ok) {
-                    return response.json().then(error => { throw error; });
-                }
+                            // Make the AJAX request to create the order using the Order action URL
+                            return fetch("@Url.Action("Order", "Payment")", {
+                                method: "post",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({ totalPrice: totalPrice })
+                            }).then((response) => {
+                                if (!response.ok) {
+                                    return response.json().then(error => { throw error; });
+                                }
 
-                return response.json();
-            }).then((order) => order.id)
-            .catch(error => alert(error.message));
-        },
-        onApprove: (data, actions) => {
-            return fetch(`@Url.Action("Capture")?orderId=${data.orderID}`, {
-                method: "post",
-            }).then((response) => {
-                if (!response.ok) {
-                    return response.json().then(error => { throw error; });
-                }
+                                return response.json();
+                            }).then((order) => order.id)
+                            .catch(error => alert(error.message));
+                        },
+                        onApprove: (data, actions) => {
+                            return fetch(`@Url.Action("Capture")?orderId=${data.orderID}`, {
+                                method: "post",
+                            }).then((response) => {
+                                if (!response.ok) {
+                                    return response.json().then(error => { throw error; });
+                                }
 
-                window.location.href = "@Url.Action("PaymentSuccess", new { cartId = Model.cart.CartId , user = Model.cart.user})";
-            }).catch(error => alert("Payment unsuccessful. Please try again later."));
-        }
-    }).render('#paypal-button-container');
+                                window.location.href = "@Url.Action("PaymentSuccess", new { cartId = Model.cart.CartId , user = Model.cart.user})";
+                            }).catch(error => alert("Payment unsuccessful. Please try again later."));
+                        }
+                    }).render('#paypal-button-container');
                 </script>
 
 
