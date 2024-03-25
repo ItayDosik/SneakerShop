@@ -74,14 +74,14 @@
 
                     <div class="col-sm-6">
                         <label for="firstName" class="form-label">First name</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required=""
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="@Model.firstName" required=""
                                name="firstName">
                         <span asp-validation-for="firstName" class="text-danger"></span>
                     </div>
 
                     <div class="col-sm-6">
                         <label for="LastName" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="LastName" placeholder="" value="" required=""
+                        <input type="text" class="form-control" id="LastName" placeholder="" value="@Model.LastName" required=""
                                name="LastName">
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
@@ -95,7 +95,7 @@
                         }
                         else
                         {
-                            <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com" value="">
+                            <input type="email" name="email" class="form-control" id="email" placeholder="you@example.com" value="@Model.email">
                         }
                         <span asp-validation-for="email" class="text-danger"></span>
 
@@ -109,7 +109,7 @@
                         }
                         else
                         {
-                            <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St" required="" value="">
+                            <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St" required="" value="@Model.address">
                         }
                         <span asp-validation-for="address" class="text-danger"></span>
                     </div>
@@ -125,7 +125,7 @@
 
                     <div class="col-md-3">
                         <label for="zip" class="form-label">Zip</label>
-                        <input type="text" name="zip" class="form-control" id="zip" placeholder="" required="">
+                        <input type="text" name="zip" class="form-control" id="zip" placeholder="" required="" value="@Model.zip">
                         <span asp-validation-for="zip" class="text-danger"></span>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
 
                     <div class="col-md-3">
                         <label for="cc-expiration" class="form-label">Expiration</label>
-                        <input value="@Model.creditExp" name="creditExp" type="text" class="form-control" id="cc-expiration" placeholder="MM/YYYY" required="">
+                        <input value="@Model.creditExp" name="creditExp" type="text" class="form-control" id="cc-expiration" placeholder="MM/YYYY" required="" >
                         <span asp-validation-for="creditExp" class="text-danger"></span>
                     </div>
 
