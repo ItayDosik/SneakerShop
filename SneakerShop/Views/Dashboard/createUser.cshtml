@@ -4,79 +4,80 @@
     ViewData["Title"] = "Create User";
 }
 
-<section class="">
-    <!-- Jumbotron -->
-    <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
-        <div class="container">
-            <div class="row gx-lg-5 align-items-center">
-                <h1>Create User:</h1>
-                <div class="col-lg-6 mb-5 mb-lg-0">
-                    <div class="card">
-                        <div class="card-body py-5 px-md-5">
-                            <form action="createUser" method="post">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <div class="form-outline mb-4">
-                                    <input type="text" name="UserName" class="form-control" />
-                                    <label class="form-label">User name</label>
-                                    <span asp-validation-for="UserName" class="text-danger"></span>
-                                </div>
 
 
-                                <div class="form-outline mb-4">
-                                    <input asp-for="Name" type="text" name="Name" class="form-control" />
-                                    <label asp-for="Name" class="form-label">Full name</label>
-                                    <span asp-validation-for="Name" class="text-danger"></span>
-                                </div>
+<div class="container d-flex justify-content-center align-items-center">
 
-                                <div class="form-outline mb-4">
-                                    <input asp-for="Password" type="password" name="password" class="form-control" />
-                                    <label asp-for="Password" class="form-label">Password</label>
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                </div>
+    <div class="card col-sm-5 align-content-center d-flex">
+        <div class="card-header">
+            Create User
+        </div>
 
-                                <div class="form-outline mb-4">
-                                    <input type="Password" name="ConfirmPassword" class="form-control" />
-                                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
-                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                    <input asp-for="PhoneNumber" type="text" name="PhoneNumber" class="form-control" />
-                                    <label asp-for="PhoneNumber" class="form-label">Phone</label>
-                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                                </div>
+        <div class="card-body px-md-5">
+            <form action="createUser" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-outline mb-4">
+                    <input type="text" name="UserName" class="form-control" />
+                    <label class="form-label">User name</label>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
 
 
-                                <div class="form-outline mb-4">
-                                    <input asp-for="Email" type="text" name="Email" class="form-control" />
-                                    <label asp-for="Email" class="form-label">Email address</label>
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
+                <div class="form-outline mb-4">
+                    <input asp-for="Name" type="text" name="Name" class="form-control" />
+                    <label asp-for="Name" class="form-label">Full name</label>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
 
-                                <div class="form-outline mb-4">
-                                    <input asp-for="Address" type="text" name="Address" class="form-control" />
-                                    <label asp-for="Address" class="form-label">Address</label>
-                                    <span asp-validation-for="Address" class="text-danger"></span>
-                                </div>
+                <div class="form-outline mb-4">
+                    <input asp-for="Password" type="password" name="password" class="form-control" />
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
 
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Role</label>
-                                    <div class="col-sm-10">
-                                        <div class="btn-group" role="group" aria-label="Role">
-                                            <button type="button" class="btn btn-secondary" onclick="selectRole('Admin')" id="adminBtn">Admin</button>
-                                            <button type="button" class="btn btn-secondary" onclick="selectRole('Member')" id="memberBtn">Member</button>
-                                            <input type="hidden" id="Role" name="Role" value="@(Model?.Role ?? "Member")">
+                <div class="form-outline mb-4">
+                    <input type="Password" name="ConfirmPassword" class="form-control" />
+                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
 
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="form-outline mb-4">
+                    <input asp-for="PhoneNumber" type="text" name="PhoneNumber" class="form-control" />
+                    <label asp-for="PhoneNumber" class="form-label">Phone</label>
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
 
-                                <input type="submit" value="Create" class="btn btn-primary btn-block mb-4" />
 
-                            </form>
+                <div class="form-outline mb-4">
+                    <input asp-for="Email" type="text" name="Email" class="form-control" />
+                    <label asp-for="Email" class="form-label">Email address</label>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-outline mb-4">
+                    <input asp-for="Address" type="text" name="Address" class="form-control" />
+                    <label asp-for="Address" class="form-label">Address</label>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Role:</label>
+                    <div class="col-sm-10">
+                        <div class="btn-group" role="group" aria-label="Role">
+                            <button type="button" class="btn btn-secondary" onclick="selectRole('Admin')" id="adminBtn">Admin</button>
+                            <button type="button" class="btn btn-secondary" onclick="selectRole('Member')" id="memberBtn">Member</button>
+                            <input type="hidden" id="Role" name="Role" value="@(Model?.Role ?? "Member")">
+
                         </div>
                     </div>
                 </div>
+
+                <input type="submit" value="Create" class="btn btn-primary my-2" />
+
+            </form>
+        </div>
+    </div>
+</div>
                 @if (TempData["SuccessMessageCreate"] != null)
                 {
                     <div class="alert alert-success" role="alert">
@@ -91,9 +92,8 @@
                 }
             </div>
         </div>
-    </div>
-    <!-- Jumbotron -->
-</section>
+
+
 
 @section Scripts {
     @{

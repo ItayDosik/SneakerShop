@@ -24,33 +24,49 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/bootstrap.css" rel="stylesheet" />
 </head>
-<body>
 
+<style>
+    h1 {
 
-    <div class="container my-5">
-        <div class="p-5 text-center bg-body-tertiary rounded-3">
-            <img class="bi mt-4 mb-3" src="https://i.ibb.co/pWTHmVn/Untitled.png" width="150" height="auto" />
-            <h1 class="text-body-emphasis">SneakerShop</h1>
-            <p class="col-lg-8 mx-auto fs-5 text-muted">
-                SneakerShop offers a diverse range of footwear, catering to all tastes and preferences.
-                With a focus on quality and style, our collection ensures you'll find the perfect pair
-                to elevate your look. Explore our selection today and step into a world of unparalleled
-                comfort and fashion-forward designs.
-            </p>
-            <div class="d-inline-flex gap-2 mb-5">
-                <a class="d-inline-flex align-items-center btn btn-secondary btn-lg px-4 rounded-pill" href="@Url.Action("ViewAllProducts","Product")" type="button">
-                    Shop Now
-                    <span class="ms-3" style="font-size: 20px; color: white;">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                    </span>
-                </a>
+        font-size: 100px;
+        background: linear-gradient(20deg, #efd5ff 0%, #515ada 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 3px 15px #170D0D);
+    }
+</style>
 
+<body style="background-image: url(../assets/bg.jpg); background-size: cover;">
+
+    <div class="container">
+                <div class="p-5 text-center bg-body-tertiary rounded-3">
+                    <img class="bi mb-3" src="https://i.ibb.co/pWTHmVn/Untitled.png" width="150" height="auto" />
+
+                <h1 class="text-white fw-bold">SneakerShop</h1>
+
+            
+                    <p class="col-lg-8 mx-auto fs-5 text-white">
+                        SneakerShop offers a diverse range of footwear, catering to all tastes and preferences.
+                        With a focus on quality and style, our collection ensures you'll find the perfect pair
+                        to elevate your look. Explore our selection today and step into a world of unparalleled
+                        comfort and fashion-forward designs.
+                    </p>
+                    <div class="d-inline-flex gap-2 mb-5">
+                        <a class="d-inline-flex align-items-center btn btn-secondary btn-lg px-4 rounded-pill" href="@Url.Action("ViewAllProducts","Product")" type="button">
+                            Shop Now
+                            <span class="ms-3" style="font-size: 20px; color: white;">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </span>
+                        </a>
+
+                    </div>
+                </div>
+                <!--Carousel-->
+            
             </div>
-        </div>
-    </div>
 
 
-
+    <script src="~/js/site.js"></script>
 
 </body>
 </html>

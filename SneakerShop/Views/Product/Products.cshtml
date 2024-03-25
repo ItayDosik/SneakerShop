@@ -7,24 +7,6 @@
 
 
 
-<style>
-    .carousel-control-prev,
-    .carousel-control-next {
-       height: 50%;
-       margin-top: auto;
-       margin-bottom: auto;
-    }
-    .text-sale{ 
-        color:red;
-    }
-
-    .my-badge{ 
-        width:5rem;
-        margin-left:80%; 
-    }
-
-
-</style>
 
 <body>
     <!--Search Bar-->
@@ -72,7 +54,7 @@
 
 
 
-        <div class="row">
+        <div class="row me-0">
             <div class="col-sm-12 col-md-2 order-sm-1">
                 <div class="container">
 
@@ -124,8 +106,8 @@
                                     <form class="mb-4" id="priceRangeForm" asp-controller="Product" asp-action="SearchByPrice" method="get">
                                         <div class="input-group mb-3">
                                             <label for="customRange3" class="form-label">Price Range</label>
-                                            <input type="range" class="form-range" min="1" max="10000" step="100" id="customRange3">
-                                            <div id="selectedAmount">Price range: 1$ - $ </div>
+                                            <input type="range" class="form-range" min="1" max="10000" step="1" id="customRange3" value="10000">
+                                            <div id="selectedAmount">Price < 10000$ </div>
                                         </div>
                                         <input type="hidden" name="search" id="selectedAmountInput">
                                         <button class="btn btn-outline-primary" type="submit">Apply</button>
@@ -144,7 +126,7 @@
             </div>
 
             <!--Product Card-->
-            <div class="col-sm-12 col-md-9 order-sm-2">
+            <div class="col-sm-12 col-md-10 order-sm-2">
                 <div class="row mx-3">
                     @for (int i = 0; i < Model.Count(); i++)
                     {
@@ -152,8 +134,8 @@
                         <div class="card">
                             @if (@Model[i].IsOnSale)
                             {
-                                <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
-                                    <span class="badge alert-danger my-badge">-@Model[i].SalePercentage% OFF</span>
+                                <div class="card-img-overlay">
+                                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0 mt-3 me-4 fs-6">-@Model[i].SalePercentage% OFF</span>
                                 </div>
 
 
@@ -200,8 +182,6 @@
                                     </div>
                                     <p class="card-text">
                                         @Model[i].ProductDescription
-                                        <br/>
-                                        <span class="">Size: @Model[i].Size</span>
                                     </p>
 
 
@@ -371,7 +351,7 @@
 
         rangeInput.addEventListener('input', function () {
             const selectedAmount = this.value;
-            selectedAmountDisplay.textContent = 'Price range: 1$ - $' + selectedAmount;
+            selectedAmountDisplay.textContent = 'Price < $' + selectedAmount;
             selectedAmountInput.value = selectedAmount;
         });
     </script>
