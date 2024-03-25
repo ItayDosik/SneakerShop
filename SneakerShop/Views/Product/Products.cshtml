@@ -6,8 +6,6 @@
 
 
 
-
-
 <body>
     <!--Search Bar-->
     <div class="container w-50 my-5">
@@ -130,16 +128,13 @@
                 <div class="row mx-3">
                     @for (int i = 0; i < Model.Count(); i++)
                     {
-                        <div class="col-md-4 col-12 mb-4">
+                        <div class="col-md-3 col-12 mb-4 me-4">
                         <div class="card">
                             @if (@Model[i].IsOnSale)
                             {
                                 <div class="card-img-overlay">
                                     <span class="badge bg-danger rounded-pill position-absolute top-0 end-0 mt-3 me-4 fs-6">-@Model[i].SalePercentage% OFF</span>
                                 </div>
-
-
-
                             }
                             @if (signInManager.IsSignedIn(User))
                             {
@@ -168,7 +163,7 @@
                             }
                             else
                             {
-                                <img class="card-img-top" src=@Model[i].ProductPictureURL1 alt="image">
+                                <img class="card-img-top " src=@Model[i].ProductPictureURL1 alt="image">
                             }
 
 
@@ -199,8 +194,6 @@
                                     </div>
                                     <p class="card-text">
                                         @Model[i].ProductDescription
-                                        <br />
-                                        <span class="">Size: @Model[i].Size</span>
                                     </p>
                                     <p class="fw-semibold text-secondary mx-auto">Out of Stock</p>
                                 }
@@ -209,11 +202,10 @@
                                     <h5 class="card-title">@Model[i].ProductName</h5>
                                     <p class="card-text">
                                         @Model[i].ProductDescription
-                                        <br />
-                                        <span class="">Size: @Model[i].Size</span>
                                     </p>
                                     <p class="fw-semibold text-secondary">$@Model[i].Price</p>
                                 }
+
 
                                 @if (@Model[i].Qnt <= 2 && @Model[i].Qnt != 0)
                                 {
