@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SneakerShop.Clients;
 using SneakerShop;
 using SneakerShop.Data;
 using SneakerShop.Models;
@@ -38,6 +39,14 @@ builder.Services.AddIdentity<Users, IdentityRole>(
     .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddSingleton(x =>
+    new PaypalClient(
+        builder.Configuration["PayPalOptions:ClientId"],
+        builder.Configuration["PayPalOptions:ClientSecret"],
+        builder.Configuration["PayPalOptions:Mode"]
+    )
+);
 
 var app = builder.Build();
 

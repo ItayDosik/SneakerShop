@@ -11,6 +11,8 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using SneakerShop.Clients;
+using Newtonsoft.Json;
 
 namespace SneakerShop.Controllers
 {
@@ -18,17 +20,17 @@ namespace SneakerShop.Controllers
     {
         private readonly AppDbContext _db;
         private readonly UserManager<Users> _userManager;
-        public PaymentController(AppDbContext db, UserManager<Users> userManager)
+        private readonly PaypalClient _paypalClient;
+        public PaymentController(AppDbContext db, UserManager<Users> userManager, PaypalClient paypalClient)
         {
             _db = db;
             _userManager = userManager;
+            _paypalClient = paypalClient;
         }
+
 
         public IActionResult Index(string userID)
         {
-
-
-
             PaymentVM payment = new PaymentVM();
             
             if(userID != null)
@@ -66,7 +68,6 @@ namespace SneakerShop.Controllers
 
             }
            
-
             return View("checkout", payment);
         }
 
@@ -176,7 +177,91 @@ namespace SneakerShop.Controllers
             return View("promoCodeParty");
         }
 
-    static byte[] EncryptStringToBytes_Aes(string plainText)
+
+        //PayPal
+
+        [HttpPost]
+        public async Task<IActionResult> Order(CancellationToken cancellationToken)
+        {
+            try
+            {
+                // set the transaction price and currency
+                string requestBody = await new StreamReader(Request.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                decimal totalPrice = data.totalPrice;
+                var currency = "USD";
+
+                // "reference" is the transaction key
+                var reference = GetRandomInvoiceNumber();
+
+
+                var response = await _paypalClient.CreateOrder(totalPrice.ToString(), currency, reference);
+
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                var error = new
+                {
+                    e.GetBaseException().Message
+                };
+
+                return BadRequest(error);
+            }
+        }
+        public async Task<IActionResult> Capture(string orderId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var response = await _paypalClient.CaptureOrder(orderId);
+
+                var reference = response.purchase_units[0].reference_id;
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                var error = new
+                {
+                    e.GetBaseException().Message
+                };
+
+                return BadRequest(error);
+            }
+        }
+        public static string GetRandomInvoiceNumber()
+        {
+            return new Random().Next(999999).ToString();
+        }
+        public IActionResult Success()
+        {
+            return View();
+        }
+
+        public IActionResult PaymentSuccess(int cartId)
+        {
+            Cart cart = _db.Carts.Include(u => u.user).Include(c => c.cartItems).ThenInclude(ci => ci.product).FirstOrDefault(cid => cid.CartId == cartId);
+            if (cart != null)
+            {
+                foreach (var item in cart.cartItems)
+                {
+                    _db.Products.Find(item.ProductId).Qnt -= item.quantity;
+                    _db.SaveChanges();
+                }
+                _db.Carts.Remove(cart);
+                _db.SaveChanges();
+            }
+            HttpContext.Session.Remove("cart");
+            TempData["SuccessMessage"] = "Thank You! Enjoy 🤑";
+            return RedirectToAction("ViewAllProducts", "Product");
+        }
+
+        //EOF PayPal
+
+
+
+        static byte[] EncryptStringToBytes_Aes(string plainText)
         {
             byte[] Key = Encoding.UTF8.GetBytes("adivtomeritay123"); 
             byte[] IV = Encoding.UTF8.GetBytes("itaytomeradiv321"); 
