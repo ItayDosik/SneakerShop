@@ -52,77 +52,75 @@
 
 
 
-        <div class="row me-0">
-            <div class="col-sm-12 col-md-2 order-sm-1">
-                <div class="container">
+<div class="row me-0">
+    <div class="col-sm-12 col-md-2 order-sm-1">
+        <div class="container">
 
-                    <div class="accordion mb-5" id="accordionPanelsStayOpenExample">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                    Filter Options
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
-                                <div class="accordion-body">
+            <div class="accordion mb-5" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            Filter Options
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
 
-                                    <!--Categories-->
-                                    <form class="mb-4" asp-controller="Product" asp-action="CategoryFilter" method="get">
-                                        <label class="form-label">Categories</label>
-                                        <div class="input-group mb-3">
-                                        
-                                            <select class="form-select" name="category">
-                                                <option selected value="Show">Show All</option>
-                                                <option value="Yeezy">Yeezy</option>
-                                                <option value="NikeSB">NikeSB</option>
-                                                <option value="Adidas">Adidas</option>
-                                                <option value="Jordan">Jordan</option>
-                                                <option value="Others">Others</option>
-                                            </select>
-                                            <button class="btn btn-outline-primary" type="submit">Show</button>
-                                        </div>
-                                    </form>
-                                    <!--EOF Categories-->
-                                    <!--Locations-->
-                                    <form class="mb-4" asp-controller="Product" asp-action="LocationFilter" method="get">
-                                        <label class="form-label">Location in store</label>
-                                        <div class="input-group mb-3">
-
-                                            <select class="form-select" name="location" title="Department List">
-                                                <option selected value="Show All">Show All</option>
-                                                <option value="Aisle 1">Aisle 1</option>
-                                                <option value="Aisle 2">Aisle 2</option>
-                                                <option value="Aisle 3">Aisle 3</option>
-                                                <option value="Aisle 4">Aisle 4</option>
-                                            </select>
-                                            <button class="btn btn-outline-primary" type="submit">Show</button>
-                                        </div>
-                                    </form>
-                                    <!--EOF Locations-->
-
-
-                                    <!--Price Range-->
-                                    <form class="mb-4" id="priceRangeForm" asp-controller="Product" asp-action="SearchByPrice" method="get">
-                                        <div class="input-group mb-3">
-                                            <label for="customRange3" class="form-label">Price Range</label>
-                                            <input type="range" class="form-range" min="1" max="10000" step="1" id="customRange3" value="10000">
-                                        <div id="selectedAmount">Price < $10000 </div>
-                                        </div>
-                                        <input type="hidden" name="search" id="selectedAmountInput">
-                                        <button class="btn btn-outline-primary" type="submit">Apply</button>
-                                    </form>
-                                    <!--EOF Price Range-->
-
-                                    <div class="btn-group">
-                                    <a href="@Url.Action("Sort", "Product", new { sort = "Sale" })" class="btn btn-outline-primary">Show Items on Sale</a>
-                                    </div>
-
-                                </div>
+                        <form asp-controller="Product" asp-action="Filter" method="get">
+                            <!-- Categories -->
+                            <div class="mb-3">
+                                <label class="form-label">Categories</label>
+                                <select class="form-select" name="category">
+                                    <option value="Show" selected="@((string)ViewBag.Category == "Show")">Show All</option>
+                                    <option value="Yeezy" selected="@((string)ViewBag.Category == "Yeezy")">Yeezy</option>
+                                    <option value="NikeSB" selected="@((string)ViewBag.Category == "NikeSB")">NikeSB</option>
+                                    <option value="Adidas" selected="@((string)ViewBag.Category == "Adidas")">Adidas</option>
+                                    <option value="Jordan" selected="@((string)ViewBag.Category == "Jordan")">Jordan</option>
+                                    <option value="Others" selected="@((string)ViewBag.Category == "Others")">Others</option>
+                                </select>
                             </div>
-                        </div>
-                    </div>               
+
+                            <!-- Locations -->
+                            <div class="mb-3">
+                                <label class="form-label">Location in store</label>
+                                <select class="form-select" name="location">
+                                    <option value="Show All" selected="@((string)ViewBag.Location == "Show All")">Show All</option>
+                                    <option value="Aisle 1" selected="@((string)ViewBag.Location == "Aisle 1")">Aisle 1</option>
+                                    <option value="Aisle 2" selected="@((string)ViewBag.Location == "Aisle 2")">Aisle 2</option>
+                                    <option value="Aisle 3" selected="@((string)ViewBag.Location == "Aisle 3")">Aisle 3</option>
+                                    <option value="Aisle 4" selected="@((string)ViewBag.Location == "Aisle 4")">Aisle 4</option>
+                                </select>
+                            </div>
+
+                            <!-- Price Range -->
+                            <div class="mb-3">
+                                <label for="customRange3" class="form-label">Price Range</label>
+                                <input type="range" class="form-range" min="1" max="10000" step="1" id="customRange3" name="price" value="@(ViewBag.Price ?? 10000)">
+                                        @if (ViewBag != null && ViewBag.Price != null)
+                                        {
+                                            <div id="selectedAmount">Price &lt; $@ViewBag.Price</div>
+                                        }
+                                        else
+                                        {
+                                            <div id="selectedAmount">Price &lt; $10000</div>
+                                        }
+                            </div>
+
+                            <!-- Filter for items on sale -->
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="onSale" name="onSale" @(ViewBag.OnSale == "on" ? "checked" : "")>
+                                <label class="form-check-label" for="onSale">Show Items on Sale</label>
+                            </div>
+
+                            <!-- Submit button -->
+                            <button class="btn btn-primary" type="submit">Apply Filters</button>
+                        </form>
+                    </div>
                 </div>
             </div>
+        </div>               
+    </div>
+</div>
 
             <!--Product Card-->
             <div class="col-sm-12 col-md-10 order-sm-2">

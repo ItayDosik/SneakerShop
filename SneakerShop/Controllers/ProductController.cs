@@ -176,71 +176,6 @@ namespace SneakerShop.Controllers
 
         }
 
-        public ActionResult CategoryFilter(string category)
-        {
-            List<Product> results = new List<Product>();
-            if (category == "Show"){
-                results = _db.Products.ToList();
-                return RedirectToAction("ViewAllProducts");
-            }
-            else
-            {
-                results = _db.Products.Where(p => p.Category.Contains(category)).ToList();
-              
-            }
-
-            if (results.Count == 0)
-            {
-                TempData["ErrorMessage"] = "No sneakers found";
-                return RedirectToAction("ViewAllProducts");
-            }
-            return View("Products", results);
-        }
-
-        public ActionResult LocationFilter(string location)
-        {
-            List<Product> results = new List<Product>();
-            if (location == "Show All")
-            {
-                results = _db.Products.ToList();
-                return RedirectToAction("ViewAllProducts");
-            }
-            else
-            {
-                results = _db.Products.Where(p => p.locationInStore.Contains(location)).ToList();
-
-            }
-
-            if (results.Count == 0)
-            {
-                TempData["ErrorMessage"] = "No sneakers found";
-                return RedirectToAction("ViewAllProducts");
-            }
-            return View("Products", results);
-        }
-
-        public ActionResult SearchByPrice(string search)
-        {
-            List<Product> results = new List<Product>();
-            if (search == null)
-            {
-                results = _db.Products.ToList();
-                TempData["ErrorMessage"] = "Enter price range";
-                return RedirectToAction("ViewAllProducts");
-            }
-            results = _db.Products.Where(p => p.Price >= 1 && p.Price <= decimal.Parse(search)).ToList();
-
-            if (results.Count == 0)
-            {
-                results = _db.Products.ToList();
-                TempData["ErrorMessage"] = "No sneakers found";
-                return RedirectToAction("ViewAllProducts");
-            }
-
-            return View("Products", results);
-
-        }
-
         public ActionResult Sort(string sort)
         {
             try
@@ -281,6 +216,39 @@ namespace SneakerShop.Controllers
             return RedirectToAction("ViewAllProducts");
 
 
+        }
+
+        public ActionResult Filter(string category, string location, string price, string? onSale)
+        {
+            IQueryable<Product> results = _db.Products;
+            ViewBag.Category = category;
+            ViewBag.Location = location;
+            ViewBag.Price = price;
+            ViewBag.OnSale = onSale;
+
+            if (category != "Show")
+            {
+                results = results.Where(p => p.Category == category);
+            }
+            if (location != "Show All")
+            {
+                results = results.Where(p => p.locationInStore == location);
+            }
+
+            if (onSale == "on")
+            {
+                results = results.Where(p => p.IsOnSale);
+            }
+
+            results = results.Where(p => p.Price <= decimal.Parse(price));
+
+            if (results.Count() == 0)
+            {
+                TempData["ErrorMessage"] = "No sneakers found";
+                return RedirectToAction("ViewAllProducts");
+            }
+
+            return View("Products", results.ToList());
         }
 
         public ActionResult NotifyMe()
