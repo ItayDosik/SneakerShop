@@ -179,7 +179,7 @@ namespace SneakerShop.Controllers
         public ActionResult CategoryFilter(string category)
         {
             List<Product> results = new List<Product>();
-            if (category == "Show All"){
+            if (category == "Show"){
                 results = _db.Products.ToList();
                 return RedirectToAction("ViewAllProducts");
             }
@@ -245,33 +245,32 @@ namespace SneakerShop.Controllers
         {
             try
             {
-                var productsList = from s in _db.Products
-                                   select s;
+                List<Product> productsList = new List<Product>();
                 switch (sort)
                 {
                     case "Price Increase":
-                        productsList = productsList.OrderByDescending(s => s.Price);
+                        productsList = _db.Products.OrderByDescending(s => s.Price).ToList();
                         break;
                     case "Price Decrease":
-                        productsList = productsList.OrderBy(s => s.Price);
+                        productsList = _db.Products.OrderBy(s => s.Price).ToList();
                         break;
                     case "Category":
-                        productsList = productsList.OrderByDescending(s => s.Category);
+                        productsList = _db.Products.OrderBy(s => s.Category).ToList();
                         break;
                     case "Most Popular":
-                        productsList = productsList.OrderByDescending(s => s.Category);
+                        productsList = _db.Products.OrderBy(s => s.Qnt).ToList();
                         break;
                     case "Remove Filter":
-                        productsList = _db.Products;
+                        productsList = _db.Products.ToList();
                         break;
                     case "Sale":
-                        productsList = productsList.Where(product => product.IsOnSale == true);
+                        productsList = _db.Products.Where(product => product.IsOnSale == true).ToList();
                         break;
                     default:
-                        productsList = _db.Products;
+                        productsList = _db.Products.ToList();
                         break;
                 }
-                return View("Products", productsList.ToList());
+                return View("Products", productsList);
             }
 
             catch (Exception ex)

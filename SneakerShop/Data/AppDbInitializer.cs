@@ -32,7 +32,7 @@ namespace SneakerShop.Data
                             Size = "12",
                             IsOnSale = false,
                             SalePercentage = 0,
-                            locationInStore = "Aisle 4"
+                            locationInStore = "Aisle 2"
 
                         },
                         new SneakerShop.Models.Product()
@@ -54,7 +54,7 @@ namespace SneakerShop.Data
                         {
                             ProductName = "Yeezy Boost 350 V2 - Steel Grey",
                             ProductDescription = "After adidas announced the official release information regarding upcoming Yeezy product, Kanye West himself took to Instagram to speak out against the shoes that he once designed in collaboration with the brand.",
-                            Price = 2200.00M,
+                            Price = 220.00M,
                             ProductPictureURL1 = "https://i.ibb.co/qrdPVTQ/yeezygrey.png",
                             ProductPictureURL2 = "https://i.ibb.co/qrdPVTQ/yeezygrey.png",
                             ProductPictureURL3 = "https://i.ibb.co/qrdPVTQ/yeezygrey.png",
@@ -75,6 +75,21 @@ namespace SneakerShop.Data
                             ProductPictureURL3 = "https://i.ibb.co/192zM7V/SbApril.png",
                             Qnt = 5,
                             Category = "NikeSb",
+                            Size = "12",
+                            IsOnSale = false,
+                            SalePercentage = 0,
+                            locationInStore = "Aisle 4"
+                        },
+                        new SneakerShop.Models.Product()
+                        {
+                            ProductName = "Jordan Jumpman Jack TR",
+                            ProductDescription = "Travis Scott Sail",
+                            Price = 780.00M,
+                            ProductPictureURL1 = "https://i.ibb.co/8dCNsc9/travismac.png",
+                            ProductPictureURL2 = "https://i.ibb.co/8dCNsc9/travismac.png",
+                            ProductPictureURL3 = "https://i.ibb.co/8dCNsc9/travismac.png",
+                            Qnt = 5,
+                            Category = "Others",
                             Size = "12",
                             IsOnSale = false,
                             SalePercentage = 0,

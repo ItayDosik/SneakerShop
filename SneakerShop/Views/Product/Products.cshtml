@@ -8,12 +8,12 @@
 
 <body>
     <!--Search Bar-->
-    <div class="container w-50 my-5">
+    <div class="container my-5">
         <form asp-controller="Product" asp-action="Search" method="get">
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 mx-1">
                 <input type="text" class="form-control" name="search" placeholder="Search sneakers">
-                <button class="btn btn-outline-secondary" type="submit">Search</button>
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
+                <button class="btn btn-outline-secondary col-md-1" type="submit">Search</button>
+                <button class="btn btn-outline-secondary dropdown-toggle col-md-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
                 <ul class="dropdown-menu">
                     <li><a href="@Url.Action("Sort", "Product", new { sort = "Price Increase" })" class="dropdown-item">Price (High to low)</a></li>
                     <li><a href="@Url.Action("Sort", "Product", new { sort = "Price Decrease" })" class="dropdown-item">Price (Low to high)</a></li>
@@ -71,12 +71,13 @@
                                         <label class="form-label">Categories</label>
                                         <div class="input-group mb-3">
                                         
-                                            <select class="form-select" name="category" title="Department List">
+                                            <select class="form-select" name="category">
                                                 <option selected value="Show">Show All</option>
                                                 <option value="Yeezy">Yeezy</option>
                                                 <option value="NikeSB">NikeSB</option>
                                                 <option value="Adidas">Adidas</option>
                                                 <option value="Jordan">Jordan</option>
+                                                <option value="Others">Others</option>
                                             </select>
                                             <button class="btn btn-outline-primary" type="submit">Show</button>
                                         </div>
@@ -105,7 +106,7 @@
                                         <div class="input-group mb-3">
                                             <label for="customRange3" class="form-label">Price Range</label>
                                             <input type="range" class="form-range" min="1" max="10000" step="1" id="customRange3" value="10000">
-                                            <div id="selectedAmount">Price < $10000 </div>
+                                        <div id="selectedAmount">Price < $10000 </div>
                                         </div>
                                         <input type="hidden" name="search" id="selectedAmountInput">
                                         <button class="btn btn-outline-primary" type="submit">Apply</button>
