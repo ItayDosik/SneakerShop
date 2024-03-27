@@ -114,9 +114,12 @@
                             </div>
 
                             <!-- Submit button -->
-                            <button class="btn btn-primary" type="submit">Apply Filters</button>
+                            <div class="d-flex">
+                                <button class="btn btn-primary"  type="submit">Apply Filters</button>
+                                <a href="@Url.Action("ClearFilters", "Product", new { sort = "Sale" })" class="btn btn-outline-danger justify-content-right"><i class="fa-solid fa-delete-left"></i> Clear Filters</a>
+                            </div>
                         </form>
-                       <a href="@Url.Action("ClearFilters", "Product", new { sort = "Sale" })" class="btn btn-outline-danger"><i class="fa-solid fa-delete-left"></i> Clear Filters</a>
+                       
                     </div>
                 </div>
             </div>
