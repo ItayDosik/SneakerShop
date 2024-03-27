@@ -41,7 +41,8 @@ namespace SneakerShop.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            RegisterVM model = new RegisterVM();
+            return View(model);
         }
 
         [HttpPost]
@@ -79,8 +80,19 @@ namespace SneakerShop.Controllers
                 {
                     ModelState.AddModelError("", error.Description);
                 }
-               
-
+                
+            }
+            foreach (var entry in ModelState)
+            {
+                if (entry.Value.Errors.Any())
+                {
+                    var errorFieldName = entry.Key;
+                    var property = typeof(RegisterVM).GetProperty(errorFieldName);
+                    if (property != null)
+                    {
+                        property.SetValue(model, null);
+                    }
+                }
             }
             return View(model);
         }
