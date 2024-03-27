@@ -24,6 +24,10 @@ namespace SneakerShop.Controllers
             _db = db;
         }
 
+        public IActionResult ClearFilters()
+        {
+            return RedirectToAction("ViewAllProducts", "Product");
+        }
 
         public ActionResult ViewAllProducts()
         {
