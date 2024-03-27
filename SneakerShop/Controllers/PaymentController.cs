@@ -147,6 +147,18 @@ namespace SneakerShop.Controllers
                 TempData["SuccessMessage"] = "Thank You! Enjoy 🤑" ;
                 return RedirectToAction("ViewAllProducts","Product");
             }
+            foreach (var entry in ModelState)
+            {
+                if (entry.Value.Errors.Any())
+                {
+                    var errorFieldName = entry.Key;
+                    var property = typeof(PaymentVM).GetProperty(errorFieldName);
+                    if (property != null)
+                    {
+                        property.SetValue(pay, null);
+                    }
+                }
+            }
 
             return View("checkout", pay);
         }
