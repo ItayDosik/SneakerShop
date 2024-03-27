@@ -1,39 +1,19 @@
-﻿@model List<SneakerShop.Models.Product>
-﻿@using Microsoft.AspNetCore.Identity;
+@model List<SneakerShop.Models.Product>
+@using Microsoft.AspNetCore.Identity;
 @using SneakerShop.Models.Data
 @using System.Security.Claims;
 @inject SignInManager<Users> signInManager;
 
 
 
-
-<style>
-    .carousel-control-prev,
-    .carousel-control-next {
-       height: 50%;
-       margin-top: auto;
-       margin-bottom: auto;
-    }
-    .text-sale{ 
-        color:red;
-    }
-
-    .my-badge{ 
-        width:5rem;
-        margin-left:80%; 
-    }
-
-
-</style>
-
 <body>
     <!--Search Bar-->
-    <div class="container w-50 my-5">
+    <div class="container my-5">
         <form asp-controller="Product" asp-action="Search" method="get">
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 mx-1">
                 <input type="text" class="form-control" name="search" placeholder="Search sneakers">
-                <button class="btn btn-outline-secondary" type="submit">Search</button>
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
+                <button class="btn btn-outline-secondary col-md-1" type="submit">Search</button>
+                <button class="btn btn-outline-secondary dropdown-toggle col-md-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">Sort By</button>
                 <ul class="dropdown-menu">
                     <li><a href="@Url.Action("Sort", "Product", new { sort = "Price Increase" })" class="dropdown-item">Price (High to low)</a></li>
                     <li><a href="@Url.Action("Sort", "Product", new { sort = "Price Decrease" })" class="dropdown-item">Price (Low to high)</a></li>
@@ -72,93 +52,90 @@
 
 
 
-        <div class="row">
-            <div class="col-sm-12 col-md-2 order-sm-1">
-                <div class="container">
+<div class="row me-0">
+    <div class="col-sm-12 col-md-2 order-sm-1">
+        <div class="container">
 
-                    <div class="accordion mb-5" id="accordionPanelsStayOpenExample">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                    Filter Options
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
-                                <div class="accordion-body">
+            <div class="accordion mb-5" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            Filter Options
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
 
-                                    <!--Categories-->
-                                    <form class="mb-4" asp-controller="Product" asp-action="CategoryFilter" method="get">
-                                        <label class="form-label">Categories</label>
-                                        <div class="input-group mb-3">
-                                        
-                                            <select class="form-select" name="category" title="Department List">
-                                                <option selected value="Show">Show All</option>
-                                                <option value="Yeezy">Yeezy</option>
-                                                <option value="NikeSB">NikeSB</option>
-                                                <option value="Adidas">Adidas</option>
-                                                <option value="Jordan">Jordan</option>
-                                            </select>
-                                            <button class="btn btn-outline-primary" type="submit">Show</button>
-                                        </div>
-                                    </form>
-                                    <!--EOF Categories-->
-                                    <!--Locations-->
-                                    <form class="mb-4" asp-controller="Product" asp-action="LocationFilter" method="get">
-                                        <label class="form-label">Location in store</label>
-                                        <div class="input-group mb-3">
-
-                                            <select class="form-select" name="location" title="Department List">
-                                                <option selected value="Show All">Show All</option>
-                                                <option value="Aisle 1">Aisle 1</option>
-                                                <option value="Aisle 2">Aisle 2</option>
-                                                <option value="Aisle 3">Aisle 3</option>
-                                                <option value="Aisle 4">Aisle 4</option>
-                                            </select>
-                                            <button class="btn btn-outline-primary" type="submit">Show</button>
-                                        </div>
-                                    </form>
-                                    <!--EOF Locations-->
-
-
-                                    <!--Price Range-->
-                                    <form class="mb-4" id="priceRangeForm" asp-controller="Product" asp-action="SearchByPrice" method="get">
-                                        <div class="input-group mb-3">
-                                            <label for="customRange3" class="form-label">Price Range</label>
-                                            <input type="range" class="form-range" min="1" max="10000" step="100" id="customRange3">
-                                            <div id="selectedAmount">Price range: 1$ - $ </div>
-                                        </div>
-                                        <input type="hidden" name="search" id="selectedAmountInput">
-                                        <button class="btn btn-outline-primary" type="submit">Apply</button>
-                                    </form>
-                                    <!--EOF Price Range-->
-
-
-                                <a href="@Url.Action("Sort", "Product", new { sort = "Sale" })" class="btn btn-outline-primary mb-4">Show Items on Sale</a>
-                                                                      
-                                    <a href="@Url.Action("ClearFilters", "Product", new { sort = "Sale" })" class="btn btn-outline-danger"><i class="fa-solid fa-delete-left"></i> Clear Filters</a>
-
-                                </div>
+                        <form asp-controller="Product" asp-action="Filter" method="get">
+                            <!-- Categories -->
+                            <div class="mb-3">
+                                <label class="form-label">Categories</label>
+                                <select class="form-select" name="category">
+                                    <option value="Show" selected="@((string)ViewBag.Category == "Show")">Show All</option>
+                                    <option value="Yeezy" selected="@((string)ViewBag.Category == "Yeezy")">Yeezy</option>
+                                    <option value="NikeSB" selected="@((string)ViewBag.Category == "NikeSB")">NikeSB</option>
+                                    <option value="Adidas" selected="@((string)ViewBag.Category == "Adidas")">Adidas</option>
+                                    <option value="Jordan" selected="@((string)ViewBag.Category == "Jordan")">Jordan</option>
+                                    <option value="Others" selected="@((string)ViewBag.Category == "Others")">Others</option>
+                                </select>
                             </div>
-                        </div>
-                    </div>               
+
+                            <!-- Locations -->
+                            <div class="mb-3">
+                                <label class="form-label">Location in store</label>
+                                <select class="form-select" name="location">
+                                    <option value="Show All" selected="@((string)ViewBag.Location == "Show All")">Show All</option>
+                                    <option value="Aisle 1" selected="@((string)ViewBag.Location == "Aisle 1")">Aisle 1</option>
+                                    <option value="Aisle 2" selected="@((string)ViewBag.Location == "Aisle 2")">Aisle 2</option>
+                                    <option value="Aisle 3" selected="@((string)ViewBag.Location == "Aisle 3")">Aisle 3</option>
+                                    <option value="Aisle 4" selected="@((string)ViewBag.Location == "Aisle 4")">Aisle 4</option>
+                                </select>
+                            </div>
+                                                                 
+                            <!-- Price Range -->
+                            <div class="mb-3">
+                                <label for="customRange3" class="form-label">Price Range</label>
+                                <input type="range" class="form-range" min="1" max="10000" step="1" id="customRange3" name="price" value="@(ViewBag.Price ?? 10000)">
+                                        @if (ViewBag != null && ViewBag.Price != null)
+                                        {
+                                            <div id="selectedAmount">Price &lt; $@ViewBag.Price</div>
+                                        }
+                                        else
+                                        {
+                                            <div id="selectedAmount">Price &lt; $10000</div>
+                                        }
+                            </div>
+
+
+                            <!-- Filter for items on sale -->
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="onSale" name="onSale" @(ViewBag.OnSale == "on" ? "checked" : "")>
+                                <label class="form-check-label" for="onSale">Show Items on Sale</label>
+                            </div>
+
+                            <!-- Submit button -->
+                            <button class="btn btn-primary" type="submit">Apply Filters</button>
+                        </form>
+                       <a href="@Url.Action("ClearFilters", "Product", new { sort = "Sale" })" class="btn btn-outline-danger"><i class="fa-solid fa-delete-left"></i> Clear Filters</a>
+                    </div>
                 </div>
             </div>
+        </div>               
+    </div>
+</div>
 
             <!--Product Card-->
-            <div class="col-sm-12 col-md-9 order-sm-2">
+            <div class="col-sm-12 col-md-10 order-sm-2">
                 <div class="row mx-3">
                     @for (int i = 0; i < Model.Count(); i++)
                     {
-                        <div class="col-md-4 col-12 mb-4">
+                        <div class="col-md-3 col-12 mb-4 me-4">
                         <div class="card">
                             @if (@Model[i].IsOnSale)
                             {
-                                <div class="card-img-overlay" style="position: absolute; top: 0; right: 0; z-index: 1;">
-                                    <span class="badge alert-danger my-badge">-@Model[i].SalePercentage% OFF</span>
+                                <div class="card-img-overlay">
+                                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0 mt-3 me-4 fs-6">-@Model[i].SalePercentage% OFF</span>
                                 </div>
-
-
-
                             }
                             @if (signInManager.IsSignedIn(User))
                             {
@@ -187,7 +164,7 @@
                             }
                             else
                             {
-                                <img class="card-img-top" src=@Model[i].ProductPictureURL1 alt="image">
+                                <img class="card-img-top " src=@Model[i].ProductPictureURL1 alt="image">
                             }
 
 
@@ -201,8 +178,6 @@
                                     </div>
                                     <p class="card-text">
                                         @Model[i].ProductDescription
-                                        <br/>
-                                        <span class="">Size: @Model[i].Size</span>
                                     </p>
 
 
@@ -220,8 +195,6 @@
                                     </div>
                                     <p class="card-text">
                                         @Model[i].ProductDescription
-                                        <br />
-                                        <span class="">Size: @Model[i].Size</span>
                                     </p>
                                     <p class="fw-semibold text-secondary mx-auto">Out of Stock</p>
                                 }
@@ -230,11 +203,10 @@
                                     <h5 class="card-title">@Model[i].ProductName</h5>
                                     <p class="card-text">
                                         @Model[i].ProductDescription
-                                        <br />
-                                        <span class="">Size: @Model[i].Size</span>
                                     </p>
                                     <p class="fw-semibold text-secondary">$@Model[i].Price</p>
                                 }
+
 
                                 @if (@Model[i].Qnt <= 2 && @Model[i].Qnt != 0)
                                 {
@@ -372,7 +344,7 @@
 
         rangeInput.addEventListener('input', function () {
             const selectedAmount = this.value;
-            selectedAmountDisplay.textContent = 'Price range: 1$ - $' + selectedAmount;
+            selectedAmountDisplay.textContent = 'Price < $' + selectedAmount;
             selectedAmountInput.value = selectedAmount;
         });
     </script>

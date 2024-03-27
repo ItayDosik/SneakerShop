@@ -12,46 +12,53 @@
         color: red;
     }
 </style>
+<body style="background-image: url(../assets/bg.jpg); background-size: cover;">
+    <div class="container py-5 ">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mx-auto">
+                <div class="card bg-white" style="--bs-bg-opacity: .05; backdrop-filter: blur(20px); border-radius:20px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 
-<div class="row d-flex align-items-center justify-content-center">
-    <div class="col-md-3 card p-3"> 
-        <h2 class="text-center text-info">Login</h2>
-        <form asp-action="Login" method="post">
-            <div class="mb-1">
-                <label asp-for="UserName"></label>
-                <input asp-for="UserName" class="form-control"/> 
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
+                    <div class="card-body py-5 px-md-5">
+                        <h2 class="text-center text-white">Login</h2>
+                        <form asp-action="Login" method="post">
+                            <div class="mb-4">
+                                <label class="form-label fs-5 text-white-50">User name</label>
+                                <input asp-for="UserName" class="form-control" placeholder="User name" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
 
-            <div class="mb-1">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div> 
+                            <div class="">
+                                <label class="form-label fs-5 text-white-50">Password</label>
+                                <input asp-for="Password" class="form-control" placeholder="Password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
 
-            <br/>
+                            <br />
 
-            <div class="mb-1 form-check-check">
-                <label class="form-check-label"></label>
-                <input asp-for="RememberMe" class="form-check-input"/>@Html.DisplayNameFor(a=>a.RememberMe)
-            </div>
+                            <div class="mb-4 form-check">
+                                <label class="form-check-label text-white-50">Remember me</label>
+                                <input asp-for="RememberMe" class="form-check-input" />
+                            </div>
 
-            <div asp-validation-summary="ModelOnly" class="invalidInput"></div>
+                            <div asp-validation-summary="ModelOnly" class="invalidInput"></div>
 
 
-            <div class="row">
-                <div class="col-8">
-                    <a class="text-decoration-none float-start mt-2" asp-action="Register">Don't have and account?</a>
+                            <div class="row">
+                                <div class="col-8">
+                                    <a class="text-decoration-none text-white float-start mt-2" asp-action="Register">Don't have an account?</a>
+                                </div>
+
+                                <div class="col-4">
+                                    <input type="submit" value="Login" class="btn btn-secondary float-end" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
-                <div class="col-4">
-                    <input type="submit" value="Login" class="btn btn-primary btn-sm float-end"/>
-                </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
+</body>
 
 @section Scripts{ 
     @{
