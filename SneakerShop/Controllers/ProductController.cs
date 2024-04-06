@@ -198,6 +198,7 @@ namespace SneakerShop.Controllers
                         break;
                     case "Most Popular":
                         productsList = _db.Products.OrderBy(s => s.Qnt).ToList();
+                        productsList.RemoveAll(s => s.Qnt == 0);
                         break;
                     case "Remove Filter":
                         productsList = _db.Products.ToList();
